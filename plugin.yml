@@ -1,0 +1,24 @@
+name: BibiSkyblock
+main: fr.bibiobscur.skyblock.Plugin
+version: 1.7.2
+commands:
+  is:
+    description: Commandes joueur skyblock.
+    usage: 
+    permissions:
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande !
+  sky:
+    description: Commandes op skyblock.
+    usage:
+    permissions: skyblock.opcommands
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande !
+  createskyworld:
+    description: Creation du monde skyblock.
+    usage:
+    permissions: skyblock.devcommand
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande !
+  isg:
+    description: Commandes joueur groupes skyblock.
+    usage:
+    permissions:
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande !
