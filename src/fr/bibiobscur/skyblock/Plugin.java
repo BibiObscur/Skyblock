@@ -37,6 +37,7 @@ public class Plugin extends JavaPlugin{
 	private String directory;
 	
 	public void onEnable() {
+		System.out.println("test commit et diff");
 		getCommand("is").setExecutor(new IslandCommands(this));
 		getCommand("isg").setExecutor(new IslandGroupCommands(this));
 		getCommand("sky").setExecutor(new IslandOpCommands(this));
