@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 import java.util.Stack;
 
 import org.bukkit.ChatColor;
@@ -35,6 +36,7 @@ public class Plugin extends JavaPlugin{
 	private String worldname = "";
 	private final String path = new File("").getAbsolutePath();
 	private String directory;
+	private Logger logger = Logger.getLogger("Minecraft");
 	
 	public void onEnable() {
 		getCommand("is").setExecutor(new IslandCommands(this));
@@ -62,6 +64,16 @@ public class Plugin extends JavaPlugin{
     			world.setPVP(true);
         	} else
         		new File(directory + "SkyblockWorldName.txt");
+        	
+        	/*File f = new File ("./");
+        	for (File tmp : f.listFiles()){
+        		if(tmp.isDirectory()) {
+        			if(tmp.getName().equals(worldname)) {
+        				logger.info("Loaded world '" + worldname + "' sucessfully!");
+        				getServer().getWorlds().add(this.getServer().getWorld(worldname));
+        			}
+        		}
+        	}*/
         	
         	if(new File(directory + "lastIsland.bin").exists())
         		lastIsland = (Island)SLAPI.load(directory + "lastIsland.bin");
@@ -151,7 +163,6 @@ public class Plugin extends JavaPlugin{
     		World world = getServer().getWorld(worldname);
     		Island island;
 
-    		//System.out.println("TEST02" + getGroup(player.getName()).getLeader() + hasGroup(player.getName()));
     		if(hasGroup(player.getName()))
     			island = getPlayerIsland(getGroup(player.getName()).getLeader());
     		else
@@ -318,14 +329,13 @@ public class Plugin extends JavaPlugin{
     public HashMap<String, Home> getHomes() {return playerHomes; }
     public String getworldname() { return worldname; }
     
-    @SuppressWarnings("deprecation")
-	public void teleportIsland(Player player) {
+    public void teleportIsland(Player player) {
     	
 		Island island = getPlayerIsland(player.getName());
 		World world = getServer().getWorld(worldname);
 		int h = ISLANDS_Y;
 		
-		while(world.getBlockTypeIdAt(island.x, h, island.z) != 0) {
+		while(world.getBlockAt(island.x, h, island.z).getType() != Material.AIR) {
 				h++;
 		}
 		h++;
@@ -333,14 +343,13 @@ public class Plugin extends JavaPlugin{
 		player.teleport(new Location(world, island.x, h, island.z));	
 	}
     
-    @SuppressWarnings("deprecation")
-	public void teleportIsland(Player player, String playerdest) {
+    public void teleportIsland(Player player, String playerdest) {
     	
 		Island island = getPlayerIsland(playerdest);
 		World world = getServer().getWorld(worldname);
 		int h = ISLANDS_Y;
 		
-		while(world.getBlockTypeIdAt(island.x, h, island.z) != 0) {
+		while(world.getBlockAt(island.x, h, island.z).getType() != Material.AIR) {
 				h++;
 		}
 		h++;
@@ -348,15 +357,14 @@ public class Plugin extends JavaPlugin{
 		player.teleport(new Location(world, island.x, h, island.z));	
 	}
     
-    @SuppressWarnings("deprecation")
-	public void teleportHome(Player player) {
+    public void teleportHome(Player player) {
     	
     	Home home = getPlayerHome(player.getName());
     	World world = getServer().getWorld(worldname);
     	Location location = new Location(world, home.x, home.y, home.z);
     	int h = location.getBlockY();
     	
-	    while(world.getBlockTypeIdAt(location.getBlockX(), h, location.getBlockZ()) != 0) {
+	    while(world.getBlockAt(location.getBlockX(), h, location.getBlockZ()).getType() != Material.AIR) {
 				h++;
 		}
 	    h++;
