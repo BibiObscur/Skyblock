@@ -286,7 +286,7 @@ public class Plugin extends JavaPlugin{
     		}
     		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 5 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 250 * island.challenges.size();
     		//level = (int)(Math.pow((xp), 1.0/3) * 10);
-    		level = (int)(Math.pow((xp), 1.0/3) * 10);
+    		level = (int)(Math.pow((xp/(Math.pow(2, 17)-1)), 1.0/3) * 1000);
 			
     		island.level = level;
     	}
