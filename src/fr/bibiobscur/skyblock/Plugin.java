@@ -263,19 +263,19 @@ public class Plugin extends JavaPlugin{
 	    				block = world.getBlockAt(new Location(world, i, j, k));
 	        			if(block.getType() != Material.AIR && block.getType() != Material.WATER) {
 	        				if(block.getType() == Material.GRASS || block.getType() == Material.MYCEL)
-	        					xpblock[1] += 1 - ((xpblock[1] > 576)?0.5:0);
+	        					xpblock[1] += 1;
 	        				else if(block.getType() == Material.DIRT)
 	        					xpblock[2] += 1 - ((xpblock[2] > 576)?0.5:0);
 	        				else if(block.getType() == Material.SAND)
 	        					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0);
 	        				else if(block.getType() == Material.WOOD)
-	        					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0);
+	        					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0) - ((xpblock[4] > 3584)?0.25:0);
 	        				else if(block.getType() == Material.SMOOTH_BRICK || block.getType() == Material.STONE)
-	        					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0);
+	        					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0) - ((xpblock[5] > 3584)?0.25:0);
 	        				else if(block.getType() == Material.STEP)
-	        					xpblock[6] += 1 - ((xpblock[6] > 576)?0.5:0);
+	        					xpblock[6] += 1 - ((xpblock[6] > 576*2)?0.5:0) - ((xpblock[6] > 3584*2)?0.25:0);
 	        				else if(block.getType() == Material.SMOOTH_STAIRS)
-	        					xpblock[7] += 1 - ((xpblock[7] > 576)?0.5:0);
+	        					xpblock[7] += 1 - ((xpblock[7] > 576)?0.5:0) - ((xpblock[7] > 3584)?0.25:0);
 	        				else if(block.getType() == Material.COBBLESTONE)
 	        					xpblock[8] += 0.5 - ((xpblock[8] > 576)?0.5:0);
 	        				else
@@ -284,8 +284,9 @@ public class Plugin extends JavaPlugin{
 	        		}
     			}
     		}
-    		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 5 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 500 * island.challenges.size();
-			level = (int)(Math.pow((xp), 1.0/3) * 10);
+    		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 5 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 250 * island.challenges.size();
+    		//level = (int)(Math.pow((xp), 1.0/3) * 10);
+    		level = (int)(Math.pow((xp), 1.0/3) * 10);
 			
     		island.level = level;
     	}

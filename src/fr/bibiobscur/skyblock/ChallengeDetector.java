@@ -68,6 +68,8 @@ public class ChallengeDetector implements Listener {
 				if(e.getItem().getItemStack().getType() == Material.SUGAR_CANE)
 					island = challengeDone("SugarCaneFarmer", 30, e.getPlayer(), island);
 				
+				if(e.getItem().getItemStack().getType() == Material.APPLE && e.getPlayer().getInventory().contains(new ItemStack(Material.APPLE, 64)))
+					island = challengeDone("AppleCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.PUMPKIN && e.getPlayer().getInventory().contains(new ItemStack(Material.PUMPKIN, 64)))
 					island = challengeDone("PumpkinCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.MELON && e.getPlayer().getInventory().contains(new ItemStack(Material.MELON, 64)))
@@ -315,7 +317,8 @@ public class ChallengeDetector implements Listener {
 					item == Material.CARROT_ITEM ||
 					item == Material.MELON ||
 					item == Material.MUSHROOM_SOUP ||
-					item == Material.RAW_FISH) {
+					item == Material.RAW_FISH ||
+					item == Material.ROTTEN_FLESH) {
 				Player player = e.getPlayer();
 				Island island = plugin.getPlayerIsland(player.getName());
 				island = challengeDone("EatToSurvive", 40, player, island, Material.IRON_ORE, 8);
@@ -328,7 +331,8 @@ public class ChallengeDetector implements Listener {
 				if(item == Material.COOKIE ||
 						item == Material.RAW_FISH ||
 						item == Material.RAW_CHICKEN ||
-						item == Material.MELON)
+						item == Material.MELON ||
+						item == Material.ROTTEN_FLESH)
 					foodGet = 2;
 				if(item == Material.RAW_BEEF ||
 						item == Material.PORK)
@@ -392,6 +396,8 @@ public class ChallengeDetector implements Listener {
 			Island island = plugin.getPlayerIsland(e.getPlayer().getName());
 			Player player = plugin.getServer().getPlayer(e.getPlayer().getName());
 			
+			if(e.getInventory().contains(new ItemStack(Material.APPLE, 64)))
+				island = challengeDone("AppleCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.PUMPKIN, 64)))
 				island = challengeDone("PumpkinCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.MELON, 64)))
@@ -422,6 +428,8 @@ public class ChallengeDetector implements Listener {
 			Island island = plugin.getPlayerIsland(e.getPlayer().getName());
 			Player player = plugin.getServer().getPlayer(e.getPlayer().getName());
 			
+			if(e.getInventory().contains(new ItemStack(Material.APPLE, 64)))
+				island = challengeDone("AppleCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.PUMPKIN, 64)))
 				island = challengeDone("PumpkinCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.MELON, 64)))

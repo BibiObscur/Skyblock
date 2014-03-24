@@ -107,6 +107,13 @@ public class IslandProtect implements Listener {
 				    			mob.equalsIgnoreCase("Horse")){
 				    		e.setDamage(0);
 				    	}
+				    	
+				    	/*if(e.getEntity() instanceof Player) {
+				    		Player player2 = (Player) e.getEntity();
+				    		player2.sendMessage(player.getName() + "a pris 20 dégats.");
+				    		//player.damage(20);
+				    	}
+				    	player.damage(10);*/
 			    	
 		    	}
 			}
