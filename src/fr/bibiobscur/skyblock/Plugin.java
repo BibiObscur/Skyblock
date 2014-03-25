@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -26,11 +28,13 @@ public class Plugin extends JavaPlugin{
 	private String worldname = "";
 	private SkyDatas datas;
 	
+	private int secondsBeforeSave;
 	private Logger logger = Logger.getLogger("Minecraft");
 	
 //---------------------------------------------------------------------------------------------------------
 	//Méthodes onEnable, onDisable
 	public void onEnable() {
+		
 		//Enable Skyblock commands
 		getCommand("is").setExecutor(new IslandCommands(this));
 		getCommand("isg").setExecutor(new IslandGroupCommands(this));
@@ -56,14 +60,33 @@ public class Plugin extends JavaPlugin{
 		logger.info("[" + pluginName + "] Determination des level des iles. Cette operation peut prendre un peu de temps");
         datas.defineLevel();
         
+        //Autosave activation
+        secondsBeforeSave = 900;
+        autosave();
 	}
 	
 	public void onDisable() {
-		datas.save(directory);
+		saveDatas();
 		getServer().getWorld(worldname).save();
 	}
 
+	public void saveDatas() {
+		datas.save(directory);
+	}
 	
+	public void autosave() {
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+    	    public void run(){
+    	    	if(secondsBeforeSave > 0) {
+    	    		secondsBeforeSave --;
+    	    	} else {
+    	    		
+					Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Sauvegarde des données skyblock" + ChatColor.GOLD + " -- ");
+    	    		secondsBeforeSave = 900;
+    	    	}
+    	    }
+        }, 0L, 20L);
+	}
 //---------------------------------------------------------------------------------------------------------
 	//WorldName
 	public void loadWorldName() {

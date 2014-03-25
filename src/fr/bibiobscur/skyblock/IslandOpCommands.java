@@ -49,6 +49,7 @@ public class IslandOpCommands implements CommandExecutor {
 				sender.sendMessage(ChatColor.RED + "/sky world" + ChatColor.WHITE + " : Obtenir le nom du monde skyblock.");
 				sender.sendMessage(ChatColor.RED + "/sky createcommunisland" + ChatColor.WHITE + " : Crée une île commune.");
 				sender.sendMessage(ChatColor.RED + "/sky definelevels" + ChatColor.WHITE + " : Calcule le niveau de chaque île.");
+				sender.sendMessage(ChatColor.RED + "/sky save" + ChatColor.WHITE + " : Sauvegarde des données du skyblock.");
 				sender.sendMessage(ChatColor.RED + "/sky <player> info" + ChatColor.WHITE + " : Obtenir des informations sur un joueur.");
 				sender.sendMessage(ChatColor.RED + "/sky <player> tp" + ChatColor.WHITE + " : Se téléporter à l'île du joueur.");
 				sender.sendMessage(ChatColor.RED + "/sky <player> delete" + ChatColor.WHITE + " : Supprimer définitivement l'île du joueur.");
@@ -62,6 +63,7 @@ public class IslandOpCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "/sky world" + ChatColor.WHITE + " : Obtenir le nom du monde skyblock.");
 					sender.sendMessage(ChatColor.RED + "/sky createcommunisland" + ChatColor.WHITE + " : Crée une île commune.");
 					sender.sendMessage(ChatColor.RED + "/sky definelevels" + ChatColor.WHITE + " : Calcule le niveau de chaque île.");
+					sender.sendMessage(ChatColor.RED + "/sky save" + ChatColor.WHITE + " : Sauvegarde des données du skyblock.");
 					sender.sendMessage(ChatColor.RED + "/sky <player> info" + ChatColor.WHITE + " : Obtenir des informations sur un joueur.");
 					sender.sendMessage(ChatColor.RED + "/sky <player> tp" + ChatColor.WHITE + " : Se téléporter à l'île du joueur.");
 					sender.sendMessage(ChatColor.RED + "/sky <player> delete" + ChatColor.WHITE + " : Supprimer définitivement l'île du joueur.");
@@ -96,6 +98,12 @@ public class IslandOpCommands implements CommandExecutor {
 					sender.sendMessage("Calcul du niveau des îles...");
 					plugin.getDatas().defineLevel();
 					sender.sendMessage("Le niveau des îles a bien été mis à jour.");
+				}
+				
+				if(args[0].equalsIgnoreCase("definelevels")) {
+					sender.sendMessage("Sauvegarde...");
+					plugin.saveDatas();
+					sender.sendMessage("Sauvegarde terminée.");
 				}
 				
 			} else if(args.length == 2) {
