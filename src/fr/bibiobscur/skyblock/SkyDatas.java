@@ -37,8 +37,8 @@ public class SkyDatas {
         		lastIsland = (Island)SLAPI.load(directory + "lastIsland.bin");
         	if(null == lastIsland) {
             	lastIsland = new Island(); 
-            	lastIsland.x = 0;
-            	lastIsland.z = 0;
+            	lastIsland.setX(0);
+            	lastIsland.setZ(0);
         	}
         	
         	if(new File(directory + "playerIslands.bin").exists()){
@@ -87,6 +87,7 @@ public class SkyDatas {
 			SLAPI.save(orphaned, directory + "orphanedIslands.bin");
 			SLAPI.save(playerHomes, directory + "playerHomes.bin");
 			SLAPI.save(groupList, directory + "groupList.bin");
+			logger.info("[" + plugin.getPluginName() + "] Sauvegarde terminee.");
 		} catch (Exception e) {
 			logger.severe("[" + plugin.getPluginName() + "] La sauvegarde des donnees a echoue.");
 			e.printStackTrace();
@@ -104,9 +105,9 @@ public class SkyDatas {
 		if(hasIsland(playerName) && isLeader(playerName)) {
 			Island island = getPlayerIsland(playerName);
 			int length = plugin.getISLAND_SPACING();
-			for(int x = island.x - length/2; x <= island.x + length/2; x++)
+			for(int x = island.getX() - length/2; x <= island.getX() + length/2; x++)
 				for(int y = 0; y < world.getMaxHeight(); y++)
-					for(int z = island.z - length/2; z <= island.z + length/2; z++) {
+					for(int z = island.getZ() - length/2; z <= island.getZ() + length/2; z++) {
 						Block block = world.getBlockAt(x,y,z);
 						if(block.getType() != Material.AIR)
 							block.setType(Material.AIR);
@@ -151,8 +152,8 @@ public class SkyDatas {
 			int y = player.getLocation().getBlockY();
 			int z = player.getLocation().getBlockZ();
 
-    		if(x > island.x - plugin.getISLAND_SPACING()/2 && x < island.x + plugin.getISLAND_SPACING()/2
-    				&& z > island.z - plugin.getISLAND_SPACING()/2 && z < island.z + plugin.getISLAND_SPACING()/2
+    		if(x > island.getX() - plugin.getISLAND_SPACING()/2 && x < island.getX() + plugin.getISLAND_SPACING()/2
+    				&& z > island.getZ() - plugin.getISLAND_SPACING()/2 && z < island.getZ() + plugin.getISLAND_SPACING()/2
     				&& y > 5 && y < world.getMaxHeight() - 5) {
     			return true;
     		}
@@ -176,8 +177,8 @@ public class SkyDatas {
 			int y = location.getBlockY();
 			int z = location.getBlockZ();
     		
-    		if(x > island.x - plugin.getISLAND_SPACING()/2 && x < island.x + plugin.getISLAND_SPACING()/2
-    				&& z > island.z - plugin.getISLAND_SPACING()/2 && z < island.z + plugin.getISLAND_SPACING()/2
+    		if(x > island.getX() - plugin.getISLAND_SPACING()/2 && x < island.getX() + plugin.getISLAND_SPACING()/2
+    				&& z > island.getZ() - plugin.getISLAND_SPACING()/2 && z < island.getZ() + plugin.getISLAND_SPACING()/2
     				&& y > 5 && y < world.getMaxHeight() - 5) {
     			return true;
     		}
@@ -196,8 +197,8 @@ public class SkyDatas {
     			return playerIslands.get(playerName.toLowerCase());
     	} 
     	Island spawn = new Island();
-    	spawn.x = 0;
-    	spawn.z = 0;
+    	spawn.setX(0);
+    	spawn.setZ(0);
     	return spawn;
     }
     
@@ -208,10 +209,10 @@ public class SkyDatas {
     	
     	for (Entry<String, Island> entry : playerIslands.entrySet()) {
     		island = (Island) entry.getValue();
-    		if(x > island.x-plugin.getISLAND_SPACING()/2 && 
-    				x < island.x+plugin.getISLAND_SPACING()/2 &&
-    				z > island.z-plugin.getISLAND_SPACING()/2 &&
-    				z < island.z+plugin.getISLAND_SPACING()/2)
+    		if(x > island.getX()-plugin.getISLAND_SPACING()/2 && 
+    				x < island.getX()+plugin.getISLAND_SPACING()/2 &&
+    				z > island.getZ()-plugin.getISLAND_SPACING()/2 &&
+    				z < island.getZ()+plugin.getISLAND_SPACING()/2)
     			return (String) entry.getKey();
     	}
     	
@@ -241,8 +242,8 @@ public class SkyDatas {
     	}
     	
     	Island spawn = new Island();
-    	spawn.x = 0;
-    	spawn.z = 0;
+    	spawn.setX(0);
+    	spawn.setZ(0);
     	
     	return spawn;
     }
@@ -268,9 +269,9 @@ public class SkyDatas {
 	    		xpblock[2] = - 50;
 	    		xpblock[3] = - 27;
 	    		
-	    		for(i = island.x - plugin.getISLAND_SPACING()/2; i < island.x + plugin.getISLAND_SPACING()/2; i++) {
+	    		for(i = island.getX() - plugin.getISLAND_SPACING()/2; i < island.getX() + plugin.getISLAND_SPACING()/2; i++) {
 	    			for(j = 5; j < plugin.getServer().getWorld(plugin.getworldname()).getMaxHeight()-5; j++) {
-		    			for(k = island.z - plugin.getISLAND_SPACING()/2; k < island.z + plugin.getISLAND_SPACING()/2; k++) {
+		    			for(k = island.getZ() - plugin.getISLAND_SPACING()/2; k < island.getZ() + plugin.getISLAND_SPACING()/2; k++) {
 		    				block = world.getBlockAt(new Location(world, i, j, k));
 		        			if(block.getType() != Material.AIR && block.getType() != Material.WATER) {
 		        				if(block.getType() == Material.GRASS || block.getType() == Material.MYCEL)
@@ -372,12 +373,12 @@ public class SkyDatas {
 		World world = plugin.getServer().getWorld(plugin.getworldname());
 		int h = plugin.getISLANDS_Y();
 		
-		while(world.getBlockAt(island.x, h, island.z).getType() != Material.AIR) {
+		while(world.getBlockAt(island.getX(), h, island.getZ()).getType() != Material.AIR) {
 				h++;
 		}
 		h++;
-		world.loadChunk(island.x, island.z);
-		player.teleport(new Location(world, island.x, h, island.z));	
+		world.loadChunk(island.getX(), island.getZ());
+		player.teleport(new Location(world, island.getX(), h, island.getZ()));	
 	}
     
     public void teleportIsland(Player player, String playerdest) {
@@ -386,12 +387,12 @@ public class SkyDatas {
 		World world = plugin.getServer().getWorld(plugin.getworldname());
 		int h = plugin.getISLANDS_Y();
 		
-		while(world.getBlockAt(island.x, h, island.z).getType() != Material.AIR) {
+		while(world.getBlockAt(island.getX(), h, island.getZ()).getType() != Material.AIR) {
 				h++;
 		}
 		h++;
-		world.loadChunk(island.x, island.z);
-		player.teleport(new Location(world, island.x, h, island.z));	
+		world.loadChunk(island.getX(), island.getZ());
+		player.teleport(new Location(world, island.getX(), h, island.getZ()));	
 	}
     
     public void teleportHome(Player player) {
@@ -465,7 +466,7 @@ public class SkyDatas {
 			}
 			plugin.getServer().getPlayer(playername).getInventory().clear();
 			teleportIsland(plugin.getServer().getPlayer(playername));
-			createHome(plugin.getServer().getPlayer(playername), new Location(plugin.getServer().getWorld(plugin.getworldname()), getPlayerIsland(leader).x, plugin.getISLANDS_Y(), getPlayerIsland(leader).z));
+			createHome(plugin.getServer().getPlayer(playername), new Location(plugin.getServer().getWorld(plugin.getworldname()), getPlayerIsland(leader).getX(), plugin.getISLANDS_Y(), getPlayerIsland(leader).getZ()));
 			if(plugin.isConnected(leader)) plugin.getServer().getPlayer(leader).sendMessage(ChatColor.GREEN + "Le joueur " + ChatColor.BLUE + playername + ChatColor.GREEN + " a été ajouté à votre groupe.");
 			if(plugin.isConnected(playername)) plugin.getServer().getPlayer(playername).sendMessage(ChatColor.GREEN + "Vous avez rejoint le groupe de " + ChatColor.BLUE + leader + ChatColor.GREEN + " !");
 		}
