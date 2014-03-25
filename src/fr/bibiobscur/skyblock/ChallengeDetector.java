@@ -33,8 +33,8 @@ public class ChallengeDetector implements Listener {
 	@EventHandler
 	public void playerPickupItem(PlayerPickupItemEvent e) {
 		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
-			if(plugin.isOnIsland(e.getPlayer())) {
-				Island island = plugin.getPlayerIsland(e.getPlayer().getName());
+			if(plugin.getDatas().isOnIsland(e.getPlayer())) {
+				Island island = plugin.getDatas().getPlayerIsland(e.getPlayer().getName());
 				
 				if(e.getItem().getItemStack().getType() == Material.COBBLESTONE)
 					island = challengeDone("CobblestoneGenerator", 30, e.getPlayer(), island);
@@ -123,9 +123,9 @@ public class ChallengeDetector implements Listener {
 		Player player = plugin.getServer().getPlayer(e.getWhoClicked().getName());
 		
 		if(player.getWorld().getName().equals(plugin.getworldname())) {
-			if(plugin.isOnIsland(player)) {
+			if(plugin.getDatas().isOnIsland(player)) {
 				
-				Island island = plugin.getPlayerIsland(player.getName());
+				Island island = plugin.getDatas().getPlayerIsland(player.getName());
 				
 				if(e.getCurrentItem().getType() == Material.STONE_PICKAXE ||
 						e.getCurrentItem().getType() == Material.STONE_AXE ||
@@ -201,9 +201,9 @@ public class ChallengeDetector implements Listener {
 				Player player = (Player) e1.getDamager();
 		
 				if(player.getWorld().getName().equals(plugin.getworldname())) {
-					if(plugin.isOnIsland(player)) {
+					if(plugin.getDatas().isOnIsland(player)) {
 	
-						Island island = plugin.getPlayerIsland(player.getName());
+						Island island = plugin.getDatas().getPlayerIsland(player.getName());
 						
 						if(((e1.getEntityType().getTypeId() >= 50 && e1.getEntityType().getTypeId() <= 64) ||
 								e1.getEntityType().getTypeId() == 66))
@@ -222,13 +222,13 @@ public class ChallengeDetector implements Listener {
 			boolean hostConnected = false;
 			for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !hostConnected; i++)
 			{
-				if(plugin.getServer().getOnlinePlayers()[i].getName().equals(plugin.getHostHere(e.getLocation()))) hostConnected = true;
+				if(plugin.getServer().getOnlinePlayers()[i].getName().equals(plugin.getDatas().getHostHere(e.getLocation()))) hostConnected = true;
 			}
 			
 			if(hostConnected)
 			{
-				String playername = plugin.getHostHere(e.getLocation());
-				Island island = plugin.getPlayerIsland(playername);
+				String playername = plugin.getDatas().getHostHere(e.getLocation());
+				Island island = plugin.getDatas().getPlayerIsland(playername);
 				if(e.getEntityType() == EntityType.CHICKEN || 
 						e.getEntityType() == EntityType.COW || 
 						e.getEntityType() == EntityType.HORSE || 
@@ -279,7 +279,7 @@ public class ChallengeDetector implements Listener {
 	@EventHandler
 	public void playerBurnFurnance(FurnaceBurnEvent e) {
 		if(e.getBlock().getWorld().getName().equals(plugin.getworldname())) {
-			String playername = plugin.getHostHere(e.getBlock().getLocation());
+			String playername = plugin.getDatas().getHostHere(e.getBlock().getLocation());
 			if(playername != null) {
 				boolean online = false;
 				for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !online; i++){
@@ -287,7 +287,7 @@ public class ChallengeDetector implements Listener {
 				}
 				if(online) {
 					Player player = (Player) plugin.getServer().getPlayer(playername);
-					Island island = plugin.getPlayerIsland(player.getName());
+					Island island = plugin.getDatas().getPlayerIsland(player.getName());
 					island = challengeDone("FurnanceUser", 30, player, island);
 				}
 			}
@@ -320,7 +320,7 @@ public class ChallengeDetector implements Listener {
 					item == Material.RAW_FISH ||
 					item == Material.ROTTEN_FLESH) {
 				Player player = e.getPlayer();
-				Island island = plugin.getPlayerIsland(player.getName());
+				Island island = plugin.getDatas().getPlayerIsland(player.getName());
 				island = challengeDone("EatToSurvive", 40, player, island, Material.IRON_ORE, 8);
 				
 				for(int i = 0; i < 2; i++)
@@ -364,36 +364,36 @@ public class ChallengeDetector implements Listener {
 	
 	@EventHandler
 	public void playerFish(PlayerFishEvent e) {
-		if(plugin.isOnIsland(e.getPlayer()))
+		if(plugin.getDatas().isOnIsland(e.getPlayer()))
 		{
 			if(e.getExpToDrop() > 0)
 			{
 				for(int i = 0; i < 2; i++)
 					e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.EXPERIENCE_ORB);
 				e.getPlayer().giveExp(17);
-				challengeDone("FisherMan", 30, e.getPlayer(), plugin.getPlayerIsland(e.getPlayer().getName()), Material.IRON_ORE, 16);
+				challengeDone("FisherMan", 30, e.getPlayer(), plugin.getDatas().getPlayerIsland(e.getPlayer().getName()), Material.IRON_ORE, 16);
 			}
 		}
 	}
 
 	@EventHandler
 	public void playerEnchant(EnchantItemEvent e) {
-		if(plugin.isOnIsland(e.getEnchanter()))
+		if(plugin.getDatas().isOnIsland(e.getEnchanter()))
 		{
 			if (e.getExpLevelCost() >= 1)
-				challengeDone("ApprenticeEnchanter", 50, e.getEnchanter(), plugin.getPlayerIsland(e.getEnchanter().getName()), Material.BOOKSHELF, 10);
+				challengeDone("ApprenticeEnchanter", 50, e.getEnchanter(), plugin.getDatas().getPlayerIsland(e.getEnchanter().getName()), Material.BOOKSHELF, 10);
 			if (e.getExpLevelCost() >= 15)
-				challengeDone("Enchanter", 80, e.getEnchanter(), plugin.getPlayerIsland(e.getEnchanter().getName()), Material.IRON_ORE, 16);
+				challengeDone("Enchanter", 80, e.getEnchanter(), plugin.getDatas().getPlayerIsland(e.getEnchanter().getName()), Material.IRON_ORE, 16);
 			if (e.getExpLevelCost() == 30)
-				challengeDone("Wizard", 170, e.getEnchanter(), plugin.getPlayerIsland(e.getEnchanter().getName()), Material.DIAMOND_ORE, 16);
+				challengeDone("Wizard", 170, e.getEnchanter(), plugin.getDatas().getPlayerIsland(e.getEnchanter().getName()), Material.DIAMOND_ORE, 16);
 		}
 	}
 	
 	@EventHandler
 	public void inventoryOpen(InventoryOpenEvent e) {
-		if(plugin.isOnIsland(plugin.getServer().getPlayer(e.getPlayer().getName())))
+		if(plugin.getDatas().isOnIsland(plugin.getServer().getPlayer(e.getPlayer().getName())))
 		{
-			Island island = plugin.getPlayerIsland(e.getPlayer().getName());
+			Island island = plugin.getDatas().getPlayerIsland(e.getPlayer().getName());
 			Player player = plugin.getServer().getPlayer(e.getPlayer().getName());
 			
 			if(e.getInventory().contains(new ItemStack(Material.APPLE, 64)))
@@ -423,9 +423,9 @@ public class ChallengeDetector implements Listener {
 	
 	@EventHandler
 	public void inventoryClose(InventoryCloseEvent e) {
-		if(plugin.isOnIsland(plugin.getServer().getPlayer(e.getPlayer().getName())))
+		if(plugin.getDatas().isOnIsland(plugin.getServer().getPlayer(e.getPlayer().getName())))
 		{
-			Island island = plugin.getPlayerIsland(e.getPlayer().getName());
+			Island island = plugin.getDatas().getPlayerIsland(e.getPlayer().getName());
 			Player player = plugin.getServer().getPlayer(e.getPlayer().getName());
 			
 			if(e.getInventory().contains(new ItemStack(Material.APPLE, 64)))
@@ -456,7 +456,7 @@ public class ChallengeDetector implements Listener {
 	@EventHandler
 	public void playerBrew(BrewEvent e) {
 		if(e.getBlock().getWorld().getName().equals(plugin.getworldname())) {
-			String playername = plugin.getHostHere(e.getBlock().getLocation());
+			String playername = plugin.getDatas().getHostHere(e.getBlock().getLocation());
 			if(playername != null) {
 				boolean online = false;
 				for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !online; i++){
@@ -464,7 +464,7 @@ public class ChallengeDetector implements Listener {
 				}
 				if(online) {
 					Player player = (Player) plugin.getServer().getPlayer(playername);
-					Island island = plugin.getPlayerIsland(player.getName());
+					Island island = plugin.getDatas().getPlayerIsland(player.getName());
 					island = challengeDone("Brewing", 50, player, island);
 				}
 			}
@@ -500,7 +500,7 @@ public class ChallengeDetector implements Listener {
 	public void respawnSky(PlayerRespawnEvent e) {
 		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
 			Player player = e.getPlayer();
-			Island island = plugin.getPlayerIsland(player.getName());
+			Island island = plugin.getDatas().getPlayerIsland(player.getName());
 			island = challengeDone("SawTheDeath", 30, player, island);
 		}
 	}

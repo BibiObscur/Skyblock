@@ -69,7 +69,7 @@ public class IslandOpCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "/sky <player> restart" + ChatColor.WHITE + " : Supprimer et recréer un île au joueur.");
 				}
 				if(args[0].equalsIgnoreCase("lastisland")) {
-					Island last = plugin.getLastIsland();
+					Island last = plugin.getDatas().getLastIsland();
 					sender.sendMessage("Coordonnées de la dernière île créée : x=" + ChatColor.BLUE + last.x + ChatColor.WHITE + ", z=" + ChatColor.BLUE + last.z);
 				}
 				if(args[0].equalsIgnoreCase("world")) {
@@ -78,13 +78,13 @@ public class IslandOpCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("createcommunisland")) {
 					String name = "Commune";
 					int number = 0;
-					while(plugin.hasIsland(name + number))
+					while(plugin.getDatas().hasIsland(name + number))
 						number ++;
 					createNewCommunIsland(name + number);
 					
-					Island island = plugin.getPlayerIsland(name + number);
+					Island island = plugin.getDatas().getPlayerIsland(name + number);
 					Player player = (Player) sender;
-					plugin.teleportIsland(player, name + number);
+					plugin.getDatas().teleportIsland(player, name + number);
 					List<Entity> Entities = player.getNearbyEntities(15,15,15);
 		    		Iterator<Entity> ent = Entities.iterator();
 		    		while (ent.hasNext())
@@ -94,7 +94,7 @@ public class IslandOpCommands implements CommandExecutor {
 				}
 				if(args[0].equalsIgnoreCase("definelevels")) {
 					sender.sendMessage("Calcul du niveau des îles...");
-					plugin.defineLevel();
+					plugin.getDatas().defineLevel();
 					sender.sendMessage("Le niveau des îles a bien été mis à jour.");
 				}
 				
@@ -103,41 +103,41 @@ public class IslandOpCommands implements CommandExecutor {
 				String playername = args[0];
 				
 				if(args[1].equalsIgnoreCase("info")) {
-					if(plugin.hasIsland(playername)) {
-						Island island = plugin.getPlayerIsland(playername);
+					if(plugin.getDatas().hasIsland(playername)) {
+						Island island = plugin.getDatas().getPlayerIsland(playername);
 						sender.sendMessage("Le joueur " + ChatColor.BLUE + playername + ChatColor.WHITE + " a une île aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.WHITE + ", z=" + ChatColor.BLUE + island.z);
 					} else {
 						islandNotFound(sender, playername);
 					}
 				}
 				if(args[1].equalsIgnoreCase("tp")) {
-					if(plugin.hasIsland(playername)) {
-						Island island = plugin.getPlayerIsland(playername);
+					if(plugin.getDatas().hasIsland(playername)) {
+						Island island = plugin.getDatas().getPlayerIsland(playername);
 						sender.sendMessage("Téléportation à l'île de " + ChatColor.BLUE + playername + ChatColor.WHITE + " aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.WHITE + ", z=" + ChatColor.BLUE + island.z);
 						Player player = (Player) sender;
-						plugin.teleportIsland(player, playername);
+						plugin.getDatas().teleportIsland(player, playername);
 					} else {
 						islandNotFound(sender, playername);
 					}
 				}
 				if(args[1].equalsIgnoreCase("delete") && sender.hasPermission("skyblock.devcommand")) {
-					if(plugin.hasIsland(playername)) {
-						Island island = plugin.getPlayerIsland(playername);
+					if(plugin.getDatas().hasIsland(playername)) {
+						Island island = plugin.getDatas().getPlayerIsland(playername);
 						sender.sendMessage("Suppression de l'île de " + ChatColor.BLUE + playername + ChatColor.WHITE + " aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.WHITE + ", z=" + ChatColor.BLUE + island.z);
-						plugin.deleteIsland(playername, plugin.getServer().getWorld(plugin.getworldname()));
+						plugin.getDatas().deleteIsland(playername, plugin.getServer().getWorld(plugin.getworldname()));
 						if(plugin.getServer().getPlayer(playername) != null) plugin.getServer().getPlayer(playername).sendMessage(ChatColor.RED + "Votre île a été supprimée définitivement par " + ChatColor.BLUE + sender.getName() + ChatColor.RED + ".");
 					} else {
 						islandNotFound(sender, playername);
 					}
 				}
 				if(args[1].equalsIgnoreCase("create")) {
-					if(plugin.hasIsland(playername)) {
-						Island island = plugin.getPlayerIsland(playername);
+					if(plugin.getDatas().hasIsland(playername)) {
+						Island island = plugin.getDatas().getPlayerIsland(playername);
 						sender.sendMessage(ChatColor.BLUE + playername + ChatColor.RED + " a déjà une île aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.RED + ", z=" + ChatColor.BLUE + island.z + ChatColor.RED + ".");
 					} else {
 						if(createNewIsland(plugin.getServer().getPlayer(playername))){
-							Island island = plugin.getPlayerIsland(playername);
-							plugin.teleportIsland(plugin.getServer().getPlayer(playername));
+							Island island = plugin.getDatas().getPlayerIsland(playername);
+							plugin.getDatas().teleportIsland(plugin.getServer().getPlayer(playername));
 				    		List<Entity> Entities = plugin.getServer().getPlayer(playername).getNearbyEntities(15,15,15);
 				    		Iterator<Entity> ent = Entities.iterator();
 				    		while (ent.hasNext())
@@ -149,14 +149,14 @@ public class IslandOpCommands implements CommandExecutor {
 					}
 				}
 				if(args[1].equalsIgnoreCase("restart") && sender.hasPermission("skyblock.devcommand")) {
-					if(plugin.hasIsland(playername)) {
-						Island island = plugin.getPlayerIsland(playername);
+					if(plugin.getDatas().hasIsland(playername)) {
+						Island island = plugin.getDatas().getPlayerIsland(playername);
 						sender.sendMessage("Suppression de l'île de " + ChatColor.BLUE + playername + ChatColor.WHITE + " aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.WHITE + ", z=" + ChatColor.BLUE + island.z);
 						plugin.getServer().getPlayer(playername).sendMessage(ChatColor.RED + "Votre île a été supprimée définitivement par " + ChatColor.BLUE + sender.getName() + ChatColor.RED + ".");
-						plugin.deleteIsland(playername, plugin.getServer().getWorld(plugin.getworldname()));
+						plugin.getDatas().deleteIsland(playername, plugin.getServer().getWorld(plugin.getworldname()));
 						if(createNewIsland(plugin.getServer().getPlayer(playername))){
-							island = plugin.getPlayerIsland(playername);
-							plugin.teleportIsland(plugin.getServer().getPlayer(playername));
+							island = plugin.getDatas().getPlayerIsland(playername);
+							plugin.getDatas().teleportIsland(plugin.getServer().getPlayer(playername));
 				    		List<Entity> Entities = plugin.getServer().getPlayer(playername).getNearbyEntities(15,15,15);
 				    		Iterator<Entity> ent = Entities.iterator();
 				    		while (ent.hasNext())
@@ -184,34 +184,34 @@ public class IslandOpCommands implements CommandExecutor {
 private boolean createNewIsland(Player player) {
 		
 		//Si le joueur a déjà commencé une île
-		if(plugin.hasIsland(player.getName()))
+		if(plugin.getDatas().hasIsland(player.getName()))
 		{
-			Island island = plugin.getPlayerIsland(player.getName());
+			Island island = plugin.getDatas().getPlayerIsland(player.getName());
 			player.sendMessage(ChatColor.RED + "Vous avez déjà une île aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.RED + ", z=" + ChatColor.BLUE + island.z);
 			player.sendMessage(ChatColor.RED + "Pour recommencer une île, tapez /is restart");
 			return false;
 		}
 		
 		Island island;
-		Island last = plugin.getLastIsland();
+		Island last = plugin.getDatas().getLastIsland();
 		//if we have space because of a deleted Island, create one there
-		if(plugin.hasOrphanedIsland()) {
-			island = plugin.getOrphanedIsland();
+		if(plugin.getDatas().hasOrphanedIsland()) {
+			island = plugin.getDatas().getOrphanedIsland();
 			//sender.sendMessage(ChatColor.RED + "Une île est libre aux coorodonnées : x=" + ChatColor.BLUE + island.x + ChatColor.RED + ", z=" + ChatColor.BLUE + island.z);
 		} else {
             island = nextIslandLocation(last);
-            plugin.setLastIsland(island);
-            while (plugin.getPlayers().containsValue(island))
+            plugin.getDatas().setLastIsland(island);
+            while (plugin.getDatas().getPlayers().containsValue(island))
             {
             	island = nextIslandLocation(island);
-                plugin.setLastIsland(island);
+                plugin.getDatas().setLastIsland(island);
             }
 		}
 		
 		createIslandBlocks(island, plugin.getServer().getWorld(plugin.getworldname()));
-		plugin.registerPlayerIsland(player.getName(), island);
-		plugin.teleportIsland(player);
-		plugin.createHome(player, new Location(plugin.getServer().getWorld(plugin.getworldname()), island.x, plugin.getISLANDS_Y(), island.z));
+		plugin.getDatas().addPlayerIsland(player.getName(), island);
+		plugin.getDatas().teleportIsland(player);
+		plugin.getDatas().createHome(player, new Location(plugin.getServer().getWorld(plugin.getworldname()), island.x, plugin.getISLANDS_Y(), island.z));
 		player.getInventory().clear();
 		
 		player.sendMessage(ChatColor.GOLD + "Une île vous a été créée aux coordonnées : x=" + ChatColor.BLUE + island.x + ChatColor.GOLD + ", z=" + ChatColor.BLUE + island.z + ChatColor.GOLD + " !");
@@ -259,22 +259,22 @@ private boolean createNewIsland(Player player) {
 private void createNewCommunIsland(String name) {
 		
 		Island island;
-		Island last = plugin.getLastIsland();
+		Island last = plugin.getDatas().getLastIsland();
 
-		if(plugin.hasOrphanedIsland()) {
-			island = plugin.getOrphanedIsland();
+		if(plugin.getDatas().hasOrphanedIsland()) {
+			island = plugin.getDatas().getOrphanedIsland();
 		} else {
             island = nextIslandLocation(last);
-            plugin.setLastIsland(island);
-            while (plugin.getPlayers().containsValue(island))
+            plugin.getDatas().setLastIsland(island);
+            while (plugin.getDatas().getPlayers().containsValue(island))
             {
             	island = nextIslandLocation(island);
-                plugin.setLastIsland(island);
+                plugin.getDatas().setLastIsland(island);
             }
 		}
 		
 		createIslandBlocks(island, plugin.getServer().getWorld(plugin.getworldname()));
-		plugin.registerPlayerIsland(name, island);
+		plugin.getDatas().addPlayerIsland(name, island);
 	}
 	
 	//Création des blocs de l'île

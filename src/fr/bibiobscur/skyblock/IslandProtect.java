@@ -47,10 +47,10 @@ public class IslandProtect implements Listener {
 	@EventHandler
     public void blockPlaceProtect(BlockPlaceEvent e){
 		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
-			if(!plugin.isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
+			if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
-			} else if(!plugin.isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
+			} else if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île.");
 		}
     }
@@ -58,10 +58,10 @@ public class IslandProtect implements Listener {
     @EventHandler
     public void blockBreakProtect(BlockBreakEvent e) {
     	if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
-	    	if(!plugin.isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
+	    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
-			} else if(!plugin.isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
+			} else if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île.");
     	}
     }
@@ -70,7 +70,7 @@ public class IslandProtect implements Listener {
     public void interactProtect(PlayerInteractEvent e){
     	if(!e.getPlayer().isOp() && e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
 	    	if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-		    	if(!plugin.isOnIsland(e.getPlayer(), e.getClickedBlock().getLocation()) &&
+		    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getClickedBlock().getLocation()) &&
 		    			(e.getClickedBlock().getType() == Material.CHEST ||
 		    			e.getClickedBlock().getType() == Material.FENCE_GATE ||
 		    			e.getClickedBlock().getType() == Material.WOODEN_DOOR ||
@@ -94,7 +94,7 @@ public class IslandProtect implements Listener {
 		    	
 		    	String mob = e.getEntityType().name();
 		    	
-		    	if(!plugin.isOnIsland(player, e.getEntity().getLocation())) {
+		    	if(!plugin.getDatas().isOnIsland(player, e.getEntity().getLocation())) {
 
 				    	if(mob.equalsIgnoreCase("Chicken") ||
 				    			mob.equalsIgnoreCase("pig") ||

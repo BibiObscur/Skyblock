@@ -71,9 +71,9 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				}
 				
 				if(args[0].equalsIgnoreCase("leave")) {
-					if(plugin.hasGroup(player.getName())) {
-						if(!plugin.isLeader(player.getName())) {
-							plugin.quitGroup(player.getName());
+					if(plugin.getDatas().hasGroup(player.getName())) {
+						if(!plugin.getDatas().isLeader(player.getName())) {
+							plugin.getDatas().quitGroup(player.getName());
 							player.getInventory().clear();
 						} else
 							player.sendMessage(ChatColor.RED + "Vous ne pouvez pas quitter votre propre groupe. faites /givelead <player> pour donner votre groupe à un autre joueur.");
@@ -82,9 +82,9 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				}
 				
 				if(args[0].equalsIgnoreCase("info")) {
-					if(plugin.hasGroup(player.getName())) {
+					if(plugin.getDatas().hasGroup(player.getName())) {
 						System.out.println(player.getName() + " a un groupe.");
-						Group group = plugin.getGroup(player.getName());
+						Group group = plugin.getDatas().getGroup(player.getName());
 						System.out.println("Groupe récupéré.");
 						player.sendMessage(ChatColor.GREEN + "Informations sur le groupe de " + ChatColor.BLUE + group.getLeader() + ChatColor.GREEN + " :");
 						player.sendMessage(ChatColor.YELLOW + "Leader : " + ChatColor.WHITE + group.getLeader());
@@ -113,8 +113,8 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				
 				if(args[0].equalsIgnoreCase("invite")) {
 					if(plugin.isConnected(playername2)) {
-						if(plugin.isLeader(player.getName())) {
-							if(!plugin.hasIsland(playername2)) {
+						if(plugin.getDatas().isLeader(player.getName())) {
+							if(!plugin.getDatas().hasIsland(playername2)) {
 								inviteRequest.add(new Invite(player.getName(), playername2));
 								player.sendMessage("Demande envoyée à " + ChatColor.BLUE + playername2 + ChatColor.WHITE + ".");
 								plugin.getServer().getPlayer(playername2).sendMessage(ChatColor.BLUE + player.getName() + ChatColor.GREEN + " vous invite à rejoindre son île. Pour accepter, faites /isg accept " + player.getName() + ". Sinon, faites /isg decline " + player.getName());
@@ -129,9 +129,9 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				if(args[0].equalsIgnoreCase("accept")) {
 					if(isInvited(playername2, player.getName())) {
 						if(plugin.isConnected(playername2)) {
-							if(!plugin.hasIsland(player.getName())) {
-								if(plugin.isLeader(playername2)) {
-									plugin.addPlayerToGroup(playername2, player.getName());
+							if(!plugin.getDatas().hasIsland(player.getName())) {
+								if(plugin.getDatas().isLeader(playername2)) {
+									plugin.getDatas().addPlayerToGroup(playername2, player.getName());
 									inviteRequest.remove(new Invite(playername2, player.getName()));
 								} else
 									player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + playername2 + ChatColor.RED + " n'est pas leader d'un groupe ou ne possède pas d'île.");
@@ -146,7 +146,7 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				if(args[0].equalsIgnoreCase("decline")) {
 					if(isInvited(playername2, player.getName())) {
 						if(plugin.isConnected(playername2)) {
-							if(plugin.isLeader(playername2)) {
+							if(plugin.getDatas().isLeader(playername2)) {
 								player.sendMessage("Vous avez refusé la demande de " + ChatColor.BLUE + playername2);
 								plugin.getServer().getPlayer(playername2).sendMessage(ChatColor.BLUE + player.getName() + ChatColor.RED + " a refusé votre demande.");
 								inviteRequest.remove(new Invite(playername2, player.getName()));
@@ -159,11 +159,11 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				}
 				
 				if(args[0].equalsIgnoreCase("kick")) {
-					if(plugin.isLeader(player.getName())) {
-						if(plugin.hasIsland(playername2)) {
-							if(plugin.hasGroup(playername2)) {
-								if(plugin.getGroup(player.getName()).getMembers().contains(playername2)) {
-									plugin.removePlayerFromGroup(player.getName(), playername2);
+					if(plugin.getDatas().isLeader(player.getName())) {
+						if(plugin.getDatas().hasIsland(playername2)) {
+							if(plugin.getDatas().hasGroup(playername2)) {
+								if(plugin.getDatas().getGroup(player.getName()).getMembers().contains(playername2)) {
+									plugin.getDatas().removePlayerFromGroup(player.getName(), playername2);
 								} else
 									player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + playername2 + ChatColor.RED + " n'est pas dans votre groupe.");
 							} else
@@ -175,11 +175,11 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				}
 				
 				if(args[0].equalsIgnoreCase("givelead")) {
-					if(plugin.isLeader(player.getName())) {
-						if(plugin.hasIsland(playername2)) {
-							if(plugin.hasGroup(playername2)) {
-								if(plugin.getGroup(player.getName()).getMembers().contains(playername2)) {
-									plugin.changeLeader(player.getName(), playername2);
+					if(plugin.getDatas().isLeader(player.getName())) {
+						if(plugin.getDatas().hasIsland(playername2)) {
+							if(plugin.getDatas().hasGroup(playername2)) {
+								if(plugin.getDatas().getGroup(player.getName()).getMembers().contains(playername2)) {
+									plugin.getDatas().changeLeader(player.getName(), playername2);
 								} else
 									player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + playername2 + ChatColor.RED + " n'est pas dans votre groupe.");
 							} else
