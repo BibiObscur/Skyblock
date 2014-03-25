@@ -81,7 +81,7 @@ public class Plugin extends JavaPlugin{
     	    		secondsBeforeSave --;
     	    	} else {
     	    		
-					Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Sauvegarde des données skyblock" + ChatColor.GOLD + " -- ");
+					Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Donnees du skyblock sauvegardees." + ChatColor.GOLD + " -- ");
     	    		secondsBeforeSave = 900;
     	    	}
     	    }
