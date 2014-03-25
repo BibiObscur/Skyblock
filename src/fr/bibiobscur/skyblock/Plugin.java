@@ -80,13 +80,14 @@ public class Plugin extends JavaPlugin{
     	    	if(secondsBeforeSave > 0) {
     	    		secondsBeforeSave --;
     	    	} else {
-    	    		
+    	    		saveDatas();
 					Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Donnees du skyblock sauvegardees." + ChatColor.GOLD + " -- ");
     	    		secondsBeforeSave = 900;
     	    	}
     	    }
         }, 0L, 20L);
 	}
+
 //---------------------------------------------------------------------------------------------------------
 	//WorldName
 	public void loadWorldName() {

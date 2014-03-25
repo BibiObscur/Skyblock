@@ -302,7 +302,7 @@ public class SkyDatas {
 	    		else
 	    			level = (int)(Math.pow((xp/(Math.pow(2, 17)-1)), 1.0/3) * 1000);
 				
-	    		island.level = level;
+	    		island.setLevel(level);
 	    	}
 	    }
 	    
