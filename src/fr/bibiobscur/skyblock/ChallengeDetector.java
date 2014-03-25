@@ -263,11 +263,11 @@ public class ChallengeDetector implements Listener {
 				if(e.getEntityType() == EntityType.SNOWMAN)
 					island = challengeDone("LetItGo", 120, plugin.getServer().getPlayer(playername), island, Material.CARROT_ITEM, 1);
 				
-				if(e.getEntityType() == EntityType.IRON_GOLEM && island.challenges.contains("VillagerCity"))
+				if(e.getEntityType() == EntityType.IRON_GOLEM && island.getChallenges().contains("VillagerCity"))
 					island = challengeDone("VillagerProtector", 200, plugin.getServer().getPlayer(playername), island, Material.RED_ROSE, 1);
-				if(e.getEntityType() == EntityType.VILLAGER && island.challenges.contains("VillagerFamily"))
+				if(e.getEntityType() == EntityType.VILLAGER && island.getChallenges().contains("VillagerFamily"))
 					island = challengeDone("VillagerCity", 100, plugin.getServer().getPlayer(playername), island, Material.IRON_ORE, 16);
-				if(e.getEntityType() == EntityType.VILLAGER && island.challenges.contains("ANewFriend"))
+				if(e.getEntityType() == EntityType.VILLAGER && island.getChallenges().contains("ANewFriend"))
 					island = challengeDone("VillagerFamily", 60, plugin.getServer().getPlayer(playername), island, Material.DIRT, 16);
 				if(e.getEntityType() == EntityType.VILLAGER)
 					island = challengeDone("ANewFriend", 40, plugin.getServer().getPlayer(playername), island, Material.LEASH, 1);
@@ -472,24 +472,24 @@ public class ChallengeDetector implements Listener {
 	}
 	
 	public Island challengeDone(String challengename, int xp, Player player, Island island) {
-		if(!island.challenges.contains(challengename)) {
+		if(!island.getChallenges().contains(challengename)) {
 			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
 			for(int i = 0; i < xp/10; i++)
 				player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
 			player.giveExp(xp);
-			island.challenges.add(challengename);
+			island.getChallenges().add(challengename);
 		}
 		return island;
 	}
 	
 	public Island challengeDone(String challengename, int xp, Player player, Island island, Material bonus, int amount) {
-		if(!island.challenges.contains(challengename)) {
+		if(!island.getChallenges().contains(challengename)) {
 			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
 			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez gagné un bonus de " + ChatColor.GREEN + amount + " " + ChatColor.BLUE + bonus.toString() + ChatColor.GOLD + " !");
 			for(int i = 0; i < xp/10; i++)
 				player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
 			player.giveExp(xp);
-			island.challenges.add(challengename);
+			island.getChallenges().add(challengename);
 			player.getInventory().addItem(new ItemStack(bonus, amount));
 		}
 		return island;

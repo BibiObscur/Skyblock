@@ -141,7 +141,7 @@ public class IslandCommands implements CommandExecutor {
 					if(plugin.getDatas().getHostHere(player.getLocation()) != null) {
 						sender.sendMessage("Vous êtes sur l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(player.getLocation()));
 						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getLevel() + ChatColor.RED + ".");
-						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).challenges.size() + ChatColor.RED + ".");
+						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getChallenges().size() + ChatColor.RED + ".");
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'êtes pas sur une île.");
 					}
@@ -154,10 +154,10 @@ public class IslandCommands implements CommandExecutor {
 						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + island.getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + island.getZ() + ChatColor.RED + ".");
 						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + island.getLevel() + ChatColor.RED + ".");
 						String challengelist = "";
-						Iterator<String> it = island.challenges.iterator();
+						Iterator<String> it = island.getChallenges().iterator();
 						while(it.hasNext())
 							challengelist += "" + ChatColor.GREEN + it.next() + ChatColor.WHITE + ", ";
-						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + "(" + island.challenges.size() + ")" + challengelist);
+						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + "(" + island.getChallenges().size() + ")" + challengelist);
 						
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'avez pas d'île.");

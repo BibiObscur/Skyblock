@@ -113,7 +113,7 @@ public class SkyDatas {
 							block.setType(Material.AIR);
 					}
 			
-			island.challenges.clear();
+			island.getChallenges().clear();
 			orphaned.push(island);
 			playerIslands.remove(playerName);
 			
@@ -296,7 +296,7 @@ public class SkyDatas {
 		        		}
 	    			}
 	    		}
-	    		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 5 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 250 * island.challenges.size();
+	    		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 5 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 250 * island.getChallenges().size();
 
 	    		if(xp <= 16383.875)
 	    			level = (int)(xp/32.76775);
