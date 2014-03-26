@@ -1,4 +1,4 @@
-package fr.bibiobscur.skyblock;
+package fr.bibiobscur.skyblock.group;
 
 import java.io.Serializable;
 import java.util.HashSet;

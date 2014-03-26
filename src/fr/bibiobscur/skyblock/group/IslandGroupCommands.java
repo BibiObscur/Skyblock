@@ -1,4 +1,4 @@
-package fr.bibiobscur.skyblock;
+package fr.bibiobscur.skyblock.group;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,6 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import fr.bibiobscur.skyblock.Plugin;
 
 public class IslandGroupCommands implements CommandExecutor {
 

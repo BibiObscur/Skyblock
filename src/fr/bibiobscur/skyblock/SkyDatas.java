@@ -16,6 +16,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import fr.bibiobscur.skyblock.group.Group;
+
 public class SkyDatas {
 	private final Plugin plugin;
 	private HashMap<String, Island> playerIslands = new HashMap<String, Island>();

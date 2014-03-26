@@ -1,4 +1,4 @@
-package fr.bibiobscur.skyblock;
+package fr.bibiobscur.skyblock.group;
 
 public class Invite {
 	private String inviting;
