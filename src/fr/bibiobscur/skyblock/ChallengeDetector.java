@@ -67,6 +67,8 @@ public class ChallengeDetector implements Listener {
 					island = challengeDone("WheatFarmer", 30, e.getPlayer(), island);
 				if(e.getItem().getItemStack().getType() == Material.SUGAR_CANE)
 					island = challengeDone("SugarCaneFarmer", 30, e.getPlayer(), island);
+				if(e.getItem().getItemStack().getType() == Material.SLIME_BALL)
+					island = challengeDone("SlimeBallFarmer", 30, e.getPlayer(), island);
 				
 				if(e.getItem().getItemStack().getType() == Material.APPLE && e.getPlayer().getInventory().contains(new ItemStack(Material.APPLE, 64)))
 					island = challengeDone("AppleCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
@@ -84,6 +86,8 @@ public class ChallengeDetector implements Listener {
 					island = challengeDone("WheatCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.SUGAR_CANE && e.getPlayer().getInventory().contains(new ItemStack(Material.SUGAR_CANE, 64)))
 					island = challengeDone("SugarCaneCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
+				if(e.getItem().getItemStack().getType() == Material.SLIME_BALL && e.getPlayer().getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
+					island = challengeDone("SlimeBallCollector", 80, e.getPlayer(), island, Material.DIAMOND_PICKAXE, 1);
 				
 				if(e.getItem().getItemStack().getType() == Material.LOG && e.getPlayer().getInventory().contains(new ItemStack(Material.LOG, 64)))
 					island = challengeDone("Timber", 40, e.getPlayer(), island, Material.IRON_AXE, 1);
@@ -412,6 +416,8 @@ public class ChallengeDetector implements Listener {
 				island = challengeDone("WheatCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.SUGAR_CANE, 64)))
 				island = challengeDone("SugarCaneCollector", 80, player, island, Material.DIRT, 32);
+			if(e.getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
+				island = challengeDone("SlimeBallCollector", 80, player, island, Material.DIAMOND_PICKAXE, 1);
 			
 			if(e.getInventory().contains(new ItemStack(Material.BONE, 64)) &&
 					e.getInventory().contains(new ItemStack(Material.STRING, 64)) &&
@@ -444,6 +450,8 @@ public class ChallengeDetector implements Listener {
 				island = challengeDone("WheatCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.SUGAR_CANE, 64)))
 				island = challengeDone("SugarCaneCollector", 80, player, island, Material.DIRT, 32);
+			if(e.getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
+				island = challengeDone("SlimeBallCollector", 80, player, island, Material.DIAMOND_PICKAXE, 1);
 			
 			if(e.getInventory().contains(new ItemStack(Material.BONE, 64)) &&
 					e.getInventory().contains(new ItemStack(Material.STRING, 64)) &&
