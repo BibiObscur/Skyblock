@@ -156,11 +156,7 @@ public class IslandCommands implements CommandExecutor {
 						sender.sendMessage(ChatColor.RED + "Informations sur l'île de " + ChatColor.BLUE + player.getName() + ChatColor.RED + " :");
 						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + island.getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + island.getZ() + ChatColor.RED + ".");
 						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + island.getLevel() + ChatColor.RED + ".");
-						String challengelist = "";
-						Iterator<String> it = island.getChallenges().iterator();
-						while(it.hasNext())
-							challengelist += "" + ChatColor.GREEN + it.next() + ChatColor.WHITE + ", ";
-						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + "(" + island.getChallenges().size() + ")" + challengelist);
+						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + "(" + island.getChallenges().size() + ") " + island.getChallengeList());
 						
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'avez pas d'île.");
