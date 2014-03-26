@@ -256,7 +256,7 @@ public class ChallengeDetector implements Listener {
 					island = challengeDone("FriendlyRegion", 50, plugin.getServer().getPlayer(playername), island, Material.DIRT, 16);
 					Animals mob = (Animals) e.getEntity();
 					if(mob.getAge() < 0)
-						island = challengeDone("Breeding", 100, plugin.getServer().getPlayer(playername), island, Material.GOLD_ORE, 8);
+						island = challengeDone("SoCute", 100, plugin.getServer().getPlayer(playername), island, Material.GOLD_ORE, 8);
 				}
 				if(e.getEntityType() == EntityType.HORSE)
 					island = challengeDone("HorseAreAmazing", 170, plugin.getServer().getPlayer(playername), island, Material.NAME_TAG, 2);
