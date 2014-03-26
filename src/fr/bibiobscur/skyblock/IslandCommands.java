@@ -52,6 +52,9 @@ public class IslandCommands implements CommandExecutor {
 				if(plugin.getDatas().hasHome(player.getName())) {
 					sender.sendMessage("Téléportation à votre île.");
 					plugin.getDatas().teleportHome(player);
+				} else if(plugin.getDatas().hasIsland(player.getName())) {
+					sender.sendMessage("Téléportation à votre île.");
+					plugin.getDatas().teleportIsland(player);
 				} else {
 					sender.sendMessage(ChatColor.RED + "Vous n'avez pas de home. Pour créer un home, tapez /is sethome.");
 				}

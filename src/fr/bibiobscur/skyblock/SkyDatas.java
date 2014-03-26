@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class SkyDatas {
 	private final Plugin plugin;
@@ -324,9 +325,9 @@ public class SkyDatas {
     	} 
     	
     	Home home = new Home();
-    	home.x = plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockX();
-    	home.y = plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockY();
-    	home.z = plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockZ();
+    	home.setX(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockX());
+    	home.setY(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockY());
+    	home.setZ(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockZ());
     	return home;
     }
 	
@@ -349,9 +350,10 @@ public class SkyDatas {
 	    			playerHomes.remove(player.getName());
 	    		
 	    		Home home = new Home();
-	    		home.x = location.getBlockX();
-	    		home.y = location.getBlockY();
-	    		home.z = location.getBlockZ();
+	    		home.setX(location.getBlockX());
+	    		home.setY(location.getBlockY());
+	    		home.setZ(location.getBlockZ());
+	    		home.setDirection(location.getDirection().serialize());
 	    		playerHomes.put(player.getName(), home);
 	    		
 	    		return true;
@@ -399,7 +401,8 @@ public class SkyDatas {
     	
     	Home home = getPlayerHome(player.getName());
     	World world = plugin.getServer().getWorld(plugin.getworldname());
-    	Location location = new Location(world, home.x, home.y, home.z);
+    	Location location = new Location(world, home.getX(), home.getY(), home.getZ());
+		location.setDirection(Vector.deserialize(home.getDirection()));
     	int h = location.getBlockY();
     	
 	    while(world.getBlockAt(location.getBlockX(), h, location.getBlockZ()).getType() != Material.AIR) {
@@ -408,7 +411,8 @@ public class SkyDatas {
 	    h++;
 	    
 		world.loadChunk(location.getBlockX(), location.getBlockZ());
-		player.teleport(new Location(world, location.getBlockX(), h, location.getBlockZ()));
+		location.setY(h);
+		player.teleport(location);
 	}
 
 
