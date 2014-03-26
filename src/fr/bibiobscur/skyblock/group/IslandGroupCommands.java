@@ -134,7 +134,7 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 							if(!plugin.getDatas().hasIsland(player.getName())) {
 								if(plugin.getDatas().isLeader(playername2)) {
 									plugin.getDatas().addPlayerToGroup(playername2, player.getName());
-									inviteRequest.remove(new Invite(playername2, player.getName()));
+									removeRequest(playername2, player.getName());
 								} else
 									player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + playername2 + ChatColor.RED + " n'est pas leader d'un groupe ou ne possède pas d'île.");
 							} else
@@ -151,7 +151,7 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 							if(plugin.getDatas().isLeader(playername2)) {
 								player.sendMessage("Vous avez refusé la demande de " + ChatColor.BLUE + playername2);
 								plugin.getServer().getPlayer(playername2).sendMessage(ChatColor.BLUE + player.getName() + ChatColor.RED + " a refusé votre demande.");
-								inviteRequest.remove(new Invite(playername2, player.getName()));
+								removeRequest(playername2, player.getName());
 							} else
 								player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + playername2 + ChatColor.RED + " n'est pas leader d'un groupe ou ne possède pas d'île.");
 						} else
@@ -203,6 +203,19 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 		while(it.hasNext()) {
 			request = it.next();
 			if(request.getInvited().equalsIgnoreCase(invited) && request.getInviting().equalsIgnoreCase(inviting)) return true;
+		}
+		return false;
+	}
+	
+	private boolean removeRequest(String inviting, String invited) {
+		Iterator<Invite> it = inviteRequest.iterator();
+		Invite request;
+		while(it.hasNext()) {
+			request = it.next();
+			if(request.getInvited().equalsIgnoreCase(invited) && request.getInviting().equalsIgnoreCase(inviting)) {
+				inviteRequest.remove(request);
+				return true;
+			}
 		}
 		return false;
 	}
