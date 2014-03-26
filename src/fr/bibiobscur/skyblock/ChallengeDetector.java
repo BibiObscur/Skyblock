@@ -3,6 +3,7 @@ package fr.bibiobscur.skyblock;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -88,6 +89,13 @@ public class ChallengeDetector implements Listener {
 					island = challengeDone("SugarCaneCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.SLIME_BALL && e.getPlayer().getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
 					island = challengeDone("SlimeBallCollector", 80, e.getPlayer(), island, Material.DIAMOND_PICKAXE, 1);
+				
+				if(e.getItem().getItemStack().getType() == Material.RAW_CHICKEN || e.getItem().getItemStack().getType() == Material.FEATHER)
+					island = challengeDone("Chicken", 30, e.getPlayer(), island);
+				if(e.getItem().getItemStack().getType() == Material.RAW_BEEF || e.getItem().getItemStack().getType() == Material.LEATHER)
+					island = challengeDone("Cow", 30, e.getPlayer(), island);
+				if(e.getItem().getItemStack().getType() == Material.PORK)
+					island = challengeDone("Pig", 30, e.getPlayer(), island);
 				
 				if(e.getItem().getItemStack().getType() == Material.LOG && e.getPlayer().getInventory().contains(new ItemStack(Material.LOG, 64)))
 					island = challengeDone("Timber", 40, e.getPlayer(), island, Material.IRON_AXE, 1);
@@ -212,6 +220,8 @@ public class ChallengeDetector implements Listener {
 						if(((e1.getEntityType().getTypeId() >= 50 && e1.getEntityType().getTypeId() <= 64) ||
 								e1.getEntityType().getTypeId() == 66))
 							island = challengeDone("MonsterSlayer", 50, player, island);
+						if(e1.getEntityType() == EntityType.IRON_GOLEM)
+							island = challengeDone("GolemDestroyer", 80, player, island, Material.GOLD_ORE, 16);
 									
 					}
 				}
@@ -242,9 +252,12 @@ public class ChallengeDetector implements Listener {
 						e.getEntityType() == EntityType.SHEEP || 
 						e.getEntityType() == EntityType.SQUID || 
 						e.getEntityType() == EntityType.VILLAGER || 
-						e.getEntityType() == EntityType.WOLF)
+						e.getEntityType() == EntityType.WOLF) {
 					island = challengeDone("FriendlyRegion", 50, plugin.getServer().getPlayer(playername), island, Material.DIRT, 16);
-				
+					Animals mob = (Animals) e.getEntity();
+					if(mob.getAge() < 0)
+						island = challengeDone("Breeding", 100, plugin.getServer().getPlayer(playername), island, Material.GOLD_ORE, 8);
+				}
 				if(e.getEntityType() == EntityType.HORSE)
 					island = challengeDone("HorseAreAmazing", 170, plugin.getServer().getPlayer(playername), island, Material.NAME_TAG, 2);
 				
