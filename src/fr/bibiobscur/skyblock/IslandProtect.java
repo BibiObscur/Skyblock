@@ -165,7 +165,7 @@ public class IslandProtect implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void respawnSky(PlayerRespawnEvent e) {
 		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
-			e.getPlayer().setLevel(0);
+			//e.getPlayer().setLevel(0);
 			e.setRespawnLocation(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
 		}
 	}
