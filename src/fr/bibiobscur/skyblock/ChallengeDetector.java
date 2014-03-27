@@ -388,7 +388,7 @@ public class ChallengeDetector implements Listener {
 				for(int i = 0; i < 2; i++)
 					e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.EXPERIENCE_ORB);
 				e.getPlayer().giveExp(17);
-				challengeDone("FisherMan", 30, e.getPlayer(), plugin.getDatas().getPlayerIsland(e.getPlayer().getName()), Material.IRON_ORE, 16);
+				challengeDone("FisherMan", 30, e.getPlayer(), plugin.getDatas().getPlayerIsland(e.getPlayer().getName()), Material.IRON_ORE, 5);
 			}
 		}
 	}
