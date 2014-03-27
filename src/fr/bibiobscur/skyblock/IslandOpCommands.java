@@ -113,7 +113,10 @@ public class IslandOpCommands implements CommandExecutor {
 				if(args[1].equalsIgnoreCase("info")) {
 					if(plugin.getDatas().hasIsland(playername)) {
 						Island island = plugin.getDatas().getPlayerIsland(playername);
-						sender.sendMessage("Le joueur " + ChatColor.BLUE + playername + ChatColor.WHITE + " a une île aux coordonnées : x=" + ChatColor.BLUE + island.getX() + ChatColor.WHITE + ", z=" + ChatColor.BLUE + island.getZ());
+						sender.sendMessage(ChatColor.WHITE + "Informations sur l'île de " + ChatColor.BLUE + playername + ChatColor.WHITE + " :");
+						sender.sendMessage(ChatColor.WHITE + "Coordonnées : x=" + ChatColor.BLUE + island.getX() + ChatColor.WHITE + ", z=" + ChatColor.BLUE + island.getZ() + ChatColor.WHITE + ".");
+						sender.sendMessage(ChatColor.WHITE + "Niveau : " + ChatColor.BLUE + island.getLevel() + ChatColor.WHITE + ".");
+						sender.sendMessage(ChatColor.WHITE + "Challenges accomplis : " + ChatColor.WHITE + "(" + island.getChallenges().size() + ") " + island.getChallengeList());
 					} else {
 						islandNotFound(sender, playername);
 					}
