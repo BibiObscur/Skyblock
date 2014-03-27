@@ -45,16 +45,18 @@ public class IslandCommands implements CommandExecutor {
 			return true;
 		}
 		
-		if(commandLabel.equalsIgnoreCase("is") || commandLabel.equalsIgnoreCase("island"))
+		if(commandLabel.equalsIgnoreCase("is"))
 		{
 			if(args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("home")))
 			{
 				if(plugin.getDatas().hasHome(player.getName())) {
 					sender.sendMessage("Téléportation à votre île.");
 					plugin.getDatas().teleportHome(player);
+					return true;
 				} else if(plugin.getDatas().hasIsland(player.getName())) {
 					sender.sendMessage("Téléportation à votre île.");
 					plugin.getDatas().teleportIsland(player);
+					return true;
 				} else {
 					sender.sendMessage(ChatColor.RED + "Vous n'avez pas de home. Pour créer un home, tapez /is sethome.");
 				}
@@ -62,6 +64,7 @@ public class IslandCommands implements CommandExecutor {
 			
 			if(args.length == 1 && args[0].equalsIgnoreCase("spawn")) {
 				player.teleport(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
+				return true;
 			}
 
 			if(!player.getWorld().getName().equalsIgnoreCase(plugin.getworldname()))
@@ -81,8 +84,9 @@ public class IslandCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "/is delete" + ChatColor.WHITE + " : Supprimer son île.");
 					sender.sendMessage(ChatColor.RED + "/is restart" + ChatColor.WHITE + " : Détruire et recommencer son île.");
 					sender.sendMessage(ChatColor.RED + "/is sethome" + ChatColor.WHITE + " : Définir un point de téléportation sur son île.");
-					sender.sendMessage(ChatColor.RED + "/is info" + ChatColor.WHITE + " : Récupérer des informations votre île.");
-					sender.sendMessage(ChatColor.RED + "/is infohere" + ChatColor.WHITE + " : Récupérer des informations sur l'île sur laquelle vous êtes");
+					sender.sendMessage(ChatColor.RED + "/is info" + ChatColor.WHITE + " : Afficher des informations votre île.");
+					sender.sendMessage(ChatColor.RED + "/is infohere" + ChatColor.WHITE + " : Afficher des informations sur l'île sur laquelle vous êtes.");
+					sender.sendMessage(ChatColor.RED + "/is info <player>" + ChatColor.WHITE + " : Afficher des informations sur l'île du joueur.");
 					sender.sendMessage(ChatColor.RED + "/isg" + ChatColor.WHITE + " : Commandes pour créer une île en coopération.");
 					}
 				
@@ -143,6 +147,7 @@ public class IslandCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("infohere")) {
 					if(plugin.getDatas().getHostHere(player.getLocation()) != null) {
 						sender.sendMessage("Vous êtes sur l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(player.getLocation()));
+						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getZ() + ChatColor.RED + ".");
 						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getLevel() + ChatColor.RED + ".");
 						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getChallenges().size() + ChatColor.RED + ".");
 					} else {
@@ -160,6 +165,22 @@ public class IslandCommands implements CommandExecutor {
 						
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'avez pas d'île.");
+					}
+				}
+			}
+			
+			if(args.length == 2)
+			{
+				if(args[0].equalsIgnoreCase("info")) {
+					String playername = args[1];
+					if(plugin.getDatas().hasIsland(playername)) {
+						Island island = plugin.getDatas().getPlayerIsland(playername);
+						sender.sendMessage("Informations sur l'île de " + ChatColor.BLUE + playername + ChatColor.RED + " :");
+						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + island.getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + island.getZ() + ChatColor.RED + ".");
+						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + island.getLevel() + ChatColor.RED + ".");
+						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + island.getChallenges().size() + ChatColor.RED + ".");
+					} else {
+						sender.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + playername + ChatColor.RED + " n'a pas d'île.");
 					}
 				}
 			}
