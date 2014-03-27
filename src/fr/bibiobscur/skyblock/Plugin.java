@@ -105,6 +105,7 @@ public class Plugin extends JavaPlugin{
 		        World world = getServer().getWorld(worldname);
 				world.setDifficulty(Difficulty.HARD);
 				world.setPVP(true);
+				world.setMonsterSpawnLimit(220);
 	    	} else
 	    		new File(directory + "SkyblockWorldName.txt");
     	

@@ -106,6 +106,10 @@ public class IslandOpCommands implements CommandExecutor {
 					sender.sendMessage("Sauvegarde terminée.");
 				}
 				
+				if(args[0].equalsIgnoreCase("mlimit")) {
+					sender.sendMessage("Monster spawn limit : " + plugin.getServer().getWorld(plugin.getworldname()).getMonsterSpawnLimit());
+				}
+				
 			} else if(args.length == 2) {
 				
 				String playername = args[0];
@@ -121,6 +125,7 @@ public class IslandOpCommands implements CommandExecutor {
 						islandNotFound(sender, playername);
 					}
 				}
+				
 				if(args[1].equalsIgnoreCase("tp")) {
 					if(plugin.getDatas().hasIsland(playername)) {
 						Island island = plugin.getDatas().getPlayerIsland(playername);
@@ -131,6 +136,7 @@ public class IslandOpCommands implements CommandExecutor {
 						islandNotFound(sender, playername);
 					}
 				}
+				
 				if(args[1].equalsIgnoreCase("delete") && sender.hasPermission("skyblock.devcommand")) {
 					if(plugin.getDatas().hasIsland(playername)) {
 						Island island = plugin.getDatas().getPlayerIsland(playername);
@@ -141,6 +147,7 @@ public class IslandOpCommands implements CommandExecutor {
 						islandNotFound(sender, playername);
 					}
 				}
+				
 				if(args[1].equalsIgnoreCase("create")) {
 					if(plugin.getDatas().hasIsland(playername)) {
 						Island island = plugin.getDatas().getPlayerIsland(playername);
@@ -159,6 +166,7 @@ public class IslandOpCommands implements CommandExecutor {
 						}
 					}
 				}
+				
 				if(args[1].equalsIgnoreCase("restart") && sender.hasPermission("skyblock.devcommand")) {
 					if(plugin.getDatas().hasIsland(playername)) {
 						Island island = plugin.getDatas().getPlayerIsland(playername);
