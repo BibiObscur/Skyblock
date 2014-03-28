@@ -42,9 +42,9 @@ public class ChallengeDetector implements Listener {
 			if(plugin.getDatas().isOnIsland(e.getPlayer())) {
 				if((e.getBlock().getType() == Material.CROPS ||
 						e.getBlock().getType() == Material.CARROT ||
-						e.getBlock().getType() == Material.MELON_STEM) &&
+						e.getBlock().getType() == Material.POTATO) &&
 						e.getBlock().getData() == (byte) 7)
-					giveExp(e.getPlayer(), 2);
+					giveExp(e.getPlayer(), 1);
 			}
 		}
 	}
