@@ -1,5 +1,7 @@
 package fr.bibiobscur.skyblock;
 
+import java.util.Iterator;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +14,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -22,6 +25,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 
+import fr.bibiobscur.skyblock.group.Group;
+
 public class ChallengeDetector implements Listener {
 
 	public final Plugin plugin;
@@ -29,6 +34,19 @@ public class ChallengeDetector implements Listener {
 	public ChallengeDetector(Plugin plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+	
+	@EventHandler
+	public void playerFarm(BlockBreakEvent e) {
+		if(e.getBlock().getLocation().getWorld().getName().equals(plugin.getworldname())) {
+			if(plugin.getDatas().isOnIsland(e.getPlayer())) {
+				if((e.getBlock().getType() == Material.CROPS ||
+						e.getBlock().getType() == Material.CARROT ||
+						e.getBlock().getType() == Material.MELON_STEM) &&
+						e.getBlock().getData() == (byte) 7)
+					giveExp(e.getPlayer(), 2);
+			}
+		}
 	}
 	
 	@EventHandler
@@ -233,15 +251,49 @@ public class ChallengeDetector implements Listener {
 	public void creatureSpawn(CreatureSpawnEvent e) {
 		if(e.getLocation().getWorld().getName().equals(plugin.getworldname()))
 		{
+			String playername = "";
+			String currentname;
 			boolean hostConnected = false;
-			for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !hostConnected; i++)
+			/*for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !hostConnected; i++)
 			{
-				if(plugin.getServer().getOnlinePlayers()[i].getName().equals(plugin.getDatas().getHostHere(e.getLocation()))) hostConnected = true;
-			}
+				if(!plugin.getDatas().hasGroup(plugin.getDatas().getHostHere(e.getLocation()))) {
+					if(plugin.getServer().getOnlinePlayers()[i].getName().equals(plugin.getDatas().getHostHere(e.getLocation()))) {
+						hostConnected = true;
+						playername = plugin.getDatas().getHostHere(e.getLocation());
+					}
+				} else {
+					Group group = plugin.getDatas().getGroup(plugin.getDatas().getHostHere(e.getLocation()));
+					Iterator<String> it = group.getMembers().iterator();
+					while(it.hasNext()) {
+						currentname = it.next();
+						if(plugin.getServer().getOnlinePlayers()[i].getName().equalsIgnoreCase(currentname)) {
+							playername = currentname;
+						}
+					}
+					it.remove();
+				}
+			}*/
+			
+			String hostName = plugin.getDatas().getHostHere(e.getLocation());
+			if(plugin.isConnected(hostName)) {
+				playername = hostName;
+				hostConnected = true;
+			} else if(plugin.getDatas().hasGroup(hostName)) {
+				Group group = plugin.getDatas().getGroup(hostName);
+				Iterator<String> it = group.getMembers().iterator();
+				while(it.hasNext() && !hostConnected) {
+					currentname = it.next();
+					if(plugin.isConnected(currentname)) {
+						playername = currentname;
+						hostConnected = true;
+					}
+				}
+			} else
+				hostConnected = false;
 			
 			if(hostConnected)
 			{
-				String playername = plugin.getDatas().getHostHere(e.getLocation());
+				//Bukkit.broadcastMessage("Un " + e.getEntityType().name() + " a spawn sur l'île de " + playername);
 				Island island = plugin.getDatas().getPlayerIsland(playername);
 				if(e.getEntityType() == EntityType.CHICKEN || 
 						e.getEntityType() == EntityType.COW || 
@@ -374,7 +426,7 @@ public class ChallengeDetector implements Listener {
 				
 				if(player.getFoodLevel() + foodGet > 20) foodGet = 20 - player.getFoodLevel();
 				
-				player.giveExp(foodGet*2);
+				giveExp(player, foodGet*2);
 			}
 		}
 	}
@@ -385,9 +437,7 @@ public class ChallengeDetector implements Listener {
 		{
 			if(e.getExpToDrop() > 0)
 			{
-				for(int i = 0; i < 2; i++)
-					e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.EXPERIENCE_ORB);
-				e.getPlayer().giveExp(17);
+				giveExp(e.getPlayer(), 17);
 				challengeDone("FisherMan", 30, e.getPlayer(), plugin.getDatas().getPlayerIsland(e.getPlayer().getName()), Material.IRON_ORE, 5);
 			}
 		}
@@ -479,14 +529,11 @@ public class ChallengeDetector implements Listener {
 		if(e.getBlock().getWorld().getName().equals(plugin.getworldname())) {
 			String playername = plugin.getDatas().getHostHere(e.getBlock().getLocation());
 			if(playername != null) {
-				boolean online = false;
-				for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !online; i++){
-					if(plugin.getServer().getOnlinePlayers()[i].getName().equals(playername)) online = true;
-				}
-				if(online) {
+				if(plugin.isConnected(playername)) {
 					Player player = (Player) plugin.getServer().getPlayer(playername);
 					Island island = plugin.getDatas().getPlayerIsland(player.getName());
 					island = challengeDone("Brewing", 50, player, island);
+					giveExp(player, 8);
 				}
 			}
 		}
@@ -495,9 +542,7 @@ public class ChallengeDetector implements Listener {
 	public Island challengeDone(String challengename, int xp, Player player, Island island) {
 		if(!island.getChallenges().contains(challengename)) {
 			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
-			for(int i = 0; i < xp/10; i++)
-				player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
-			player.giveExp(xp);
+			giveExp(player, xp);
 			island.getChallenges().add(challengename);
 		}
 		return island;
@@ -507,13 +552,17 @@ public class ChallengeDetector implements Listener {
 		if(!island.getChallenges().contains(challengename)) {
 			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
 			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez gagné un bonus de " + ChatColor.GREEN + amount + " " + ChatColor.BLUE + bonus.toString() + ChatColor.GOLD + " !");
-			for(int i = 0; i < xp/10; i++)
-				player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
-			player.giveExp(xp);
+			giveExp(player, xp);
 			island.getChallenges().add(challengename);
 			player.getInventory().addItem(new ItemStack(bonus, amount));
 		}
 		return island;
+	}
+	
+	private void giveExp(Player player, int xp) {
+		for(int i = 0; i < xp/10 + 1; i++)
+			player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
+		player.giveExp(xp);
 	}
 	
 	
