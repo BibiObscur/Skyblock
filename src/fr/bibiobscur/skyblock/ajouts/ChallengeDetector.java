@@ -38,6 +38,7 @@ public class ChallengeDetector implements Listener {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void playerFarm(BlockBreakEvent e) {
 		if(e.getBlock().getLocation().getWorld().getName().equals(plugin.getworldname())) {
@@ -439,7 +440,7 @@ public class ChallengeDetector implements Listener {
 		{
 			if(e.getExpToDrop() > 0)
 			{
-				giveExp(e.getPlayer(), 17);
+				giveExp(e.getPlayer(), 10);
 				challengeDone("FisherMan", 30, e.getPlayer(), plugin.getDatas().getPlayerIsland(e.getPlayer().getName()), Material.IRON_ORE, 5);
 			}
 		}
