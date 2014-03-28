@@ -17,6 +17,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.bibiobscur.skyblock.ajouts.ChallengeDetector;
+import fr.bibiobscur.skyblock.ajouts.NewSigns;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
 
 
@@ -31,7 +32,7 @@ public class Plugin extends JavaPlugin{
 	private String worldname = "";
 	private SkyDatas datas;
 	
-	private int secondsBeforeSave;
+	//private int secondsBeforeSave;
 	private Logger logger = Logger.getLogger("Minecraft");
 	
 //---------------------------------------------------------------------------------------------------------
@@ -47,6 +48,7 @@ public class Plugin extends JavaPlugin{
 		//Enable Skyblock listeners
 		new IslandProtect(this);
 		new ChallengeDetector(this);
+		new NewSigns(this);
 		
 		//Create new Skyblock datas
 		datas = new SkyDatas(this);
@@ -64,7 +66,7 @@ public class Plugin extends JavaPlugin{
         datas.defineLevel();
         
         //Autosave activation
-        secondsBeforeSave = 900;
+        //secondsBeforeSave = 900;
         autosave();
 	}
 	
@@ -80,15 +82,15 @@ public class Plugin extends JavaPlugin{
 	public void autosave() {
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
     	    public void run(){
-    	    	if(secondsBeforeSave > 0) {
-    	    		secondsBeforeSave --;
-    	    	} else {
+    	    	//if(secondsBeforeSave > 0) {
+    	    		//secondsBeforeSave --;
+    	    	//} else {
     	    		saveDatas();
 					Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Donnees du skyblock sauvegardees." + ChatColor.GOLD + " -- ");
-    	    		secondsBeforeSave = 900;
-    	    	}
+    	    		//secondsBeforeSave = 900;
+    	    	//}
     	    }
-        }, 0L, 20L);
+        }, 0L, 20 * 60 * 15L);
 	}
 
 //---------------------------------------------------------------------------------------------------------
