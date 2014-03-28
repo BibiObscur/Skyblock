@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.bibiobscur.skyblock.ajouts.ChallengeDetector;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
 
 

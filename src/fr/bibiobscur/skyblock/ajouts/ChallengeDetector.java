@@ -1,4 +1,4 @@
-package fr.bibiobscur.skyblock;
+package fr.bibiobscur.skyblock.ajouts;
 
 import java.util.Iterator;
 
@@ -25,6 +25,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 
+import fr.bibiobscur.skyblock.Island;
+import fr.bibiobscur.skyblock.Plugin;
 import fr.bibiobscur.skyblock.group.Group;
 
 public class ChallengeDetector implements Listener {
