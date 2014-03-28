@@ -59,6 +59,7 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				sender.sendMessage(ChatColor.RED + "/isg leave" + ChatColor.WHITE + " : Quitter un groupe.");
 				sender.sendMessage(ChatColor.RED + "/isg givelead <player>" + ChatColor.WHITE + " : Donne le lead à un autre joueur.");
 				sender.sendMessage(ChatColor.RED + "/isg info" + ChatColor.WHITE + " : Voir les infos sur votre groupe.");
+				sender.sendMessage(ChatColor.RED + "/isg infohere" + ChatColor.WHITE + " : Voir les infos sur le groupe sur l'île à votre emplacement.");
 			} else if(args.length == 1) {
 				if(args[0].equalsIgnoreCase("help")) {
 					sender.sendMessage(ChatColor.RED + "Commandes groupe : ");
@@ -70,6 +71,7 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 					sender.sendMessage(ChatColor.RED + "/isg leave" + ChatColor.WHITE + " : Quitter un groupe.");
 					sender.sendMessage(ChatColor.RED + "/isg givelead <player>" + ChatColor.WHITE + " : Donne le lead à un autre joueur.");
 					sender.sendMessage(ChatColor.RED + "/isg info" + ChatColor.WHITE + " : Voir les infos sur votre groupe.");
+					sender.sendMessage(ChatColor.RED + "/isg infohere" + ChatColor.WHITE + " : Voir les infos sur le groupe sur l'île à votre emplacement.");
 				}
 				
 				if(args[0].equalsIgnoreCase("leave")) {
@@ -85,9 +87,7 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 				
 				if(args[0].equalsIgnoreCase("info")) {
 					if(plugin.getDatas().hasGroup(player.getName())) {
-						System.out.println(player.getName() + " a un groupe.");
 						Group group = plugin.getDatas().getGroup(player.getName());
-						System.out.println("Groupe récupéré.");
 						player.sendMessage(ChatColor.GREEN + "Informations sur le groupe de " + ChatColor.BLUE + group.getLeader() + ChatColor.GREEN + " :");
 						player.sendMessage(ChatColor.YELLOW + "Leader : " + ChatColor.WHITE + group.getLeader());
 						String membres = "";
@@ -97,6 +97,22 @@ public boolean onCommand(CommandSender sender, Command command, String commandLa
 						player.sendMessage(ChatColor.YELLOW + "Membres : " + ChatColor.WHITE + membres);
 						} else
 						player.sendMessage(ChatColor.RED + "Vous n'êtes pas dans un groupe.");
+				}
+				
+				if(args[0].equalsIgnoreCase("infohere")) {
+					String hostname = plugin.getDatas().getHostHere(player.getLocation());
+					if(plugin.getDatas().hasGroup(hostname)) {
+						Group group = plugin.getDatas().getGroup(hostname);
+						player.sendMessage(ChatColor.GREEN + "Informations sur le groupe de " + ChatColor.BLUE + group.getLeader() + ChatColor.GREEN + " :");
+						player.sendMessage(ChatColor.YELLOW + "Leader : " + ChatColor.WHITE + group.getLeader());
+						String membres = "";
+						Iterator<String> it = group.getMembers().iterator();
+						while(it.hasNext())
+							membres += "" + ChatColor.WHITE + it.next() + ChatColor.YELLOW + ", ";
+						player.sendMessage(ChatColor.YELLOW + "Membres : " + ChatColor.WHITE + membres);
+					} else {
+						player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BLUE + hostname + ChatColor.RED + " n'a pas de groupe.");
+					}
 				}
 				
 				if(args[0].equalsIgnoreCase("invite"))
