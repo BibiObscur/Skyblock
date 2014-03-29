@@ -1,4 +1,4 @@
-package fr.bibiobscur.skyblock;
+package fr.bibiobscur.skyblock.hell;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,17 +11,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-public class IslandCommands implements CommandExecutor {
+import fr.bibiobscur.skyblock.Island;
+import fr.bibiobscur.skyblock.Plugin;
 
-	public final Plugin plugin;
+public class HellCommands implements CommandExecutor {
 	
-    public IslandCommands(Plugin plugin) {
-        this.plugin = plugin;
-    }
-    
+	private final Plugin plugin;
+	
+	public HellCommands(Plugin plugin) {
+		this.plugin = plugin;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-		
 		if (!(sender instanceof Player)) {
             return false;
         }
@@ -33,36 +35,36 @@ public class IslandCommands implements CommandExecutor {
         	return true;
         }*/
 		
-		if(plugin.getworldname().isEmpty()){
-			player.sendMessage(ChatColor.RED + "Le monde skyblock n'a pas encore été défini.");
+		if(plugin.getHellDatas().getworldname().isEmpty()){
+			player.sendMessage(ChatColor.RED + "Le monde hellblock n'a pas encore été défini.");
 			return true;
 		}
 		
-		if(commandLabel.equalsIgnoreCase("is"))
+		if(commandLabel.equalsIgnoreCase("ishell"))
 		{
 			if(args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("home")))
 			{
-				if(plugin.getDatas().hasHome(player.getName())) {
+				if(plugin.getHellDatas().hasHome(player.getName())) {
 					sender.sendMessage("Téléportation à votre île.");
-					plugin.getDatas().teleportHome(player);
+					plugin.getHellDatas().teleportHome(player);
 					return true;
-				} else if(plugin.getDatas().hasIsland(player.getName())) {
+				} else if(plugin.getHellDatas().hasIsland(player.getName())) {
 					sender.sendMessage("Téléportation à votre île.");
-					plugin.getDatas().teleportIsland(player);
+					plugin.getHellDatas().teleportIsland(player);
 					return true;
 				} else {
-					sender.sendMessage(ChatColor.RED + "Vous n'avez pas de home. Pour créer un home, tapez /is sethome.");
+					sender.sendMessage(ChatColor.RED + "Vous n'avez pas de home. Pour créer un home, tapez /ishell sethome.");
 				}
 			}
 			
 			if(args.length == 1 && args[0].equalsIgnoreCase("spawn")) {
-				player.teleport(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
+				player.teleport(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
 				return true;
 			}
 
-			if(!player.getWorld().getName().equalsIgnoreCase(plugin.getworldname()))
+			if(!player.getWorld().getName().equalsIgnoreCase(plugin.getHellDatas().getworldname()))
 			{
-				player.sendMessage(ChatColor.RED + "Tu dois être sur la map " + ChatColor.BLUE + plugin.getworldname() + ChatColor.RED + " pour utiliser cette commande.");
+				player.sendMessage(ChatColor.RED + "Tu dois être sur la map " + ChatColor.BLUE + plugin.getHellDatas().getworldname() + ChatColor.RED + " pour utiliser cette commande.");
 	        	return true;
 			}
 			
@@ -70,24 +72,22 @@ public class IslandCommands implements CommandExecutor {
 			{
 				if(args[0].equalsIgnoreCase("help"))
 				{
-					sender.sendMessage(ChatColor.RED + "Commandes Skyblock : ");
-					sender.sendMessage(ChatColor.RED + "/is" + ChatColor.WHITE + " : Se téléporter à son île");
-					sender.sendMessage(ChatColor.RED + "/is spawn" + ChatColor.WHITE + " : Se téléporter au spawn du monde skyblock");
-					sender.sendMessage(ChatColor.RED + "/is create" + ChatColor.WHITE + " : Créer une île.");
-					sender.sendMessage(ChatColor.RED + "/is delete" + ChatColor.WHITE + " : Supprimer son île.");
-					sender.sendMessage(ChatColor.RED + "/is restart" + ChatColor.WHITE + " : Détruire et recommencer son île.");
-					sender.sendMessage(ChatColor.RED + "/is sethome" + ChatColor.WHITE + " : Définir un point de téléportation sur son île.");
-					sender.sendMessage(ChatColor.RED + "/is info" + ChatColor.WHITE + " : Afficher des informations votre île.");
-					sender.sendMessage(ChatColor.RED + "/is infohere" + ChatColor.WHITE + " : Afficher des informations sur l'île sur laquelle vous êtes.");
-					sender.sendMessage(ChatColor.RED + "/is info <player>" + ChatColor.WHITE + " : Afficher des informations sur l'île du joueur.");
-					sender.sendMessage(ChatColor.RED + "/isg" + ChatColor.WHITE + " : Commandes pour créer une île en coopération.");
+					sender.sendMessage(ChatColor.RED + "Commandes Hellblock : ");
+					sender.sendMessage(ChatColor.RED + "/ishell" + ChatColor.WHITE + " : Se téléporter à son île");
+					sender.sendMessage(ChatColor.RED + "/ishell create" + ChatColor.WHITE + " : Créer une île.");
+					sender.sendMessage(ChatColor.RED + "/ishell delete" + ChatColor.WHITE + " : Supprimer son île.");
+					sender.sendMessage(ChatColor.RED + "/ishell restart" + ChatColor.WHITE + " : Détruire et recommencer son île.");
+					sender.sendMessage(ChatColor.RED + "/ishell sethome" + ChatColor.WHITE + " : Définir un point de téléportation sur son île.");
+					sender.sendMessage(ChatColor.RED + "/ishell info" + ChatColor.WHITE + " : Afficher des informations votre île.");
+					sender.sendMessage(ChatColor.RED + "/ishell infohere" + ChatColor.WHITE + " : Afficher des informations sur l'île sur laquelle vous êtes.");
+					sender.sendMessage(ChatColor.RED + "/ishell info <player>" + ChatColor.WHITE + " : Afficher des informations sur l'île du joueur.");
 				}
 				
 				if(args[0].equalsIgnoreCase("create"))
 				{
 					//Création de l'île
 					if(createNewIsland(player)){
-						plugin.getDatas().teleportIsland(player);
+						plugin.getHellDatas().teleportIsland(player);
 			    		List<Entity> Entities = player.getNearbyEntities(15,15,15);
 			    		Iterator<Entity> ent = Entities.iterator();
 			    		while (ent.hasNext())
@@ -100,11 +100,11 @@ public class IslandCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("restart") || args[0].equalsIgnoreCase("reset"))
 				{
 					//Suppression de l'île
-					plugin.getDatas().deleteIsland(player.getName(), plugin.getServer().getWorld(plugin.getworldname()));
+					plugin.getHellDatas().deleteIsland(player.getName(), plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
 					
 					//Création de l'île
 					if(createNewIsland(player)){
-						plugin.getDatas().teleportIsland(player);
+						plugin.getHellDatas().teleportIsland(player);
 			    		List<Entity> Entities = player.getNearbyEntities(15,15,15);
 			    		Iterator<Entity> ent = Entities.iterator();
 			    		while (ent.hasNext())
@@ -117,8 +117,8 @@ public class IslandCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("delete"))
 				{
 					//Suppression de l'île
-					if(plugin.getDatas().hasIsland(player.getName())) {
-						plugin.getDatas().deleteIsland(player.getName(), plugin.getServer().getWorld(plugin.getworldname()));
+					if(plugin.getHellDatas().hasIsland(player.getName())) {
+						plugin.getHellDatas().deleteIsland(player.getName(), plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
 						sender.sendMessage(ChatColor.RED + "Votre île a été supprimée définitivement.");
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'avez pas d'île.");
@@ -127,7 +127,7 @@ public class IslandCommands implements CommandExecutor {
 				
 				if(args[0].equalsIgnoreCase("sethome"))
 				{
-					if(plugin.getDatas().createHome(player, player.getLocation())){
+					if(plugin.getHellDatas().createHome(player, player.getLocation())){
 						int x = player.getLocation().getBlockX();
 						int y = player.getLocation().getBlockY();
 						int z = player.getLocation().getBlockZ();
@@ -138,19 +138,21 @@ public class IslandCommands implements CommandExecutor {
 				}
 				
 				if(args[0].equalsIgnoreCase("infohere")) {
-					if(plugin.getDatas().getHostHere(player.getLocation()) != null) {
-						sender.sendMessage("Vous êtes sur l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(player.getLocation()));
-						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getZ() + ChatColor.RED + ".");
-						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getLevel() + ChatColor.RED + ".");
-						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(plugin.getDatas().getHostHere(player.getLocation())).getChallenges().size() + ChatColor.RED + ".");
+					if(plugin.getHellDatas().getHostHere(player.getLocation()) != null) {
+						sender.sendMessage("Vous êtes sur l'île de " + ChatColor.BLUE + plugin.getHellDatas().getHostHere(player.getLocation()));
+						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + plugin.getHellDatas().getPlayerIsland(plugin.getHellDatas().getHostHere(player.getLocation())).getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + plugin.getHellDatas().getPlayerIsland(plugin.getHellDatas().getHostHere(player.getLocation())).getZ() + ChatColor.RED + ".");
+						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + plugin.getHellDatas().getPlayerIsland(plugin.getHellDatas().getHostHere(player.getLocation())).getLevel() + ChatColor.RED + ".");
+						sender.sendMessage(ChatColor.RED + "Challenges accomplis : " + ChatColor.WHITE + plugin.getHellDatas().getPlayerIsland(plugin.getHellDatas().getHostHere(player.getLocation())).getChallenges().size() + ChatColor.RED + ".");
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'êtes pas sur une île.");
 					}
 				}
 				
 				if(args[0].equalsIgnoreCase("info")) {
-					if(plugin.getDatas().hasIsland(player.getName())) {
-						Island island = plugin.getDatas().getPlayerIsland(player.getName());
+					System.out.println("test");
+					if(plugin.getHellDatas().hasIsland(player.getName())) {
+						System.out.println("test2");
+						Island island = plugin.getHellDatas().getPlayerIsland(player.getName());
 						sender.sendMessage(ChatColor.RED + "Informations sur l'île de " + ChatColor.BLUE + player.getName() + ChatColor.RED + " :");
 						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + island.getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + island.getZ() + ChatColor.RED + ".");
 						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + island.getLevel() + ChatColor.RED + ".");
@@ -166,8 +168,8 @@ public class IslandCommands implements CommandExecutor {
 			{
 				if(args[0].equalsIgnoreCase("info")) {
 					String playername = args[1];
-					if(plugin.getDatas().hasIsland(playername)) {
-						Island island = plugin.getDatas().getPlayerIsland(playername);
+					if(plugin.getHellDatas().hasIsland(playername)) {
+						Island island = plugin.getHellDatas().getPlayerIsland(playername);
 						sender.sendMessage("Informations sur l'île de " + ChatColor.BLUE + playername + ChatColor.RED + " :");
 						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + island.getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + island.getZ() + ChatColor.RED + ".");
 						sender.sendMessage(ChatColor.RED + "Niveau : " + ChatColor.WHITE + island.getLevel() + ChatColor.RED + ".");
@@ -189,34 +191,34 @@ public class IslandCommands implements CommandExecutor {
 		Player player = (Player) sender;
 		
 		//Si le joueur a déjà commencé une île
-		if(plugin.getDatas().hasIsland(player.getName()))
+		if(plugin.getHellDatas().hasIsland(player.getName()))
 		{
-			Island island = plugin.getDatas().getPlayerIsland(player.getName());
+			Island island = plugin.getHellDatas().getPlayerIsland(player.getName());
 			sender.sendMessage(ChatColor.RED + "Vous avez déjà une île aux coordonnées : x=" + ChatColor.BLUE + island.getX() + ChatColor.RED + ", z=" + ChatColor.BLUE + island.getZ());
-			sender.sendMessage(ChatColor.RED + "Pour recommencer une île, tapez /is restart");
+			sender.sendMessage(ChatColor.RED + "Pour recommencer une île, tapez /ishell restart");
 			return false;
 		}
 		
 		Island island;
-		Island last = plugin.getDatas().getLastIsland();
+		Island last = plugin.getHellDatas().getLastIsland();
 		//if we have space because of a deleted Island, create one there
-		if(plugin.getDatas().hasOrphanedIsland()) {
-			island = plugin.getDatas().getOrphanedIsland();
+		if(plugin.getHellDatas().hasOrphanedIsland()) {
+			island = plugin.getHellDatas().getOrphanedIsland();
 			//sender.sendMessage(ChatColor.RED + "Une île est libre aux coorodonnées : x=" + ChatColor.BLUE + island.getX() + ChatColor.RED + ", z=" + ChatColor.BLUE + island.getZ());
 		} else {
             island = nextIslandLocation(last);
-            plugin.getDatas().setLastIsland(island);
-            while (plugin.getDatas().getPlayers().containsValue(island))
+            plugin.getHellDatas().setLastIsland(island);
+            while (plugin.getHellDatas().getPlayers().containsValue(island))
             {
             	island = nextIslandLocation(island);
-                plugin.getDatas().setLastIsland(island);
+                plugin.getHellDatas().setLastIsland(island);
             }
 		}
 		
-		island.build(plugin.getServer().getWorld(plugin.getworldname()));
-		plugin.getDatas().addPlayerIsland(player.getName(), island);
-		plugin.getDatas().teleportIsland(player);
-		plugin.getDatas().createHome(player, new Location(plugin.getServer().getWorld(plugin.getworldname()), island.getX(), plugin.getISLANDS_Y(), island.getZ()));
+		island.buildHell(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
+		plugin.getHellDatas().addPlayerIsland(player.getName(), island);
+		plugin.getHellDatas().teleportIsland(player);
+		plugin.getHellDatas().createHome(player, new Location(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()), island.getX(), plugin.getISLANDS_Y(), island.getZ()));
 		player.getInventory().clear();
 		
 		sender.sendMessage(ChatColor.GOLD + "Ile créée avec succès aux coordonnées : x=" + ChatColor.BLUE + island.getX() + ChatColor.GOLD + ", z=" + ChatColor.BLUE + island.getZ() + ChatColor.GOLD + " !");

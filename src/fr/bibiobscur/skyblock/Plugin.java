@@ -19,6 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.bibiobscur.skyblock.ajouts.ChallengeDetector;
 import fr.bibiobscur.skyblock.ajouts.NewSigns;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
+import fr.bibiobscur.skyblock.hell.HellCommands;
+import fr.bibiobscur.skyblock.hell.HellDatas;
+import fr.bibiobscur.skyblock.hell.HellProperties;
 
 
 public class Plugin extends JavaPlugin{
@@ -31,6 +34,7 @@ public class Plugin extends JavaPlugin{
 	private final int ISLANDS_Y = 64;
 	private String worldname = "";
 	private SkyDatas datas;
+	private HellDatas helldatas;
 	
 	//private int secondsBeforeSave;
 	private Logger logger = Logger.getLogger("Minecraft");
@@ -38,35 +42,41 @@ public class Plugin extends JavaPlugin{
 //---------------------------------------------------------------------------------------------------------
 	//Méthodes onEnable, onDisable
 	public void onEnable() {
-		
+
 		//Enable Skyblock commands
 		getCommand("is").setExecutor(new IslandCommands(this));
 		getCommand("isg").setExecutor(new IslandGroupCommands(this));
 		getCommand("sky").setExecutor(new IslandOpCommands(this));
 		getCommand("createskyworld").setExecutor(new CreateWorldCommand(this));
+		getCommand("createhellworld").setExecutor(new CreateWorldCommand(this));
+		getCommand("ishell").setExecutor(new HellCommands(this));
 		
 		//Enable Skyblock listeners
 		new IslandProtect(this);
 		new ChallengeDetector(this);
 		new NewSigns(this);
+		new HellProperties(this);
 		
 		//Create new Skyblock datas
 		datas = new SkyDatas(this);
+		helldatas = new HellDatas(this);
 		
 		//Define directory to load and save datas
 		new File(path + "/plugins/SkyblockDatas").mkdirs();
 		directory = path + "/plugins/SkyblockDatas/";
 		logger.info("[" + pluginName + "] Dossier de stockage des données défini a l'emplacement '" + directory + "'.");
+		new File(directory + "HellDatas/").mkdirs();
 		
 		//Load datas
 		datas.load(directory);
+		helldatas.load(directory + "HellDatas/");
 		loadWorldName();
+		helldatas.loadworldname(directory + "HellDatas/");
         
 		logger.info("[" + pluginName + "] Determination des level des iles. Cette operation peut prendre un peu de temps");
         datas.defineLevel();
         
         //Autosave activation
-        //secondsBeforeSave = 900;
         autosave();
 	}
 	
@@ -77,18 +87,14 @@ public class Plugin extends JavaPlugin{
 
 	public void saveDatas() {
 		datas.save(directory);
+		helldatas.save(directory + "HellDatas/");
 	}
 	
 	public void autosave() {
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
     	    public void run(){
-    	    	//if(secondsBeforeSave > 0) {
-    	    		//secondsBeforeSave --;
-    	    	//} else {
-    	    		saveDatas();
-					Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Donnees du skyblock sauvegardees." + ChatColor.GOLD + " -- ");
-    	    		//secondsBeforeSave = 900;
-    	    	//}
+    	    	saveDatas();
+				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Donnees du skyblock sauvegardees." + ChatColor.GOLD + " -- ");
     	    }
         }, 0L, 20 * 60 * 15L);
 	}
@@ -139,6 +145,21 @@ public class Plugin extends JavaPlugin{
 			e.printStackTrace();
 		}
 	}
+	
+	public void changeHellWorldName(String newWorldName) {
+		helldatas.setworldname(newWorldName);
+		new File(directory + "HellDatas/HellWorldName.txt").delete();
+		
+		try {
+			new File(directory + "HellDatas/HellWorldName.txt").createNewFile();
+			FileWriter w = new FileWriter(directory + "HellDatas/HellWorldName.txt");
+			w.write(newWorldName);
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 //---------------------------------------------------------------------------------------------------------
 	//Méthodes get
@@ -152,6 +173,10 @@ public class Plugin extends JavaPlugin{
 	
 	public SkyDatas getDatas() {
 		return datas;
+	}
+	
+	public HellDatas getHellDatas() {
+		return helldatas;
 	}
 	
     public int getISLANDS_Y() {

@@ -17,8 +17,18 @@ commands:
     usage:
     permissions: skyblock.devcommand
     permission-message: Vous n'avez pas la permission d'utiliser cette commande !
+  createhellworld:
+    description: Creation du monde hellblock.
+    usage:
+    permissions: skyblock.devcommand
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande !
   isg:
     description: Commandes joueur groupes skyblock.
     usage:
+    permissions:
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande !
+  ishell:
+    description: Commandes joueur hellblock.
+    usage: 
     permissions:
     permission-message: Vous n'avez pas la permission d'utiliser cette commande !

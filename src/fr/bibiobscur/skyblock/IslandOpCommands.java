@@ -5,18 +5,11 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.TreeType;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class IslandOpCommands implements CommandExecutor {
 	
@@ -227,7 +220,7 @@ private boolean createNewIsland(Player player) {
             }
 		}
 		
-		createIslandBlocks(island, plugin.getServer().getWorld(plugin.getworldname()));
+		island.build(plugin.getServer().getWorld(plugin.getworldname()));
 		plugin.getDatas().addPlayerIsland(player.getName(), island);
 		plugin.getDatas().teleportIsland(player);
 		plugin.getDatas().createHome(player, new Location(plugin.getServer().getWorld(plugin.getworldname()), island.getX(), plugin.getISLANDS_Y(), island.getZ()));
@@ -275,7 +268,7 @@ private boolean createNewIsland(Player player) {
 	    return nextPos;
 	}
 	
-private void createNewCommunIsland(String name) {
+	private void createNewCommunIsland(String name) {
 		
 		Island island;
 		Island last = plugin.getDatas().getLastIsland();
@@ -292,92 +285,7 @@ private void createNewCommunIsland(String name) {
             }
 		}
 		
-		createIslandBlocks(island, plugin.getServer().getWorld(plugin.getworldname()));
+		island.build(plugin.getServer().getWorld(plugin.getworldname()));
 		plugin.getDatas().addPlayerIsland(name, island);
 	}
-	
-	//Création des blocs de l'île
-	private void createIslandBlocks(Island island, World world) {
-		
-		int x = island.getX();
-		int y = 64;
-		int z = island.getZ();
-		int x_operate;
-		int y_operate;
-		int z_operate;
-		
-		for(x_operate = x; x_operate < x+3; x_operate++){
-			for(z_operate = z; z_operate < z+6; z_operate++){
-				Block blockToChange = world.getBlockAt(x_operate,y+2,z_operate);
-				blockToChange.setType(Material.GRASS);  //chest area
-			}
-	    }
-		for(x_operate = x; x_operate < x+3; x_operate++){
-			for(y_operate = y; y_operate < y+2; y_operate++){
-				for(z_operate = z; z_operate < z+6; z_operate++){
-					Block blockToChange = world.getBlockAt(x_operate,y_operate,z_operate);
-					blockToChange.setType(Material.DIRT);  //chest area
-				}
-	    	}
-	    }
-	
-	    for(x_operate = x+3; x_operate < x+6; x_operate++){
-	    	for(y_operate = y; y_operate < y+3; y_operate++){
-	    		for(z_operate = z+3; z_operate < z+6; z_operate++){
-	            	Block blockToChange = world.getBlockAt(x_operate,y+2,z_operate);
-	                blockToChange.setType(Material.GRASS);    // 3x3 corner
-	            }
-	        }
-	    }
-	    for(x_operate = x+3; x_operate < x+6; x_operate++){
-	    	for(y_operate = y; y_operate < y+2; y_operate++){
-	    		for(z_operate = z+3; z_operate < z+6; z_operate++){
-	            	Block blockToChange = world.getBlockAt(x_operate,y_operate,z_operate);
-	                blockToChange.setType(Material.DIRT);    // 3x3 corner
-	            }
-	        }
-	    }
-	    
-	    world.generateTree(new Location(world,x+4 , y+3, z+4), TreeType.TREE);
-
-	
-	    // chest
-	    Block blockToChange = world.getBlockAt(x+1,y+3,z+1);
-	    blockToChange.setType(Material.CHEST);
-	    Chest chest = (Chest) blockToChange.getState();
-        Inventory inventory = chest.getInventory();
-        inventory.clear();
-        ItemStack item = new ItemStack(Material.LAVA_BUCKET);
-        inventory.addItem(item);
-        item.setType(Material.SUGAR_CANE);
-        inventory.addItem(item);
-        item.setType(Material.RED_MUSHROOM);
-        inventory.addItem(item);
-        item.setType(Material.ICE);
-        item.setAmount(2);
-        inventory.addItem(item);
-        item.setType(Material.PUMPKIN_SEEDS);
-        item.setAmount(1);
-        inventory.addItem(item);
-        item.setType(Material.BROWN_MUSHROOM);
-        inventory.addItem(item);
-        item.setType(Material.MELON_SEEDS);
-        inventory.addItem(item);
-        item.setType(Material.CACTUS);
-        inventory.addItem(item);
-        item.setType(Material.SIGN);
-        inventory.addItem(item);
-		
-		
-        blockToChange = world.getBlockAt(x,y,z);
-        blockToChange.setType(Material.BEDROCK);
-        
-        blockToChange = world.getBlockAt(x+1,y+1,z+1);
-        blockToChange.setType(Material.SAND);
-        blockToChange = world.getBlockAt(x+1,y+1,z+2);
-        blockToChange.setType(Material.SAND);
-        blockToChange = world.getBlockAt(x+1,y+1,z+3);
-        blockToChange.setType(Material.SAND);
-	}
-
 }

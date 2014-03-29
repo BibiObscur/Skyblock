@@ -108,6 +108,7 @@ public class SkyDatas {
 		if(hasIsland(playerName) && isLeader(playerName)) {
 			Island island = getPlayerIsland(playerName);
 			int length = plugin.getISLAND_SPACING();
+			
 			for(int x = island.getX() - length/2; x <= island.getX() + length/2; x++)
 				for(int y = 0; y < world.getMaxHeight(); y++)
 					for(int z = island.getZ() - length/2; z <= island.getZ() + length/2; z++) {
@@ -124,6 +125,9 @@ public class SkyDatas {
 				removeGroup(playerName);
 			
 			playerHomes.remove(playerName);
+			
+			if(plugin.getHellDatas().hasIsland(playerName))
+				plugin.getHellDatas().deleteIsland(playerName, world);
 			
 			plugin.getServer().getPlayer(playerName).setLevel(0);
 		}
@@ -162,7 +166,7 @@ public class SkyDatas {
     		}
     		return false;
     	}
-    	return false;
+    	return plugin.getHellDatas().isOnIsland(player);
     }
     
     public boolean isOnIsland(Player player, Location location) {
@@ -187,7 +191,7 @@ public class SkyDatas {
     		}
     		return false;
     	}
-    	return false;
+    	return plugin.getHellDatas().isOnIsland(player, location);
     }
     
     public Island getPlayerIsland(String playerName) {
@@ -219,7 +223,7 @@ public class SkyDatas {
     			return (String) entry.getKey();
     	}
     	
-    	return null;
+    	return plugin.getHellDatas().getHostHere(location);
     }
     
     public Island getLastIsland() {
@@ -346,21 +350,26 @@ public class SkyDatas {
     	
     	if(hasIsland(player.getName()))
     	{
-	    	if(isOnIsland(player))
-	    	{
-	    		if(hasHome(player.getName()))
-	    			playerHomes.remove(player.getName());
-	    		
-	    		Home home = new Home();
-	    		home.setX(location.getBlockX());
-	    		home.setY(location.getBlockY());
-	    		home.setZ(location.getBlockZ());
-	    		home.setDirection(location.getDirection().serialize());
-	    		playerHomes.put(player.getName(), home);
-	    		
-	    		return true;
-	    	}
-    		player.sendMessage(ChatColor.RED + "Vous devez être sur votre île pour créer un home.");
+    		if(location.getWorld().getName().equals(plugin.getworldname()))
+    		{
+		    	if(isOnIsland(player))
+		    	{
+		    		if(hasHome(player.getName()))
+		    			playerHomes.remove(player.getName());
+		    		
+		    		Home home = new Home();
+		    		home.setX(location.getBlockX());
+		    		home.setY(location.getBlockY());
+		    		home.setZ(location.getBlockZ());
+		    		home.setDirection(location.getDirection().serialize());
+		    		playerHomes.put(player.getName(), home);
+		    		
+		    		return true;
+		    	}
+	    		player.sendMessage(ChatColor.RED + "Vous devez être sur votre île pour créer un home.");
+	    		return false;
+    		}
+    		player.sendMessage(ChatColor.RED + "Vous devez être sur la map Skyblock pour créer un home.");
     		return false;
     	}
     	
