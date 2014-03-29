@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import fr.bibiobscur.skyblock.Plugin;
 
@@ -107,7 +108,7 @@ public class NewSigns implements Listener{
 
 									item = getItemStack(itemType, amount);
 									
-									player.setLevel(player.getLevel() - amount);
+									player.setLevel(player.getLevel() - amount/2);
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu " + ChatColor.BLUE + item.getAmount() + ChatColor.GOLD + " entités de " + ChatColor.BLUE + item.getType().name());
 									e.setCancelled(true);
@@ -170,13 +171,13 @@ public class NewSigns implements Listener{
 									
 									itemType = bestItems[rand.nextInt(bestItems.length)];
 									item = getBestItem(itemType);
-									player.getInventory().addItem(item);
+									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 
 									player.setLevel(player.getLevel() - 15);
 									e.setCancelled(true);
 								} else
-									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items.");
+									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items." + player.getItemInHand().toString() + player.getItemInHand().getType().name());
 							} else
 								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 15 niveaux pour utiliser ce panneau.");
 						} else
@@ -549,8 +550,11 @@ public class NewSigns implements Listener{
 			
 			item = new ItemStack(Material.ENCHANTED_BOOK);
 			data = rand.nextInt(3);
-			for(int i = 0; i < data + 1; i++) 
-				item.addEnchantment(Enchantment.values()[Enchantment.values().length], rand.nextInt(5));
+			EnchantmentStorageMeta enchantStorage = (EnchantmentStorageMeta) item.getItemMeta();
+			for(int i = 0; i < data + 1; i++) {
+				enchantStorage.addStoredEnchant(Enchantment.values()[rand.nextInt(Enchantment.values().length)], rand.nextInt(3) + 3, true);
+				item.setItemMeta(enchantStorage);
+			}
 			
 		} else if(itemType == Material.MOB_SPAWNER) {
 			item = new ItemStack(Material.MOB_SPAWNER);
