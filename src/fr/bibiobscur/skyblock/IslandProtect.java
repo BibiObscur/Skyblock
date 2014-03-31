@@ -11,8 +11,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -27,8 +30,28 @@ public class IslandProtect implements Listener {
 	}
 	
 	@EventHandler
+	public void test(PlayerLoginEvent e) {
+		System.out.println("LOGIN : " + e.getPlayer().getWorld().getName());
+	}
+	
+	@EventHandler
+	public void test(PlayerJoinEvent e) {
+		System.out.println("JOIN : " + e.getPlayer().getWorld().getName());
+	}
+	
+	
+	private boolean isOnSkyworld(Player player) {
+		if(player.getWorld().getName().equals(plugin.getworldname()))
+			return true;
+		else if(player.getWorld().getName().equals(plugin.getHellDatas().getworldname()))
+			return true;
+		else
+			return false;
+	}
+	
+	@EventHandler
 	public void playerPickupItem(PlayerPickupItemEvent e) {
-		if(!e.getPlayer().isOp() && e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+		if(!e.getPlayer().isOp() && isOnSkyworld(e.getPlayer())) {
 			if(plugin.isOnSpawn(e.getPlayer().getLocation())){
 				e.setCancelled(true);
 				//e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas ramasser d'item au spawn.");
@@ -38,7 +61,7 @@ public class IslandProtect implements Listener {
 	
 	@EventHandler
 	public void playerDropItem(PlayerDropItemEvent e) {
-		if(!e.getPlayer().isOp() && e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+		if(!e.getPlayer().isOp() && isOnSkyworld(e.getPlayer())) {
 			if(plugin.isOnSpawn(e.getPlayer().getLocation())){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas drop d'item au spawn.");
@@ -48,7 +71,7 @@ public class IslandProtect implements Listener {
 
 	@EventHandler
     public void blockPlaceProtect(BlockPlaceEvent e){
-		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+		if(isOnSkyworld(e.getPlayer())) {
 			if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
@@ -59,7 +82,7 @@ public class IslandProtect implements Listener {
     
     @EventHandler
     public void blockBreakProtect(BlockBreakEvent e) {
-    	if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+    	if(isOnSkyworld(e.getPlayer())) {
 	    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
@@ -70,7 +93,7 @@ public class IslandProtect implements Listener {
     
     @EventHandler
     public void interactProtect(PlayerInteractEvent e){
-    	if(!e.getPlayer().isOp() && e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+    	if(!e.getPlayer().isOp() && isOnSkyworld(e.getPlayer())) {
 	    	if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 		    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getClickedBlock().getLocation()) &&
 		    			(e.getClickedBlock().getType() == Material.CHEST ||
@@ -117,7 +140,7 @@ public class IslandProtect implements Listener {
     
     @EventHandler
     public void interactEntityProtect(PlayerInteractEntityEvent e) {
-    	if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+    	if(isOnSkyworld(e.getPlayer())) {
     		if(!e.getPlayer().isOp() && !plugin.getDatas().isOnIsland(e.getPlayer(), e.getRightClicked().getLocation())) {
     			if(e.getRightClicked().getType() == EntityType.MINECART_CHEST || 
     					e.getRightClicked().getType() == EntityType.MINECART_FURNACE ||
@@ -139,7 +162,7 @@ public class IslandProtect implements Listener {
 			
 		    Player player = (Player) e.getDamager();
 		    
-		    if(!player.isOp() && player.getWorld().getName().equals(plugin.getworldname())) {
+		    if(!player.isOp() && isOnSkyworld(player)) {
 		    	
 		    	String mob = e.getEntityType().name();
 		    	
@@ -162,9 +185,15 @@ public class IslandProtect implements Listener {
 		}
     }
 	
+	@EventHandler
+	public void spawnMobProtect(CreatureSpawnEvent e) {
+		if(plugin.isOnSpawn(e.getLocation()))
+			e.setCancelled(true);
+	}
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void respawnSky(PlayerRespawnEvent e) {
-		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+		if(isOnSkyworld(e.getPlayer())) {
 			//e.getPlayer().setLevel(0);
 			e.setRespawnLocation(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
 		}
