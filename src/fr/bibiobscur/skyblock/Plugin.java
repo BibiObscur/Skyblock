@@ -12,8 +12,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.bibiobscur.skyblock.ajouts.ChallengeDetector;
@@ -30,7 +33,7 @@ public class Plugin extends JavaPlugin{
 	private final String path = new File("").getAbsolutePath();
 	private String directory;
 	
-	private final int ISLAND_SPACING = 100;
+	private final int ISLAND_SPACING = 200;
 	private final int ISLANDS_Y = 64;
 	private String worldname = "";
 	private SkyDatas datas;
@@ -78,11 +81,18 @@ public class Plugin extends JavaPlugin{
         
         //Autosave activation
         autosave();
+        
+        ShapedRecipe soulsand = new ShapedRecipe(new ItemStack(Material.SOUL_SAND, 1)).shape("aaa", "aba", "aaa").setIngredient('a', Material.GRAVEL).setIngredient('b', Material.FLINT);
+        ShapedRecipe icepacked = new ShapedRecipe(new ItemStack(Material.PACKED_ICE, 1)).shape("aa", "aa").setIngredient('a', Material.ICE);
+        getServer().addRecipe(soulsand);
+        getServer().addRecipe(icepacked);
 	}
 	
 	public void onDisable() {
 		saveDatas();
 		getServer().getWorld(worldname).save();
+		getServer().getWorld(helldatas.getworldname()).save();
+		getServer().clearRecipes();
 	}
 
 	public void saveDatas() {
@@ -114,7 +124,7 @@ public class Plugin extends JavaPlugin{
 		        World world = getServer().getWorld(worldname);
 				world.setDifficulty(Difficulty.HARD);
 				world.setPVP(true);
-				world.setMonsterSpawnLimit(220);
+				world.setMonsterSpawnLimit(110);
 	    	} else
 	    		new File(directory + "SkyblockWorldName.txt");
     	
