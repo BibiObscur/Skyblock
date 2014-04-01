@@ -5,7 +5,17 @@ import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import fr.bibiobscur.skyblock.Plugin;
 
@@ -17,6 +27,116 @@ public class HellProperties implements Listener{
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
+	
+	@EventHandler
+	public void portalTravel(PlayerPortalEvent e) {
+		if(e.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
+			Player player = e.getPlayer();
+			/*if(e.getFrom().getWorld().getName().equals(plugin.getworldname())) {
+				if(plugin.getHellDatas().hasIsland(player.getName())) {
+					if(plugin.getHellDatas().hasHome(player.getName()))
+						plugin.getHellDatas().teleportHome(player);
+					else
+						plugin.getHellDatas().teleportIsland(player);
+					e.setCancelled(true);
+				} else {
+					e.setTo(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
+				}
+			} else if(e.getFrom().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+				if(plugin.getDatas().hasIsland(player.getName())) {
+					plugin.getDatas().teleportHome(player);
+					e.setCancelled(true);
+				} else {
+					e.setTo(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
+				}
+			}*/
+			if(e.getFrom().getWorld().getName().equals(plugin.getworldname())) {
+				String hosthere = plugin.getDatas().getHostHere(e.getFrom());
+				if(hosthere == null)
+					player.teleport(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
+				else if (!plugin.getHellDatas().hasIsland(hosthere))
+					player.teleport(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
+				else {
+					if(hosthere.equals(player.getName()))
+						plugin.getHellDatas().teleportHome(player);
+					else
+						plugin.getHellDatas().teleportIsland(player, hosthere);
+				}
+				e.setCancelled(true);
+			} else if(e.getFrom().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+				String hosthere = plugin.getHellDatas().getHostHere(e.getFrom());
+				if(hosthere == null)
+					player.teleport(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
+				else {
+					if(hosthere.equals(player.getName()))
+						plugin.getDatas().teleportHome(player);
+					else
+						plugin.getDatas().teleportIsland(player, hosthere);
+				}
+				e.setCancelled(true);
+			}
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler
+	public void netherrackGenerator(BlockFromToEvent e) {
+		if(e.getBlock().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			if(e.getToBlock().getData() == 1 && e.getToBlock().getType() == Material.STATIONARY_LAVA) {
+				int compteur = 0;
+				if(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX()+1, e.getToBlock().getY(), e.getToBlock().getZ()).getType() == Material.STATIONARY_LAVA && plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX()+1, e.getToBlock().getY(), e.getToBlock().getZ()).getData() == 0)
+					compteur ++;
+				if(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX(), e.getToBlock().getY(), e.getToBlock().getZ()+1).getType() == Material.STATIONARY_LAVA && plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX(), e.getToBlock().getY(), e.getToBlock().getZ()+1).getData() == 0)
+					compteur ++;
+				if(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX()-1, e.getToBlock().getY(), e.getToBlock().getZ()).getType() == Material.STATIONARY_LAVA && plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX()-1, e.getToBlock().getY(), e.getToBlock().getZ()).getData() == 0)
+					compteur ++;
+				if(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX(), e.getToBlock().getY(), e.getToBlock().getZ()-1).getType() == Material.STATIONARY_LAVA && plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX(), e.getToBlock().getY(), e.getToBlock().getZ()-1).getData() == 0)
+					compteur ++;
+				if(compteur >= 2) plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getBlockAt(e.getToBlock().getX(), e.getToBlock().getY(), e.getToBlock().getZ()).setType(Material.NETHERRACK);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void glowBroken(BlockBreakEvent e) {
+		if(e.getBlock().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			if(e.getBlock().getType() == Material.GLOWSTONE) {
+				if(!e.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+					Random rand = new Random();
+					if(rand.nextInt(5) == 0)
+						e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(Material.QUARTZ));
+				}
+			}
+		}
+	}
+	
+	
+	@EventHandler
+	public void createSapling(PlayerInteractEvent e) {
+		if(e.getPlayer().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if(e.getClickedBlock().getType() == Material.SOUL_SAND && e.getPlayer().getItemInHand().getType() == Material.GLOWSTONE_DUST && e.getPlayer().getWorld().getBlockAt(e.getClickedBlock().getX(), e.getClickedBlock().getY()+1, e.getClickedBlock().getZ()).getType() == Material.AIR) {
+					if(e.getPlayer().getItemInHand().getAmount() <= 1)
+						e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
+					else
+						e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+					Random rand = new Random();
+					if(rand.nextInt(5) == 0)
+						e.getPlayer().getWorld().getBlockAt(e.getClickedBlock().getX(), e.getClickedBlock().getY()+1, e.getClickedBlock().getZ()).setType(Material.SAPLING);
+				}
+				if(e.getClickedBlock().getType() == Material.SAPLING && e.getPlayer().getItemInHand().getType() == Material.FLINT && e.getPlayer().getWorld().getBlockAt(e.getClickedBlock().getX(), e.getClickedBlock().getY()-1, e.getClickedBlock().getZ()).getType() == Material.SOUL_SAND) {
+					if(generateTree(e.getClickedBlock().getLocation()))
+					{
+						if(e.getPlayer().getItemInHand().getAmount() <= 1)
+							e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
+						else
+							e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+					}
+				}
+			}
+		}
+	}
+	
 	
 	public boolean generateTree(Location location) {
 		
@@ -34,12 +154,12 @@ public class HellProperties implements Listener{
 		for(i = 0; i < taille + 1; i++)
 			for(j = 0; j < 3; j++)
 				for(k = 0; k < 3; k++)
-					if(world.getBlockAt(x -1 + j, y + i, z - 1 + k).getType() != Material.AIR) return false;
+					if(world.getBlockAt(x -1 + j, y + i, z - 1 + k).getType() != Material.AIR && world.getBlockAt(x -1 + j, y + i, z - 1 + k).getType() != Material.SAPLING) return false;
 				
 		
 		//Tronc de gravier
 		for(i = 0; i < taille; i++) {
-			if(world.getBlockAt(x, y + i, z).getType() == Material.AIR)
+			if(world.getBlockAt(x, y + i, z).getType() == Material.AIR || world.getBlockAt(x, y + i, z).getType() == Material.SAPLING)
 				world.getBlockAt(x, y + i, z).setType(Material.GRAVEL);
 		}
 		

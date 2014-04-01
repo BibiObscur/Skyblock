@@ -187,16 +187,16 @@ public class HellDatas {
     }
 
 	public boolean isOnIsland(Player player, Location location) {
-    	if(hasIsland(player.getName()) && location.getWorld().getName().equals(plugin.getworldname())) {
+    	if(hasIsland(player.getName()) && location.getWorld().getName().equals(worldname)) {
     		
-    		World world = plugin.getServer().getWorld(plugin.getworldname());
+    		World world = plugin.getServer().getWorld(worldname);
     		Island island;
     		
     		if(plugin.getDatas().hasGroup(player.getName()))
     			island = getPlayerIsland(plugin.getDatas().getGroup(player.getName()).getLeader());
     		else
     			island = getPlayerIsland(player.getName());
-    		
+
     		int x = location.getBlockX();
 			int y = location.getBlockY();
 			int z = location.getBlockZ();
@@ -290,9 +290,9 @@ public class HellDatas {
 	    	} 
 	    	
 	    	Home home = new Home();
-	    	home.setX(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockX());
-	    	home.setY(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockY());
-	    	home.setZ(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation().getBlockZ());
+	    	home.setX(plugin.getServer().getWorld(worldname).getSpawnLocation().getBlockX());
+	    	home.setY(plugin.getServer().getWorld(worldname).getSpawnLocation().getBlockY());
+	    	home.setZ(plugin.getServer().getWorld(worldname).getSpawnLocation().getBlockZ());
 	    	return home;
 	    }
 		

@@ -42,6 +42,13 @@ public class HellCommands implements CommandExecutor {
 		
 		if(commandLabel.equalsIgnoreCase("ishell"))
 		{
+
+			if(!player.getWorld().getName().equalsIgnoreCase(plugin.getHellDatas().getworldname()))
+			{
+				player.sendMessage(ChatColor.RED + "Tu dois être sur la map " + ChatColor.BLUE + plugin.getHellDatas().getworldname() + ChatColor.RED + " pour utiliser cette commande.");
+	        	return true;
+			}
+			
 			if(args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("home")))
 			{
 				if(plugin.getHellDatas().hasHome(player.getName())) {
@@ -56,16 +63,10 @@ public class HellCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "Vous n'avez pas de home. Pour créer un home, tapez /ishell sethome.");
 				}
 			}
-			
+
 			if(args.length == 1 && args[0].equalsIgnoreCase("spawn")) {
 				player.teleport(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
 				return true;
-			}
-
-			if(!player.getWorld().getName().equalsIgnoreCase(plugin.getHellDatas().getworldname()))
-			{
-				player.sendMessage(ChatColor.RED + "Tu dois être sur la map " + ChatColor.BLUE + plugin.getHellDatas().getworldname() + ChatColor.RED + " pour utiliser cette commande.");
-	        	return true;
 			}
 			
 			if(args.length == 1)
@@ -85,7 +86,6 @@ public class HellCommands implements CommandExecutor {
 				
 				if(args[0].equalsIgnoreCase("create"))
 				{
-					//Création de l'île
 					if(createNewIsland(player)){
 						plugin.getHellDatas().teleportIsland(player);
 			    		List<Entity> Entities = player.getNearbyEntities(15,15,15);
@@ -99,6 +99,13 @@ public class HellCommands implements CommandExecutor {
 				
 				if(args[0].equalsIgnoreCase("restart") || args[0].equalsIgnoreCase("reset"))
 				{
+					if(plugin.getDatas().hasGroup(player.getName())) {
+						if(!plugin.getDatas().isLeader(player.getName())) {
+							player.sendMessage(ChatColor.RED + "Vous devez être le leader de votre groupe pour faire ceci.");
+							return false;
+						}
+					}
+					
 					//Suppression de l'île
 					plugin.getHellDatas().deleteIsland(player.getName(), plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
 					
@@ -116,6 +123,13 @@ public class HellCommands implements CommandExecutor {
 				
 				if(args[0].equalsIgnoreCase("delete"))
 				{
+					if(plugin.getDatas().hasGroup(player.getName())) {
+						if(!plugin.getDatas().isLeader(player.getName())) {
+							player.sendMessage(ChatColor.RED + "Vous devez être le leader de votre groupe pour faire ceci.");
+							return false;
+						}
+					}
+					
 					//Suppression de l'île
 					if(plugin.getHellDatas().hasIsland(player.getName())) {
 						plugin.getHellDatas().deleteIsland(player.getName(), plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
@@ -149,9 +163,7 @@ public class HellCommands implements CommandExecutor {
 				}
 				
 				if(args[0].equalsIgnoreCase("info")) {
-					System.out.println("test");
 					if(plugin.getHellDatas().hasIsland(player.getName())) {
-						System.out.println("test2");
 						Island island = plugin.getHellDatas().getPlayerIsland(player.getName());
 						sender.sendMessage(ChatColor.RED + "Informations sur l'île de " + ChatColor.BLUE + player.getName() + ChatColor.RED + " :");
 						sender.sendMessage(ChatColor.RED + "Coordonnées : x=" + ChatColor.WHITE + island.getX() + ChatColor.RED + ", z=" + ChatColor.WHITE + island.getZ() + ChatColor.RED + ".");
@@ -219,7 +231,6 @@ public class HellCommands implements CommandExecutor {
 		plugin.getHellDatas().addPlayerIsland(player.getName(), island);
 		plugin.getHellDatas().teleportIsland(player);
 		plugin.getHellDatas().createHome(player, new Location(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()), island.getX(), plugin.getISLANDS_Y(), island.getZ()));
-		player.getInventory().clear();
 		
 		sender.sendMessage(ChatColor.GOLD + "Ile créée avec succès aux coordonnées : x=" + ChatColor.BLUE + island.getX() + ChatColor.GOLD + ", z=" + ChatColor.BLUE + island.getZ() + ChatColor.GOLD + " !");
 
