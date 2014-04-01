@@ -48,28 +48,22 @@ public class NewSigns implements Listener{
 	
 	private final Material rareItems[] = {
 			Material.MONSTER_EGG,
+			Material.MONSTER_EGG,
 			Material.REDSTONE_BLOCK,
 			Material.BREWING_STAND_ITEM,// + cauldron_item, anvil, hopper, + jukebox
 			Material.IRON_PICKAXE,// + tools and sword
 			Material.GOLDEN_APPLE,// + golden carrot + enchanted golden apple
-			Material.LAVA_BUCKET,
-			Material.COMPASS, //+ watch + nametag
 			Material.IRON_HELMET, // + armor
 			Material.GOLD_HELMET,
 			Material.IRON_BARDING // + gold
 	};
 	
 	private final Material bestItems[] = {
-			Material.MOB_SPAWNER, //every mob
+			//Material.MOB_SPAWNER, //every mob
 			Material.DIAMOND_BLOCK,
-			Material.EMERALD_BLOCK,
-			Material.IRON_BLOCK,
-			Material.GOLD_BLOCK,
-			Material.ENCHANTMENT_TABLE,
 			Material.ANVIL,
 			Material.DIAMOND_PICKAXE,
 			Material.DIAMOND_HELMET,
-			Material.DIAMOND_BARDING,
 			Material.ENCHANTED_BOOK //random enchant
 	};
 	
@@ -130,7 +124,7 @@ public class NewSigns implements Listener{
 					{
 						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 300)
 						{
-							if(player.getLevel() >= 10)
+							if(player.getLevel() >= 13)
 							{
 								ItemStack item;
 								Random rand = new Random();
@@ -143,10 +137,10 @@ public class NewSigns implements Listener{
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 								}
 								
-								player.setLevel(player.getLevel() - 10);
+								player.setLevel(player.getLevel() - 13);
 								e.setCancelled(true);
 							} else
-								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 10 niveaux pour utiliser ce panneau.");
+								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 13 niveaux pour utiliser ce panneau.");
 						} else
 							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 300 pour faire ceci.");
 					} else
@@ -161,7 +155,7 @@ public class NewSigns implements Listener{
 					{
 						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 500)
 						{
-							if(player.getLevel() >= 15)
+							if(player.getLevel() >= 20)
 							{
 								if(player.getInventory().getItemInHand().getType() == Material.AIR)
 								{
@@ -174,12 +168,12 @@ public class NewSigns implements Listener{
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 
-									player.setLevel(player.getLevel() - 15);
+									player.setLevel(player.getLevel() - 20);
 									e.setCancelled(true);
 								} else
 									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items." + player.getItemInHand().toString() + player.getItemInHand().getType().name());
 							} else
-								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 15 niveaux pour utiliser ce panneau.");
+								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 20 niveaux pour utiliser ce panneau.");
 						} else
 							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 500 pour faire ceci.");
 					} else
@@ -356,7 +350,7 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.BROWN_MUSHROOM) {
 			
-			data = rand.nextInt(10);
+			data = rand.nextInt(9);
 			if(data == 0)
 				item = new ItemStack(Material.BROWN_MUSHROOM , amount);
 			else if(data == 1)
@@ -368,12 +362,12 @@ public class NewSigns implements Listener{
 			else if(data == 4)
 				item = new ItemStack(Material.PUMPKIN , amount);
 			else if(data == 5)
-				item = new ItemStack(Material.MELON_STEM , amount);
+				item = new ItemStack(Material.MELON , amount);
 			else if(data == 6)
 				item = new ItemStack(Material.WATER_LILY , amount);
 			else if(data == 7)
 				item = new ItemStack(Material.INK_SACK , amount, (byte) 3);
-			else if(data == 8)
+			else if(data == 7)
 				item = new ItemStack(Material.CARROT_ITEM , amount);
 			else
 				item = new ItemStack(Material.POTATO_ITEM , amount);
@@ -448,15 +442,19 @@ public class NewSigns implements Listener{
 			else
 				item = new ItemStack(Material.GOLDEN_CARROT);
 			
-		} else if(itemType == Material.COMPASS) {
+		} else if(itemType == Material.REDSTONE_BLOCK) {
 			
-			data = rand.nextInt(3);
+			data = rand.nextInt(5);
 			if(data == 0)
 				item = new ItemStack(Material.COMPASS);
 			else if(data == 1)
 				item = new ItemStack(Material.WATCH);
-			else
+			else if(data == 2)
 				item = new ItemStack(Material.NAME_TAG);
+			else if(data == 3)
+				item = new ItemStack(Material.LAVA_BUCKET);
+			else
+				item = new ItemStack(Material.REDSTONE_BLOCK);
 			
 		} else if(itemType == Material.IRON_BARDING) {
 			
@@ -514,13 +512,31 @@ public class NewSigns implements Listener{
 		Random rand = new Random();
 		int data;
 		
+		if(itemType == Material.DIAMOND_BLOCK) {
+			
+			data = rand.nextInt(4);
+			if(data == 0)
+				item = new ItemStack(Material.DIAMOND_BLOCK);
+			else if(data == 1)
+				item = new ItemStack(Material.IRON_BLOCK);
+			else if(data == 2)
+				item = new ItemStack(Material.GOLD_BLOCK);
+			else
+				item = new ItemStack(Material.EMERALD_BLOCK);
+			
+		}
+
 		if(itemType == Material.ANVIL) {
 			
-			data = rand.nextInt(2);
+			data = rand.nextInt(4);
 			if(data == 0)
 				item = new ItemStack(Material.ANVIL);
-			else
+			else if(data == 1)
 				item = new ItemStack(Material.ANVIL, 1, (byte) 1);
+			else if(data == 2)
+				item = new ItemStack(Material.ENCHANTMENT_TABLE);
+			else
+				item = new ItemStack(Material.MOB_SPAWNER);
 			
 		} else if(itemType == Material.DIAMOND_PICKAXE) {
 			
@@ -536,15 +552,17 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.DIAMOND_HELMET) {
 			
-			data = rand.nextInt(4);
+			data = rand.nextInt(5);
 			if(data == 0)
 				item = new ItemStack(Material.DIAMOND_HELMET);
 			else if(data == 1)
 				item = new ItemStack(Material.DIAMOND_CHESTPLATE);
 			else if(data == 2)
 				item = new ItemStack(Material.DIAMOND_LEGGINGS);
-			else
+			else if(data == 3)
 				item = new ItemStack(Material.DIAMOND_BOOTS);
+			else
+				item = new ItemStack(Material.DIAMOND_BARDING);
 			
 		} else if(itemType == Material.ENCHANTED_BOOK) {
 			
