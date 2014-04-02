@@ -524,9 +524,7 @@ public class NewSigns implements Listener{
 			else
 				item = new ItemStack(Material.EMERALD_BLOCK);
 			
-		}
-
-		if(itemType == Material.ANVIL) {
+		}else if(itemType == Material.ANVIL) {
 			
 			data = rand.nextInt(4);
 			if(data == 0)
