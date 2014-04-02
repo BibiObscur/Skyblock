@@ -1,9 +1,12 @@
 package fr.bibiobscur.skyblock;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,13 +15,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
 public class IslandProtect implements Listener {
 
@@ -29,17 +33,6 @@ public class IslandProtect implements Listener {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
-	@EventHandler
-	public void test(PlayerLoginEvent e) {
-		System.out.println("LOGIN : " + e.getPlayer().getWorld().getName());
-	}
-	
-	@EventHandler
-	public void test(PlayerJoinEvent e) {
-		System.out.println("JOIN : " + e.getPlayer().getWorld().getName());
-	}
-	
-	
 	private boolean isOnSkyworld(Player player) {
 		if(player.getWorld().getName().equals(plugin.getworldname()))
 			return true;
@@ -47,6 +40,24 @@ public class IslandProtect implements Listener {
 			return true;
 		else
 			return false;
+	}
+	
+	@EventHandler
+	public void test(HangingBreakByEntityEvent e) {
+		if(e.getEntity().getWorld().getName().equals(plugin.getworldname()) ||
+				e.getEntity().getWorld().getName().equals(plugin.getHellDatas().getworldname()))
+		{
+			if(e.getRemover() instanceof Player)
+			{
+				Player player = (Player) e.getRemover();
+				
+				if(!plugin.getDatas().isOnIsland(player, e.getEntity().getLocation()))
+				{
+					if(!player.hasPermission("skyblock.test")) e.setCancelled(true);
+					player.sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île !");
+				}
+			}
+		}
 	}
 	
 	@EventHandler
@@ -158,11 +169,19 @@ public class IslandProtect implements Listener {
 	@EventHandler
     public void mobProtect(EntityDamageByEntityEvent e)
     {
-		if(e.getDamager() instanceof Player) {
+		if(e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
 			
-		    Player player = (Player) e.getDamager();
+			Player player;
+			if(e.getDamager() instanceof Projectile) {
+				Projectile projectile = (Projectile) e.getDamager();
+				if(projectile.getShooter() instanceof Player) {
+					player = (Player) projectile.getShooter();
+				} else
+					return;
+			} else
+				player = (Player) e.getDamager();
 		    
-		    if(!player.isOp() && isOnSkyworld(player)) {
+		    if(/*!player.isOp() &&*/ isOnSkyworld(player)) {
 		    	
 		    	String mob = e.getEntityType().name();
 		    	
@@ -177,9 +196,54 @@ public class IslandProtect implements Listener {
 				    		mob.equalsIgnoreCase("Ocelot") ||
 				    		mob.equalsIgnoreCase("Villager") ||
 				    		mob.equalsIgnoreCase("Horse")){
+				    	/*if(e.getDamager() instanceof Projectile)
+				    		e.setCancelled(true);*/
 				    	e.setDamage(0);
 				    }
-			    	
+				    
+				    if(e.getEntityType() == EntityType.ITEM_FRAME) {
+				    	e.setCancelled(true);
+				    	player.sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île.");
+				    }
+		    	}
+			}
+		}
+    }
+	
+	@EventHandler
+    public void mobBurnProtect(EntityCombustByEntityEvent e)
+    {
+		if(e.getCombuster() instanceof Player || e.getCombuster() instanceof Projectile) {
+			
+			Player player;
+			if(e.getCombuster() instanceof Projectile) {
+				Projectile projectile = (Projectile) e.getCombuster();
+				if(projectile.getShooter() instanceof Player) {
+					player = (Player) projectile.getShooter();
+				} else
+					return;
+			} else
+				player = (Player) e.getCombuster();
+		    
+		    if(/*!player.isOp() &&*/ isOnSkyworld(player)) {
+		    	
+		    	String mob = e.getEntityType().name();
+		    	
+		    	if(!plugin.getDatas().isOnIsland(player, e.getEntity().getLocation())) {
+
+				    if(mob.equalsIgnoreCase("Chicken") ||
+				    		mob.equalsIgnoreCase("pig") ||
+				    		mob.equalsIgnoreCase("Cow") ||
+				    		mob.equalsIgnoreCase("Sheep") ||
+				    		mob.equalsIgnoreCase("Wolf") ||
+				    		mob.equalsIgnoreCase("Mushroom_Cow") ||
+				    		mob.equalsIgnoreCase("Ocelot") ||
+				    		mob.equalsIgnoreCase("Villager") ||
+				    		mob.equalsIgnoreCase("Horse")){
+				    	LivingEntity healmob = (LivingEntity) e.getEntity();
+				    	healmob.setHealth(10);
+				    	e.setCancelled(true);
+				    }
 		    	}
 			}
 		}
@@ -197,5 +261,10 @@ public class IslandProtect implements Listener {
 			//e.getPlayer().setLevel(0);
 			e.setRespawnLocation(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
 		}
+	}
+	
+	@EventHandler
+	public void changeGamemode(PlayerGameModeChangeEvent e) {
+		Bukkit.broadcastMessage(ChatColor.BLUE + e.getPlayer().getName() + ChatColor.RED + " est maintenant en " + ChatColor.BLUE + e.getNewGameMode());
 	}
 }
