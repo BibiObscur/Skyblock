@@ -45,8 +45,16 @@ public class ChallengeDetector implements Listener {
 			if(plugin.getDatas().isOnIsland(e.getPlayer())) {
 				if((e.getBlock().getType() == Material.CROPS ||
 						e.getBlock().getType() == Material.CARROT ||
-						e.getBlock().getType() == Material.POTATO) &&
+						e.getBlock().getType() == Material.POTATO ||
+						e.getBlock().getType() == Material.NETHER_WARTS) &&
 						e.getBlock().getData() == (byte) 7)
+					giveExp(e.getPlayer(), 1);
+			}
+		}
+		
+		if(e.getBlock().getLocation().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			if(plugin.getDatas().isOnIsland(e.getPlayer())) {
+				if(e.getBlock().getType() == Material.NETHER_WARTS && e.getBlock().getData() == (byte) 3)
 					giveExp(e.getPlayer(), 1);
 			}
 		}
@@ -369,7 +377,7 @@ public class ChallengeDetector implements Listener {
 	@EventHandler
 	public void playerItemConsume(PlayerItemConsumeEvent e) {
 		
-		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname())) {
+		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname()) || e.getPlayer().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
 			
 			Material item = e.getItem().getType();
 			
@@ -529,14 +537,14 @@ public class ChallengeDetector implements Listener {
 	
 	@EventHandler
 	public void playerBrew(BrewEvent e) {
-		if(e.getBlock().getWorld().getName().equals(plugin.getworldname())) {
+		if(e.getBlock().getWorld().getName().equals(plugin.getworldname()) || e.getBlock().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
 			String playername = plugin.getDatas().getHostHere(e.getBlock().getLocation());
 			if(playername != null) {
 				if(plugin.isConnected(playername)) {
 					Player player = (Player) plugin.getServer().getPlayer(playername);
 					Island island = plugin.getDatas().getPlayerIsland(player.getName());
 					island = challengeDone("Brewing", 50, player, island);
-					giveExp(player, 8);
+					giveExp(player, 4);
 				}
 			}
 		}

@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -120,6 +121,7 @@ public class Plugin extends JavaPlugin{
 				WorldCreator wc = new WorldCreator(worldname);
 				wc.generator(new NullChunkGenerator());
 				wc.seed(-1168696288156746053L);
+				wc.type(WorldType.NORMAL);
 				wc.createWorld();
 		        World world = getServer().getWorld(worldname);
 				world.setDifficulty(Difficulty.HARD);
