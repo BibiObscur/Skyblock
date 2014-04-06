@@ -2,6 +2,7 @@ package fr.bibiobscur.skyblock.hell;
 
 import java.util.Random;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -32,24 +33,6 @@ public class HellProperties implements Listener{
 	public void portalTravel(PlayerPortalEvent e) {
 		if(e.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
 			Player player = e.getPlayer();
-			/*if(e.getFrom().getWorld().getName().equals(plugin.getworldname())) {
-				if(plugin.getHellDatas().hasIsland(player.getName())) {
-					if(plugin.getHellDatas().hasHome(player.getName()))
-						plugin.getHellDatas().teleportHome(player);
-					else
-						plugin.getHellDatas().teleportIsland(player);
-					e.setCancelled(true);
-				} else {
-					e.setTo(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
-				}
-			} else if(e.getFrom().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
-				if(plugin.getDatas().hasIsland(player.getName())) {
-					plugin.getDatas().teleportHome(player);
-					e.setCancelled(true);
-				} else {
-					e.setTo(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
-				}
-			}*/
 			if(e.getFrom().getWorld().getName().equals(plugin.getworldname())) {
 				String hosthere = plugin.getDatas().getHostHere(e.getFrom());
 				if(hosthere == null)
@@ -101,7 +84,7 @@ public class HellProperties implements Listener{
 	public void glowBroken(BlockBreakEvent e) {
 		if(e.getBlock().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
 			if(e.getBlock().getType() == Material.GLOWSTONE) {
-				if(!e.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+				if(!e.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH) && e.getPlayer().getGameMode() != GameMode.CREATIVE) {
 					Random rand = new Random();
 					if(rand.nextInt(5) == 0)
 						e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(Material.QUARTZ));
@@ -116,16 +99,18 @@ public class HellProperties implements Listener{
 		if(e.getPlayer().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
 			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if(e.getClickedBlock().getType() == Material.SOUL_SAND && e.getPlayer().getItemInHand().getType() == Material.GLOWSTONE_DUST && e.getPlayer().getWorld().getBlockAt(e.getClickedBlock().getX(), e.getClickedBlock().getY()+1, e.getClickedBlock().getZ()).getType() == Material.AIR) {
-					if(e.getPlayer().getItemInHand().getAmount() <= 1)
-						e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
-					else
-						e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+					if(e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+						if(e.getPlayer().getItemInHand().getAmount() <= 1)
+							e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
+						else
+							e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+					}
 					Random rand = new Random();
 					if(rand.nextInt(5) == 0)
 						e.getPlayer().getWorld().getBlockAt(e.getClickedBlock().getX(), e.getClickedBlock().getY()+1, e.getClickedBlock().getZ()).setType(Material.SAPLING);
 				}
 				if(e.getClickedBlock().getType() == Material.SAPLING && e.getPlayer().getItemInHand().getType() == Material.FLINT && e.getPlayer().getWorld().getBlockAt(e.getClickedBlock().getX(), e.getClickedBlock().getY()-1, e.getClickedBlock().getZ()).getType() == Material.SOUL_SAND) {
-					if(generateTree(e.getClickedBlock().getLocation()))
+					if(generateTree(e.getClickedBlock().getLocation()) && e.getPlayer().getGameMode() != GameMode.CREATIVE)
 					{
 						if(e.getPlayer().getItemInHand().getAmount() <= 1)
 							e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
@@ -136,7 +121,6 @@ public class HellProperties implements Listener{
 			}
 		}
 	}
-	
 	
 	public boolean generateTree(Location location) {
 		
