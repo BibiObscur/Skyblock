@@ -77,8 +77,8 @@ public class Plugin extends JavaPlugin{
 		loadWorldName();
 		helldatas.loadworldname(directory + "HellDatas/");
         
-		logger.info("[" + pluginName + "] Determination des level des iles. Cette operation peut prendre un peu de temps");
-        datas.defineLevel();
+		/*logger.info("[" + pluginName + "] Determination des level des iles. Cette operation peut prendre un peu de temps");
+        datas.defineLevel();*/
         
         //Autosave activation
         autosave();
