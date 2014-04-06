@@ -103,6 +103,16 @@ public class IslandOpCommands implements CommandExecutor {
 					sender.sendMessage("Monster spawn limit : " + plugin.getServer().getWorld(plugin.getworldname()).getMonsterSpawnLimit());
 				}
 				
+				if(args[0].equalsIgnoreCase("islist")) {
+					Player player = (Player) sender;
+					plugin.getDatas().afficherIslandList(player);
+				}
+				
+				if(args[0].equalsIgnoreCase("grouplist")) {
+					Player player = (Player) sender;
+					plugin.getDatas().afficherGroupList(player);
+				}
+				
 			} else if(args.length == 2) {
 				
 				String playername = args[0];
@@ -181,7 +191,27 @@ public class IslandOpCommands implements CommandExecutor {
 						islandNotFound(sender, playername);
 					}
 				}
-			}
+			}/* else if(args.length == 3) {
+				if(args[0].equalsIgnoreCase("group")) {
+					String playername = args[1];
+					if(args[2].equalsIgnoreCase("delete")) {
+						if(plugin.getDatas().hasGroup(playername)) {
+							plugin.getDatas().removeGroup(playername);
+							sender.sendMessage("Ile supprime.");
+						} else
+							sender.sendMessage(playername + " n'a pas d'île.");
+					}
+				}
+			} else if(args.length == 4) {
+				if(args[0].equalsIgnoreCase("group")) {
+					String playername = args[1];
+					if(args[2].equalsIgnoreCase("addMember")) {
+						String playername2 = args[3];
+						plugin.getDatas().getGroup(playername).getMembers().add(playername2);
+						//plugin.getDatas().addPlayerToGroup(playername, playername2);
+					}
+				}
+			}*/
 		}
 		
 		return false;

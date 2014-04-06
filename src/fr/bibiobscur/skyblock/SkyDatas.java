@@ -116,7 +116,7 @@ public class SkyDatas {
 						if(block.getType() != Material.AIR)
 							block.setType(Material.AIR);
 					}
-			
+
 			island.getChallenges().clear();
 			orphaned.push(island);
 			playerIslands.remove(playerName);
@@ -128,7 +128,7 @@ public class SkyDatas {
 			
 			if(plugin.getHellDatas().hasIsland(playerName))
 				plugin.getHellDatas().deleteIsland(playerName, world);
-			
+
 			plugin.getServer().getPlayer(playerName).setLevel(0);
 		}
 	}
@@ -202,7 +202,7 @@ public class SkyDatas {
     			return playerIslands.get(playerName);
     		else
     			return playerIslands.get(playerName.toLowerCase());
-    	} 
+    	}
     	Island spawn = new Island();
     	spawn.setX(0);
     	spawn.setZ(0);
@@ -437,8 +437,14 @@ public class SkyDatas {
 		{
 			group = it.next();
 			if(group != null) {
-				if(group.getMembers().contains(playername)) return true;
+				Iterator<String> itg = group.getMembers().iterator();
+				while(itg.hasNext()) {
+					if(itg.next().equalsIgnoreCase(playername)) return true;
+				}
 			}
+			/*if(group != null) {
+				if(group.getMembers().contains(playername)) return true;
+			}*/
 		}
 		return false;
 	}
@@ -541,4 +547,30 @@ public class SkyDatas {
 
 
 
+	public void afficherIslandList(Player player) {
+		for(Entry<String, Island> entry : playerIslands.entrySet()) {
+    		String name = (String) entry.getKey();
+    		player.sendMessage(name);
+    		/*if(name.equalsIgnoreCase("losanls45")) {
+    			playerIslands.remove(entry);
+    			player.sendMessage("ile de losan supprimée");
+    		}*/
+		}
+	}
+	
+	public void afficherGroupList(Player player) {
+		Iterator<Group> it = groupList.iterator();
+		while(it.hasNext()) {
+			Group group = it.next();
+			player.sendMessage(group.getLeader() + "  " + group.getMembers());
+			/*if(group.getLeader().equalsIgnoreCase("losanls45")) {
+				groupList.remove(group);
+				player.sendMessage("groupe de losan supprimé");
+			}*/
+			/*if(group.getLeader().equalsIgnoreCase("losanls45")) {
+				group.getMembers().add("losanls45");
+				player.sendMessage("Groupe modifié");
+			}*/
+		}
+	}
 }
