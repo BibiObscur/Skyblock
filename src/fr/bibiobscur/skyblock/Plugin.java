@@ -21,6 +21,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.bibiobscur.skyblock.ajouts.ChallengeDetector;
+import fr.bibiobscur.skyblock.ajouts.MobsProperties;
 import fr.bibiobscur.skyblock.ajouts.NewSigns;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
 import fr.bibiobscur.skyblock.hell.HellCommands;
@@ -60,6 +61,7 @@ public class Plugin extends JavaPlugin{
 		new ChallengeDetector(this);
 		new NewSigns(this);
 		new HellProperties(this);
+		new MobsProperties(this);
 		
 		//Create new Skyblock datas
 		datas = new SkyDatas(this);
