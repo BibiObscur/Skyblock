@@ -132,7 +132,10 @@ public class HellDatas {
 	}
 	
 	public void deleteIsland(String playerName,World world) {
+		System.out.println("TEST");
+		System.out.println(plugin.getDatas().isLeader(playerName));
 		if(hasIsland(playerName) && plugin.getDatas().isLeader(playerName)) {
+			System.out.println("TEST2");
 			Island island = getPlayerIsland(playerName);
 			int length = plugin.getISLAND_SPACING();
 			
@@ -149,6 +152,7 @@ public class HellDatas {
 			playerHellIslands.remove(playerName);
 			
 			playerHellHomes.remove(playerName);
+			System.out.println("Suppression de l'île nether de playerName");
 		}
 	}
 	

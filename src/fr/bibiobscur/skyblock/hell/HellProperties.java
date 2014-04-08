@@ -2,17 +2,22 @@ package fr.bibiobscur.skyblock.hell;
 
 import java.util.Random;
 
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -81,6 +86,16 @@ public class HellProperties implements Listener{
 	}
 	
 	@EventHandler
+	public void mobSpawner(BlockPlaceEvent e) {
+		if(e.getBlock().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			if(e.getBlock().getType() == Material.MOB_SPAWNER) {
+				CreatureSpawner spawner = (CreatureSpawner) e.getBlock().getState();
+				spawner.setCreatureTypeByName("BLAZE");
+			}
+		}
+	}
+	
+	@EventHandler
 	public void glowBroken(BlockBreakEvent e) {
 		if(e.getBlock().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
 			if(e.getBlock().getType() == Material.GLOWSTONE) {
@@ -116,6 +131,7 @@ public class HellProperties implements Listener{
 							e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
 						else
 							e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+						giveExp(e.getPlayer(), 8);
 					}
 				}
 			}
@@ -166,6 +182,10 @@ public class HellProperties implements Listener{
 			}
 		}
 		
+		world.playEffect(location, Effect.SMOKE, 5);
+		world.playEffect(location, Effect.POTION_BREAK, 3);
+		world.playSound(location, Sound.BLAZE_HIT, 20, 1);
+		
 		return true;
 	}
 	
@@ -208,5 +228,11 @@ public class HellProperties implements Listener{
 		}
 		
 		return true;
+	}
+	
+	private void giveExp(Player player, int xp) {
+		for(int i = 0; i < xp/10 + 1; i++)
+			player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
+		player.giveExp(xp);
 	}
 }
