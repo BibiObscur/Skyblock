@@ -127,7 +127,7 @@ public class SkyDatas {
 			playerHomes.remove(playerName);
 			
 			if(plugin.getHellDatas().hasIsland(playerName))
-				plugin.getHellDatas().deleteIsland(playerName, world);
+				plugin.getHellDatas().deleteIsland(playerName, plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
 
 			plugin.getServer().getPlayer(playerName).setLevel(0);
 		}
@@ -537,9 +537,7 @@ public class SkyDatas {
 	public void changeLeader(String oldleader, String newleader) {
 		if(hasGroup(oldleader)) {
 			getGroup(oldleader).setLeader(newleader);
-			Island island = getPlayerIsland(oldleader);
-			playerIslands.remove(oldleader);
-			playerIslands.put(newleader, island);
+			playerIslands.put(newleader, playerIslands.remove(oldleader));
 			if(plugin.isConnected(oldleader)) plugin.getServer().getPlayer(oldleader).sendMessage(ChatColor.GREEN + "Le nouveau leader du groupe est maintenant " + ChatColor.BLUE + newleader + ChatColor.GREEN + " !");
 			if(plugin.isConnected(newleader)) plugin.getServer().getPlayer(newleader).sendMessage(ChatColor.GREEN + "Vous êtes le nouveau leader du groupe !");
 		}

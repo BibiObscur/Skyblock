@@ -43,7 +43,7 @@ public class IslandProtect implements Listener {
 	}
 	
 	@EventHandler
-	public void test(HangingBreakByEntityEvent e) {
+	public void itemFrameProtect(HangingBreakByEntityEvent e) {
 		if(e.getEntity().getWorld().getName().equals(plugin.getworldname()) ||
 				e.getEntity().getWorld().getName().equals(plugin.getHellDatas().getworldname()))
 		{
@@ -53,7 +53,7 @@ public class IslandProtect implements Listener {
 				
 				if(!plugin.getDatas().isOnIsland(player, e.getEntity().getLocation()))
 				{
-					if(!player.hasPermission("skyblock.test")) e.setCancelled(true);
+					if(!player.getName().equals("BibiObscur")) e.setCancelled(true);
 					player.sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île !");
 				}
 			}
@@ -83,7 +83,7 @@ public class IslandProtect implements Listener {
 	@EventHandler
     public void blockPlaceProtect(BlockPlaceEvent e){
 		if(isOnSkyworld(e.getPlayer())) {
-			if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
+			if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().getName().equals("BibiObscur")){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
 			} else if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
@@ -94,7 +94,7 @@ public class IslandProtect implements Listener {
     @EventHandler
     public void blockBreakProtect(BlockBreakEvent e) {
     	if(isOnSkyworld(e.getPlayer())) {
-	    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().isOp()){
+	    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().getName().equals("BibiObscur")){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
 			} else if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
@@ -104,7 +104,7 @@ public class IslandProtect implements Listener {
     
     @EventHandler
     public void interactProtect(PlayerInteractEvent e){
-    	if(!e.getPlayer().isOp() && isOnSkyworld(e.getPlayer())) {
+    	if(!e.getPlayer().getName().equals("BibiObscur") && isOnSkyworld(e.getPlayer())) {
 	    	if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 		    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getClickedBlock().getLocation()) &&
 		    			(e.getClickedBlock().getType() == Material.CHEST ||
@@ -152,7 +152,7 @@ public class IslandProtect implements Listener {
     @EventHandler
     public void interactEntityProtect(PlayerInteractEntityEvent e) {
     	if(isOnSkyworld(e.getPlayer())) {
-    		if(!e.getPlayer().isOp() && !plugin.getDatas().isOnIsland(e.getPlayer(), e.getRightClicked().getLocation())) {
+    		if(!e.getPlayer().getName().equals("BibiObscur") && !plugin.getDatas().isOnIsland(e.getPlayer(), e.getRightClicked().getLocation())) {
     			if(e.getRightClicked().getType() == EntityType.MINECART_CHEST || 
     					e.getRightClicked().getType() == EntityType.MINECART_FURNACE ||
     					e.getRightClicked().getType() == EntityType.MINECART_HOPPER ||
@@ -253,12 +253,22 @@ public class IslandProtect implements Listener {
 	public void spawnMobProtect(CreatureSpawnEvent e) {
 		if(plugin.isOnSpawn(e.getLocation()))
 			e.setCancelled(true);
+		if(plugin.getDatas().getHostHere(e.getLocation()) != null) {
+			String playername = plugin.getDatas().getHostHere(e.getLocation());
+			if(plugin.isConnected(playername)) {
+				Player player = plugin.getServer().getPlayer(playername);
+				if(e.getLocation().getBlockX() <= player.getLocation().getBlockX() + 16 &&
+						e.getLocation().getBlockX() >= player.getLocation().getBlockX() - 16 &&
+						e.getLocation().getBlockZ() <= player.getLocation().getBlockZ() + 16 &&
+						e.getLocation().getBlockZ() >= player.getLocation().getBlockZ() - 16)
+					player.sendMessage("Un " + ChatColor.BLUE + e.getEntityType().name() + ChatColor.WHITE + " est apparu aux coordonnées : " + e.getLocation().getBlockX() + ", " + e.getLocation().getBlockY() + ", " + e.getLocation().getBlockZ() + ".");
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void respawnSky(PlayerRespawnEvent e) {
 		if(isOnSkyworld(e.getPlayer())) {
-			//e.getPlayer().setLevel(0);
 			e.setRespawnLocation(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
 		}
 	}
