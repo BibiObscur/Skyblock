@@ -401,7 +401,7 @@ public class ChallengeDetector implements Listener {
 					item == Material.ROTTEN_FLESH) {
 				Player player = e.getPlayer();
 				Island island = plugin.getDatas().getPlayerIsland(player.getName());
-				island = challengeDone("EatToSurvive", 40, player, island, Material.IRON_ORE, 8);
+				island = challengeDone("EatToSurvive", 40, player, island, Material.IRON_ORE, 5);
 				
 				for(int i = 0; i < 2; i++)
 					player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
