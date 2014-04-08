@@ -313,8 +313,7 @@ public class ChallengeDetector implements Listener {
 						e.getEntityType() == EntityType.OCELOT || 
 						e.getEntityType() == EntityType.PIG || 
 						e.getEntityType() == EntityType.SHEEP || 
-						e.getEntityType() == EntityType.SQUID || 
-						e.getEntityType() == EntityType.VILLAGER || 
+						e.getEntityType() == EntityType.SQUID ||
 						e.getEntityType() == EntityType.WOLF) {
 					island = challengeDone("FriendlyRegion", 50, plugin.getServer().getPlayer(playername), island, Material.DIRT, 16);
 					Animals mob = (Animals) e.getEntity();
