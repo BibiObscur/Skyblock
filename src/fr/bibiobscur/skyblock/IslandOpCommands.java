@@ -43,6 +43,7 @@ public class IslandOpCommands implements CommandExecutor {
 				sender.sendMessage(ChatColor.RED + "/sky createcommunisland" + ChatColor.WHITE + " : Crée une île commune.");
 				sender.sendMessage(ChatColor.RED + "/sky definelevels" + ChatColor.WHITE + " : Calcule le niveau de chaque île.");
 				sender.sendMessage(ChatColor.RED + "/sky save" + ChatColor.WHITE + " : Sauvegarde des données du skyblock.");
+				sender.sendMessage(ChatColor.RED + "/sky addOrphaned <x> <z>" + ChatColor.WHITE + " : Rajoute une parcelle disponible.");
 				sender.sendMessage(ChatColor.RED + "/sky <player> info" + ChatColor.WHITE + " : Obtenir des informations sur un joueur.");
 				sender.sendMessage(ChatColor.RED + "/sky <player> tp" + ChatColor.WHITE + " : Se téléporter à l'île du joueur.");
 				sender.sendMessage(ChatColor.RED + "/sky <player> delete" + ChatColor.WHITE + " : Supprimer définitivement l'île du joueur.");
@@ -57,6 +58,7 @@ public class IslandOpCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "/sky createcommunisland" + ChatColor.WHITE + " : Crée une île commune.");
 					sender.sendMessage(ChatColor.RED + "/sky definelevels" + ChatColor.WHITE + " : Calcule le niveau de chaque île.");
 					sender.sendMessage(ChatColor.RED + "/sky save" + ChatColor.WHITE + " : Sauvegarde des données du skyblock.");
+					sender.sendMessage(ChatColor.RED + "/sky addOrphaned <x> <z>" + ChatColor.WHITE + " : Rajoute une parcelle disponible.");
 					sender.sendMessage(ChatColor.RED + "/sky <player> info" + ChatColor.WHITE + " : Obtenir des informations sur un joueur.");
 					sender.sendMessage(ChatColor.RED + "/sky <player> tp" + ChatColor.WHITE + " : Se téléporter à l'île du joueur.");
 					sender.sendMessage(ChatColor.RED + "/sky <player> delete" + ChatColor.WHITE + " : Supprimer définitivement l'île du joueur.");
@@ -191,27 +193,14 @@ public class IslandOpCommands implements CommandExecutor {
 						islandNotFound(sender, playername);
 					}
 				}
-			}/* else if(args.length == 3) {
-				if(args[0].equalsIgnoreCase("group")) {
-					String playername = args[1];
-					if(args[2].equalsIgnoreCase("delete")) {
-						if(plugin.getDatas().hasGroup(playername)) {
-							plugin.getDatas().removeGroup(playername);
-							sender.sendMessage("Ile supprime.");
-						} else
-							sender.sendMessage(playername + " n'a pas d'île.");
-					}
+			} else if(args.length == 3) {
+				if(args[0].equalsIgnoreCase("addOrphaned")) {
+					int x = Integer.parseInt(args[1]);
+					int z = Integer.parseInt(args[2]);
+					plugin.getDatas().addOrphanedIsland(x, z);
+					sender.sendMessage("Parcelle ajoutées aux coordonnées " + x + " " + z + ".");
 				}
-			} else if(args.length == 4) {
-				if(args[0].equalsIgnoreCase("group")) {
-					String playername = args[1];
-					if(args[2].equalsIgnoreCase("addMember")) {
-						String playername2 = args[3];
-						plugin.getDatas().getGroup(playername).getMembers().add(playername2);
-						//plugin.getDatas().addPlayerToGroup(playername, playername2);
-					}
-				}
-			}*/
+			}
 		}
 		
 		return false;
