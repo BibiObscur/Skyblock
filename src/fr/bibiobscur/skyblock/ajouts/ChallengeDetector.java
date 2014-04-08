@@ -544,6 +544,8 @@ public class ChallengeDetector implements Listener {
 					Island island = plugin.getDatas().getPlayerIsland(player.getName());
 					island = challengeDone("Brewing", 50, player, island);
 					giveExp(player, 4);
+				} else {
+					/* Orbes d'expérience à la location du brewing stand */
 				}
 			}
 		}
