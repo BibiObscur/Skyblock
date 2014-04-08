@@ -255,6 +255,11 @@ public class SkyDatas {
     	return spawn;
     }
 	
+	public void addOrphanedIsland(int x, int z) {
+		Island island = new Island(x, z);
+		orphaned.push(island);
+	}
+	
 	//Dans Island.java
 	public void defineLevel() {
 	    	
