@@ -279,7 +279,10 @@ public class NewSigns implements Listener{
 		} else if(itemType == Material.LONG_GRASS) {
 			
 			data = rand.nextInt(3);
-			item = new ItemStack(Material.LONG_GRASS, amount, (byte) data);
+			if(data == 0) {
+				item = new ItemStack(Material.DEAD_BUSH, amount);
+			} else
+				item = new ItemStack(Material.LONG_GRASS, amount, (byte) data);
 		
 		} else if(itemType == Material.WOOL || itemType == Material.GLASS || itemType == Material.STAINED_CLAY) {
 			
