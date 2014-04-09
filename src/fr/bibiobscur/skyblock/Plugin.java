@@ -84,6 +84,7 @@ public class Plugin extends JavaPlugin{
         
         //Autosave activation
         autosave();
+        autodefinelevels();
         
         ShapedRecipe soulsand = new ShapedRecipe(new ItemStack(Material.SOUL_SAND, 1)).shape("aaa", "aba", "aaa").setIngredient('a', Material.GRAVEL).setIngredient('b', Material.FLINT);
         ShapedRecipe icepacked = new ShapedRecipe(new ItemStack(Material.PACKED_ICE, 1)).shape("aa", "aa").setIngredient('a', Material.ICE);
@@ -110,6 +111,15 @@ public class Plugin extends JavaPlugin{
 				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Donnees du skyblock sauvegardees." + ChatColor.GOLD + " -- ");
     	    }
         }, 0L, 20 * 60 * 15L);
+	}
+	
+	public void autodefinelevels() {
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+    	    public void run(){
+    	    	datas.defineLevel();
+				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Niveaux des îles mis à jour." + ChatColor.GOLD + " -- ");
+    	    }
+        }, 0L, 20 * 60 * 5L);
 	}
 
 //---------------------------------------------------------------------------------------------------------

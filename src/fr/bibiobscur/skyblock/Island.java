@@ -23,6 +23,15 @@ public class Island implements Serializable {
 	private int level;
 	private HashSet<String> challenges = new HashSet<String>();
 	
+	public Island() {
+	}
+	
+	public Island(int x, int z) {
+		this.x = x;
+		this.z = z;
+		this.level = 0;
+	}
+	
 	public int getLevel() { return level; }
 	public int getX() { return x; }
 	public int getZ() { return z; }
@@ -244,4 +253,51 @@ public class Island implements Serializable {
 		return true;
 	}
 	
+	public void defineLevel(World world, int spacing) {
+		Block block;
+    	double xp;
+    	double xpblock[] = new double[10];
+    	int i, j, k;
+    	
+		for(i = 0; i < xpblock.length; i++)
+			xpblock[i] = 0;
+		xpblock[2] = - 50;
+		xpblock[3] = - 27;
+		
+		for(i = this.x - spacing/2; i < this.x + spacing/2; i++) {
+			for(j = 5; j < world.getMaxHeight()-5; j++) {
+    			for(k = this.z - spacing/2; k < this.z + spacing/2; k++) {
+    				block = world.getBlockAt(new Location(world, i, j, k));
+        			if(block.getType() != Material.AIR && block.getType() != Material.WATER) {
+        				if(block.getType() == Material.GRASS || block.getType() == Material.MYCEL)
+        					xpblock[1] += 1;
+        				else if(block.getType() == Material.DIRT)
+        					xpblock[2] += 1 - ((xpblock[2] > 576)?0.5:0);
+        				else if(block.getType() == Material.SAND)
+        					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0);
+        				else if(block.getType() == Material.WOOD)
+        					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0) - ((xpblock[4] > 3584)?0.25:0);
+        				else if(block.getType() == Material.SMOOTH_BRICK || block.getType() == Material.STONE)
+        					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0) - ((xpblock[5] > 3584)?0.25:0);
+        				else if(block.getType() == Material.STEP)
+        					xpblock[6] += 1 - ((xpblock[6] > 576*2)?0.5:0) - ((xpblock[6] > 3584*2)?0.25:0);
+        				else if(block.getType() == Material.SMOOTH_STAIRS)
+        					xpblock[7] += 1 - ((xpblock[7] > 576)?0.5:0) - ((xpblock[7] > 3584)?0.25:0);
+        				else if(block.getType() == Material.COBBLESTONE)
+        					xpblock[8] += 1 - ((xpblock[8] > 576)?1:0);
+        				else if(block.getType() == Material.SANDSTONE || block.getType() == Material.SANDSTONE_STAIRS)
+        					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0);
+        				else
+        					xpblock[0] += 1 - ((xpblock[0] > 8192)?0.5:0);
+        			}
+        		}
+			}
+		}
+		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 250 * challenges.size();
+
+		if(xp <= 16383.875)
+			this.level = (int)(xp/32.76775);
+		else
+			this.level = (int)(Math.pow((xp/(Math.pow(2, 17)-1)), 1.0/3) * 1000);
+	}
 }
