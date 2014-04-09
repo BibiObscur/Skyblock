@@ -423,7 +423,7 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.BREWING_STAND_ITEM) {
 			
-			data = rand.nextInt(5);
+			data = rand.nextInt(6);
 			if(data == 0)
 				item = new ItemStack(Material.BREWING_STAND_ITEM);
 			else if(data == 1)
@@ -432,8 +432,10 @@ public class NewSigns implements Listener{
 				item = new ItemStack(Material.ANVIL, 1, (byte) 2);
 			else if(data == 3)
 				item = new ItemStack(Material.HOPPER);
-			else
+			else if(data == 4)
 				item = new ItemStack(Material.JUKEBOX);
+			else
+				item = new ItemStack(Material.ENDER_CHEST);
 				
 		} else if(itemType == Material.GOLDEN_APPLE) {
 			
