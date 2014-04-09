@@ -1,7 +1,9 @@
 package fr.bibiobscur.skyblock;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -80,6 +82,7 @@ public class IslandCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "/is info" + ChatColor.WHITE + " : Afficher des informations votre île.");
 					sender.sendMessage(ChatColor.RED + "/is infohere" + ChatColor.WHITE + " : Afficher des informations sur l'île sur laquelle vous êtes.");
 					sender.sendMessage(ChatColor.RED + "/is info <player>" + ChatColor.WHITE + " : Afficher des informations sur l'île du joueur.");
+					sender.sendMessage(ChatColor.RED + "/is top" + ChatColor.WHITE + " : Afficher le classement des îles.");
 					sender.sendMessage(ChatColor.RED + "/isg" + ChatColor.WHITE + " : Commandes pour créer une île en coopération.");
 				}
 				
@@ -159,6 +162,23 @@ public class IslandCommands implements CommandExecutor {
 					} else {
 						sender.sendMessage(ChatColor.RED + "Vous n'avez pas d'île.");
 					}
+				}
+				
+				if(args[0].equalsIgnoreCase("top")) {
+					if(plugin.getDatas().getTopList() != null) {
+						ArrayList<Entry<String, Integer>> topList = plugin.getDatas().getTopList();
+						int i = 1;
+						sender.sendMessage(ChatColor.GREEN + "Classement des îles :");
+						for(Entry<String,Integer> entry : topList) {
+							if(entry.getKey().equalsIgnoreCase(sender.getName())) {
+								sender.sendMessage(i + " : " + ChatColor.GREEN + entry.getKey() + ChatColor.WHITE + " (" + ChatColor.GREEN + entry.getValue() + ChatColor.WHITE + ")");
+							} else if(i < 10) {
+								sender.sendMessage(i + " : " + ChatColor.BLUE + entry.getKey() + ChatColor.WHITE + " (" + ChatColor.GREEN + entry.getValue() + ChatColor.WHITE + ")");
+							}
+							i ++;
+						}
+					} else
+						sender.sendMessage(ChatColor.RED + "Le classement des îles n'a pas encore été défini.");
 				}
 			}
 			

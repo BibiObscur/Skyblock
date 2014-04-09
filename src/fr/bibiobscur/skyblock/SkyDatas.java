@@ -1,11 +1,14 @@
 package fr.bibiobscur.skyblock;
 
 import java.io.File;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -23,6 +26,7 @@ public class SkyDatas {
 	private HashMap<String, Island> playerIslands = new HashMap<String, Island>();
 	private Stack<Island> orphaned = new Stack<>();
 	private HashSet<Group> groupList = new HashSet<Group>();
+	private ArrayList<Entry<String, Integer>> topList = new ArrayList<Entry<String, Integer>>();
 	private Island lastIsland;
 	private HashMap<String, Home> playerHomes = new HashMap<String, Home>();
 	private Logger logger = Logger.getLogger("Minecraft");
@@ -269,8 +273,33 @@ public class SkyDatas {
 			    	island = (Island) entry.getValue();
 			    	if(island != null) island.defineLevel(plugin.getServer().getWorld(plugin.getworldname()), plugin.getISLAND_SPACING());
 			    }
+			    createTopList();
 			}
 		});
+	}
+	
+	public void createTopList() {
+		this.topList = null;
+
+		TreeMap<Integer, String> topIslands = new TreeMap<Integer, String>();
+		Island island;
+		
+		for(Entry<String, Island> entry : playerIslands.entrySet()) {
+			island = (Island) entry.getValue();
+			if(island != null && island.getLevel() > 0)
+				topIslands.put(island.getLevel(), entry.getKey());
+		}
+
+		ArrayList<Entry<String, Integer>> shortList = new ArrayList<Entry<String, Integer>>(topIslands.size());
+
+		for(Entry<Integer, String> entry : topIslands.descendingMap().entrySet())
+		shortList.add(new AbstractMap.SimpleEntry<String, Integer>(entry.getValue(), entry.getKey()));
+		
+		this.topList = shortList;
+	}
+	
+	public ArrayList<Entry<String, Integer>> getTopList() {
+		return topList;
 	}
 	    
 	
