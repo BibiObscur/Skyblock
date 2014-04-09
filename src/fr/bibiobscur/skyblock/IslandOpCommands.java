@@ -92,7 +92,6 @@ public class IslandOpCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("definelevels")) {
 					sender.sendMessage("Calcul du niveau des îles...");
 					plugin.getDatas().defineLevel();
-					sender.sendMessage("Le niveau des îles a bien été mis à jour.");
 				}
 				
 				if(args[0].equalsIgnoreCase("save")) {

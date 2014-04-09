@@ -10,12 +10,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -84,7 +80,7 @@ public class Plugin extends JavaPlugin{
         
         //Autosave activation
         autosave();
-        //autodefinelevels();
+        autodefinelevels();
         
         ShapedRecipe soulsand = new ShapedRecipe(new ItemStack(Material.SOUL_SAND, 1)).shape("aaa", "aba", "aaa").setIngredient('a', Material.GRAVEL).setIngredient('b', Material.FLINT);
         ShapedRecipe icepacked = new ShapedRecipe(new ItemStack(Material.PACKED_ICE, 1)).shape("aa", "aa").setIngredient('a', Material.ICE);
@@ -117,9 +113,8 @@ public class Plugin extends JavaPlugin{
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
     	    public void run(){
     	    	datas.defineLevel();
-				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Niveaux des îles mis à jour." + ChatColor.GOLD + " -- ");
     	    }
-        }, 0L, 20 * 60 * 5L);
+        }, 0L, 20 * 60 * 30L);
 	}
 
 //---------------------------------------------------------------------------------------------------------
@@ -130,7 +125,7 @@ public class Plugin extends JavaPlugin{
 				BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(directory + "SkyblockWorldName.txt")));
 				worldname = br.readLine();
 				br.close();
-				WorldCreator wc = new WorldCreator(worldname);
+				/*WorldCreator wc = new WorldCreator(worldname);
 				wc.generator(new NullChunkGenerator());
 				wc.seed(-1168696288156746053L);
 				wc.type(WorldType.NORMAL);
@@ -138,7 +133,7 @@ public class Plugin extends JavaPlugin{
 		        World world = getServer().getWorld(worldname);
 				world.setDifficulty(Difficulty.HARD);
 				world.setPVP(true);
-				world.setMonsterSpawnLimit(110);
+				world.setMonsterSpawnLimit(110);*/
 	    	} else
 	    		new File(directory + "SkyblockWorldName.txt");
     	

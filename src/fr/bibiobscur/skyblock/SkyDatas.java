@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -268,19 +269,21 @@ public class SkyDatas {
 	public void defineLevel() {
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			public void run(){
+				logger.info("Calcul du niveau des iles...");
 			    Island island;
 			    for(Entry<String, Island> entry : playerIslands.entrySet()) {
 			    	island = (Island) entry.getValue();
 			    	if(island != null) island.defineLevel(plugin.getServer().getWorld(plugin.getworldname()), plugin.getISLAND_SPACING());
 			    }
+			    logger.info("Niveau des iles mis a jour.");
+				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Niveaux des îles mis à jour." + ChatColor.GOLD + " -- ");
 			    createTopList();
 			}
 		});
 	}
 	
 	public void createTopList() {
-		this.topList = null;
-
+		logger.info("Creation du classement...");
 		TreeMap<Integer, String> topIslands = new TreeMap<Integer, String>();
 		Island island;
 		
@@ -296,6 +299,7 @@ public class SkyDatas {
 		shortList.add(new AbstractMap.SimpleEntry<String, Integer>(entry.getValue(), entry.getKey()));
 		
 		this.topList = shortList;
+		logger.info("Creation du classement termine.");
 	}
 	
 	public ArrayList<Entry<String, Integer>> getTopList() {
