@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -21,6 +22,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.bibiobscur.skyblock.Plugin;
@@ -33,6 +35,31 @@ public class HellProperties implements Listener{
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
+	
+	/*@EventHandler
+	public void portalTravelEntity(EntityPortalEvent e) {
+		System.out.println(e.toString());
+		if(e.getFrom().getWorld().getBlockAt(e.getFrom()).getType() == Material.PORTAL) {
+			System.out.println("portal");
+			if(e.getFrom().getWorld().getName().equals(plugin.getworldname())) {
+				String hosthere = plugin.getDatas().getHostHere(e.getFrom());
+				if(hosthere == null)
+					e.setCancelled(true);
+				else if (!plugin.getHellDatas().hasIsland(hosthere)) 
+					e.setCancelled(true);
+				else {
+					e.getEntity().teleport(new Location(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()), plugin.getHellDatas().getPlayerIsland(hosthere).getX(), plugin.getISLANDS_Y() + 1, plugin.getHellDatas().getPlayerIsland(hosthere).getZ()));
+					System.out.println("Teleported");
+				}
+				//System.out.println(e.getTo().toString());
+				System.out.println(e.getEntity().getLocation());
+				e.setCancelled(true);
+			} else if(e.getFrom().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+				String hosthere = plugin.getHellDatas().getHostHere(e.getFrom());
+				
+			}
+		}
+	}*/
 	
 	@EventHandler
 	public void portalTravel(PlayerPortalEvent e) {
