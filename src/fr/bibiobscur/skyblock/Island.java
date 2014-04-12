@@ -256,7 +256,7 @@ public class Island implements Serializable {
 	public void defineLevel(World world, int spacing) {
 		Block block;
     	double xp;
-    	double xpblock[] = new double[11];
+    	double xpblock[] = new double[12];
     	int i, j, k;
     	
 		for(i = 0; i < xpblock.length; i++)
@@ -288,14 +288,16 @@ public class Island implements Serializable {
         				else if(block.getType() == Material.SANDSTONE || block.getType() == Material.SANDSTONE_STAIRS)
         					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0);
         				else if(block.getType() == Material.GLASS)
-        					xpblock[10] += 1 - ((xpblock[9] > 3584)?0.25:0);
+        					xpblock[10] += 1 - ((xpblock[10] > 3584)?0.25:0);
+        				else if(block.getType() == Material.BRICK || block.getType() == Material.BRICK_STAIRS)
+        					xpblock[11] += 1 - ((xpblock[11] > 576)?0.5:0) - ((xpblock[11] > 3584)?0.25:0);
         				else
         					xpblock[0] += 1 - ((xpblock[0] > 8192)?0.5:0);
         			}
         		}
 			}
 		}
-		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 5 * xpblock[10] + 200 * challenges.size();
+		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 5 * xpblock[10] + 5 * xpblock[11] + 200 * challenges.size();
 
 		if(xp <= 16383.875)
 			this.level = (int)(xp/32.76775);
