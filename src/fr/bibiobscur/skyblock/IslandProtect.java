@@ -13,8 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -253,7 +253,7 @@ public class IslandProtect implements Listener {
 	public void spawnMobProtect(CreatureSpawnEvent e) {
 		if(plugin.isOnSpawn(e.getLocation()))
 			e.setCancelled(true);
-		if(plugin.getDatas().getHostHere(e.getLocation()) != null) {
+		/*if(plugin.getDatas().getHostHere(e.getLocation()) != null) {
 			String playername = plugin.getDatas().getHostHere(e.getLocation());
 			if(plugin.isConnected(playername)) {
 				Player player = plugin.getServer().getPlayer(playername);
@@ -263,7 +263,7 @@ public class IslandProtect implements Listener {
 						e.getLocation().getBlockZ() >= player.getLocation().getBlockZ() - 16)
 					player.sendMessage("Un " + ChatColor.BLUE + e.getEntityType().name() + ChatColor.WHITE + " est apparu aux coordonnées : " + e.getLocation().getBlockX() + ", " + e.getLocation().getBlockY() + ", " + e.getLocation().getBlockZ() + ".");
 			}
-		}
+		}*/
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
