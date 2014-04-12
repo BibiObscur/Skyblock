@@ -80,7 +80,7 @@ public class Plugin extends JavaPlugin{
         
         //Autosave activation
         autosave();
-        autodefinelevels();
+        //autodefinelevels();
         
         ShapedRecipe soulsand = new ShapedRecipe(new ItemStack(Material.SOUL_SAND, 1)).shape("aaa", "aba", "aaa").setIngredient('a', Material.GRAVEL).setIngredient('b', Material.FLINT);
         ShapedRecipe icepacked = new ShapedRecipe(new ItemStack(Material.PACKED_ICE, 1)).shape("aa", "aa").setIngredient('a', Material.ICE);
