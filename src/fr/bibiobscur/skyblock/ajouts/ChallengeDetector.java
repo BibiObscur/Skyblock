@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -545,7 +546,10 @@ public class ChallengeDetector implements Listener {
 					island = challengeDone("Brewing", 50, player, island);
 					giveExp(player, 4);
 				} else {
-					/* Orbes d'expérience à la location du brewing stand */
+					for(int i = 0; i < 4; i++) {
+						ExperienceOrb orb = (ExperienceOrb) e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation(), EntityType.EXPERIENCE_ORB);
+						orb.setExperience(1);
+					}
 				}
 			}
 		}

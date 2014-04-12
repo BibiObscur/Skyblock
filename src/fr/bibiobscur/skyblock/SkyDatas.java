@@ -134,7 +134,7 @@ public class SkyDatas {
 			if(plugin.getHellDatas().hasIsland(playerName))
 				plugin.getHellDatas().deleteIsland(playerName, plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
 
-			plugin.getServer().getPlayer(playerName).setLevel(0);
+			if(plugin.isConnected(playerName)) plugin.getServer().getPlayer(playerName).setLevel(0);
 		}
 	}
 	
