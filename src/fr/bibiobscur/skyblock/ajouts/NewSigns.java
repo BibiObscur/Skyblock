@@ -1,7 +1,5 @@
 package fr.bibiobscur.skyblock.ajouts;
 
-import java.util.Random;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,14 +31,11 @@ public class NewSigns implements Listener{
 			Material.NOTE_BLOCK,
 			Material.LONG_GRASS,
 			Material.WOOL,
-			Material.RED_ROSE,
 			Material.BROWN_MUSHROOM,
-			Material.BOOKSHELF,
-			Material.OBSIDIAN,
 			Material.ICE,
 			Material.CLAY,
 			Material.NETHERRACK,
-			Material.GLASS,
+			Material.STAINED_GLASS,
 			Material.STAINED_CLAY,
 			Material.SNOW_BALL,
 			Material.NETHER_STALK
@@ -95,8 +90,9 @@ public class NewSigns implements Listener{
 								if(player.getInventory().getItemInHand().getType() == Material.AIR)
 								{
 									ItemStack item;
-									Random rand = new Random();
-									Material itemType = sendLevels[rand.nextInt(sendLevels.length)];
+									//Random rand = new Random();
+									//Material itemType = sendLevels[rand.nextInt(sendLevels.length)];
+									Material itemType = sendLevels[(int) (Math.random() * sendLevels.length)];
 									int amount = player.getLevel() * 2;
 									if(player.getLevel()>32) amount = 64;
 
@@ -127,11 +123,12 @@ public class NewSigns implements Listener{
 							if(player.getLevel() >= 13)
 							{
 								ItemStack item;
-								Random rand = new Random();
+								//Random rand = new Random();
 								Material itemType;
 								
 								for(int i = 0; i < 3; i++) {
-									itemType = rareItems[rand.nextInt(rareItems.length)];
+									//itemType = rareItems[rand.nextInt(rareItems.length)];
+									itemType = rareItems[(int)(Math.random() * rareItems.length)];
 									item = getRareItem(itemType);
 									player.getInventory().addItem(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
@@ -160,10 +157,11 @@ public class NewSigns implements Listener{
 								if(player.getInventory().getItemInHand().getType() == Material.AIR)
 								{
 									ItemStack item;
-									Random rand = new Random();
+									//Random rand = new Random();
 									Material itemType;
 									
-									itemType = bestItems[rand.nextInt(bestItems.length)];
+									//itemType = bestItems[rand.nextInt(bestItems.length)];
+									itemType = bestItems[(int) (Math.random() * bestItems.length)];
 									item = getBestItem(itemType);
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
@@ -187,13 +185,14 @@ public class NewSigns implements Listener{
 	
 	private ItemStack getItemStack(Material itemType, int amount) {
 		
-		Random rand = new Random();
+		//Random rand = new Random();
 		int data;
 		ItemStack item;
 		
 		if(itemType == Material.DIRT) {
 			
-			data = rand.nextInt(3);
+			//data = rand.nextInt(3);
+			data = (int)(Math.random() * 3);
 			if(data == 0)
 				item = new ItemStack(itemType, amount);
 			else if(data == 1)
@@ -203,7 +202,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.STONE) {
 			
-			data = rand.nextInt(7);
+			//data = rand.nextInt(7);
+			data = (int)(Math.random() * 7);
 			if(data == 0)
 				item = new ItemStack(Material.STONE, amount);
 			else if(data == 1)
@@ -221,7 +221,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.SAPLING) {
 			
-			data = rand.nextInt(6);
+			//data = rand.nextInt(6);
+			data = (int)(Math.random() * 6);
 			if(data == 0)
 				item = new ItemStack(Material.SAPLING, amount);
 			else if(data == 1)
@@ -237,7 +238,8 @@ public class NewSigns implements Listener{
 				
 		} else if(itemType == Material.SAND) {
 			
-			data = rand.nextInt(2);
+			//data = rand.nextInt(2);
+			data = (int)(Math.random() * 2);
 			if(data == 0)
 				item = new ItemStack(Material.SAND, amount);
 			else
@@ -245,7 +247,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.GOLD_ORE) {
 			
-			data = rand.nextInt(7);
+			//data = rand.nextInt(7);
+			data = (int)(Math.random() * 7);
 			if(data == 0)
 				item = new ItemStack(Material.IRON_ORE, amount);
 			else if(data == 1)
@@ -263,7 +266,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.LOG) {
 			
-			data = rand.nextInt(6);
+			//data = rand.nextInt(6);
+			data = (int)(Math.random() * 6);
 			if(data == 4)
 				item = new ItemStack(Material.LOG_2, amount);
 			else if(data == 5)
@@ -273,33 +277,50 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.SANDSTONE) {
 			
-			data = rand.nextInt(3);
-			item = new ItemStack(Material.SANDSTONE, amount, (byte) data);
+			//data = rand.nextInt(3);
+			data = (int)(Math.random() * 4);
+			if(data == 3)
+				item = new ItemStack(Material.BOOKSHELF, amount);
+			else
+				item = new ItemStack(Material.SANDSTONE, amount, (byte) data);
 		
-		} else if(itemType == Material.LONG_GRASS) {
+		} else if(itemType == Material.LONG_GRASS || itemType == Material.RED_ROSE) {
 			
-			data = rand.nextInt(3);
-			if(data == 0) {
-				item = new ItemStack(Material.DEAD_BUSH, amount);
-			} else
-				item = new ItemStack(Material.LONG_GRASS, amount, (byte) data);
+			//data = rand.nextInt(3);
+			if((int)(Math.random()*2) == 0) {
+				data = (int)(Math.random() * 3);
+				if(data == 0) {
+					item = new ItemStack(Material.DEAD_BUSH, amount);
+				} else
+					item = new ItemStack(Material.LONG_GRASS, amount, (byte) data);
+			} else {
+				//data = rand.nextInt(10);
+				data = (int)(Math.random() * 10);
+				if(data == 9)
+					item = new ItemStack(Material.YELLOW_FLOWER, amount);
+				else
+					item = new ItemStack(Material.RED_ROSE, amount, (byte) data);
+			}
 		
-		} else if(itemType == Material.WOOL || itemType == Material.GLASS || itemType == Material.STAINED_CLAY) {
+		} else if(itemType == Material.WOOL || itemType == Material.STAINED_GLASS || itemType == Material.STAINED_CLAY) {
 			
-			data = rand.nextInt(16);
+			//data = rand.nextInt(16);
+			data = (int)(Math.random() * 16);
 			item = new ItemStack(itemType, amount, (byte) data);
 			
-		} else if(itemType == Material.RED_ROSE) {
+		/*} else if(itemType == Material.RED_ROSE) {
 			
-			data = rand.nextInt(10);
+			//data = rand.nextInt(10);
+			data = (int)(Math.random() * 10);
 			if(data == 9)
 				item = new ItemStack(Material.YELLOW_FLOWER, amount);
 			else
-				item = new ItemStack(Material.RED_ROSE, amount, (byte) data);
+				item = new ItemStack(Material.RED_ROSE, amount, (byte) data);*/
 			
 		} else if(itemType == Material.NETHERRACK) {
 			
-			data = rand.nextInt(5);
+			//data = rand.nextInt(5);
+			data = (int)(Math.random() * 5);
 			if(data == 0)
 				item = new ItemStack(Material.NETHERRACK, amount);
 			else if(data == 1)
@@ -308,12 +329,15 @@ public class NewSigns implements Listener{
 				item = new ItemStack(Material.GLOWSTONE, amount);
 			else if(data == 3)
 				item = new ItemStack(Material.NETHER_BRICK, amount);
-			else
+			else if(data == 4)
 				item = new ItemStack(Material.QUARTZ_ORE, amount);
+			else
+				item = new ItemStack(Material.OBSIDIAN, amount);
 			
 		} else if(itemType == Material.ICE) {
 			
-			data = rand.nextInt(2);
+			//data = rand.nextInt(2);
+			data = (int)(Math.random() * 2);
 			if(data == 0)
 				item = new ItemStack(Material.ICE, amount);
 			else
@@ -321,7 +345,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.SNOW_BALL) {
 			
-			data = rand.nextInt(4);
+			//data = rand.nextInt(4);
+			data = (int)(Math.random() * 4);
 			if(data == 0) 
 				item = new ItemStack(Material.SNOW_BALL, amount);
 			else if(data == 1)
@@ -333,7 +358,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.NOTE_BLOCK) {
 			
-			data = rand.nextInt(8);
+			//data = rand.nextInt(8);
+			data = (int)(Math.random() * 8);
 			if(data == 0)
 				item = new ItemStack(Material.NOTE_BLOCK , amount);
 			else if(data == 1)
@@ -353,7 +379,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.BROWN_MUSHROOM) {
 			
-			data = rand.nextInt(9);
+			//data = rand.nextInt(9);
+			data = (int)(Math.random() * 9);
 			if(data == 0)
 				item = new ItemStack(Material.BROWN_MUSHROOM , amount);
 			else if(data == 1)
@@ -377,7 +404,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.NETHER_STALK) {
 			
-			data = rand.nextInt(4);
+			//data = rand.nextInt(4);
+			data = (int)(Math.random() * 4);
 			if(data == 0)
 				item = new ItemStack(Material.NETHER_STALK , amount);
 			else if(data == 1)
@@ -396,12 +424,13 @@ public class NewSigns implements Listener{
 
 	private ItemStack getRareItem(Material itemType) {
 		ItemStack item;
-		Random rand = new Random();
+		//Random rand = new Random();
 		int data;
 		
 		if(itemType == Material.MONSTER_EGG) {
 			
-			data = rand.nextInt(9);
+			//data = rand.nextInt(9);
+			data = (int)(Math.random() * 9);
 			if(data == 0)
 				item = new ItemStack(itemType, 1, (byte) 90);
 			else if(data == 1)
@@ -423,7 +452,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.BREWING_STAND_ITEM) {
 			
-			data = rand.nextInt(6);
+			//data = rand.nextInt(6);
+			data = (int)(Math.random() * 6);
 			if(data == 0)
 				item = new ItemStack(Material.BREWING_STAND_ITEM);
 			else if(data == 1)
@@ -439,7 +469,8 @@ public class NewSigns implements Listener{
 				
 		} else if(itemType == Material.GOLDEN_APPLE) {
 			
-			data = rand.nextInt(3);
+			//data = rand.nextInt(3);
+			data = (int)(Math.random() * 3);
 			if(data == 0)
 				item = new ItemStack(Material.GOLDEN_APPLE);
 			else if(data == 1)
@@ -449,7 +480,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.REDSTONE_BLOCK) {
 			
-			data = rand.nextInt(5);
+			//data = rand.nextInt(5);
+			data = (int)(Math.random() * 5);
 			if(data == 0)
 				item = new ItemStack(Material.COMPASS);
 			else if(data == 1)
@@ -463,7 +495,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.IRON_BARDING) {
 			
-			data = rand.nextInt(2);
+			//data = rand.nextInt(2);
+			data = (int)(Math.random() * 2);
 			if(data == 0)
 				item = new ItemStack(Material.IRON_BARDING);
 			else
@@ -471,7 +504,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.IRON_PICKAXE) {
 			
-			data = rand.nextInt(5);
+			//data = rand.nextInt(5);
+			data = (int)(Math.random() * 5);
 			if(data == 0)
 				item = new ItemStack(Material.IRON_PICKAXE);
 			else if(data == 1)
@@ -483,7 +517,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.IRON_HELMET) {
 			
-			data = rand.nextInt(4);
+			//data = rand.nextInt(4);
+			data = (int)(Math.random() * 4);
 			if(data == 0)
 				item = new ItemStack(Material.IRON_HELMET);
 			else if(data == 1)
@@ -495,7 +530,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.GOLD_HELMET) {
 			
-			data = rand.nextInt(4);
+			//data = rand.nextInt(4);
+			data = (int)(Math.random() * 4);
 			if(data == 0)
 				item = new ItemStack(Material.GOLD_HELMET);
 			else if(data == 1)
@@ -514,12 +550,13 @@ public class NewSigns implements Listener{
 
 	private ItemStack getBestItem(Material itemType) {
 		ItemStack item;
-		Random rand = new Random();
+		//Random rand = new Random();
 		int data;
 		
 		if(itemType == Material.DIAMOND_BLOCK) {
 			
-			data = rand.nextInt(4);
+			//data = rand.nextInt(4);
+			data = (int)(Math.random() * 4);
 			if(data == 0)
 				item = new ItemStack(Material.DIAMOND_BLOCK);
 			else if(data == 1)
@@ -531,7 +568,8 @@ public class NewSigns implements Listener{
 			
 		}else if(itemType == Material.ANVIL) {
 			
-			data = rand.nextInt(4);
+			//data = rand.nextInt(4);
+			data = (int)(Math.random() * 4);
 			if(data == 0)
 				item = new ItemStack(Material.ANVIL);
 			else if(data == 1)
@@ -543,7 +581,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.DIAMOND_PICKAXE) {
 			
-			data = rand.nextInt(5);
+			//data = rand.nextInt(5);
+			data = (int)(Math.random() * 5);
 			if(data == 0)
 				item = new ItemStack(Material.DIAMOND_PICKAXE);
 			else if(data == 1)
@@ -555,7 +594,8 @@ public class NewSigns implements Listener{
 			
 		} else if(itemType == Material.DIAMOND_HELMET) {
 			
-			data = rand.nextInt(5);
+			//data = rand.nextInt(5);
+			data = (int)(Math.random() * 5);
 			if(data == 0)
 				item = new ItemStack(Material.DIAMOND_HELMET);
 			else if(data == 1)
@@ -570,10 +610,11 @@ public class NewSigns implements Listener{
 		} else if(itemType == Material.ENCHANTED_BOOK) {
 			
 			item = new ItemStack(Material.ENCHANTED_BOOK);
-			data = rand.nextInt(3);
+			//data = rand.nextInt(3);
+			data = (int)(Math.random() * 3);
 			EnchantmentStorageMeta enchantStorage = (EnchantmentStorageMeta) item.getItemMeta();
 			for(int i = 0; i < data + 1; i++) {
-				enchantStorage.addStoredEnchant(Enchantment.values()[rand.nextInt(Enchantment.values().length)], rand.nextInt(3) + 3, true);
+				enchantStorage.addStoredEnchant(Enchantment.values()[/*rand.nextInt(Enchantment.values().length)*/(int)(Math.random()*Enchantment.values().length)], /*rand.nextInt(3) + 3*/(int)(Math.random()*3+3), true);
 				item.setItemMeta(enchantStorage);
 			}
 			
