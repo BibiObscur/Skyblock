@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
@@ -92,13 +94,18 @@ public class NewSigns implements Listener{
 									ItemStack item;
 									//Random rand = new Random();
 									//Material itemType = sendLevels[rand.nextInt(sendLevels.length)];
-									Material itemType = sendLevels[(int) (Math.random() * sendLevels.length)];
-									int amount = player.getLevel() * 2;
-									if(player.getLevel()>32) amount = 64;
-
-									item = getItemStack(itemType, amount);
+									do {
+										Material itemType = sendLevels[(int) (Math.random() * sendLevels.length)];
+										int amount = (int)(Math.random()*player.getLevel() + player.getLevel());
+										if(player.getLevel()>32) amount = 64;
+	
+										item = getItemStack(itemType, amount);
+									} while(canGet(item, player));
 									
-									player.setLevel(player.getLevel() - amount/2);
+									if(player.getLevel() <= 32)
+										player.setLevel(0);
+									else
+										player.setLevel(player.getLevel()-32);
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu " + ChatColor.BLUE + item.getAmount() + ChatColor.GOLD + " entités de " + ChatColor.BLUE + item.getType().name());
 									e.setCancelled(true);
@@ -123,18 +130,19 @@ public class NewSigns implements Listener{
 							if(player.getLevel() >= 13)
 							{
 								ItemStack item;
-								//Random rand = new Random();
 								Material itemType;
 								
 								for(int i = 0; i < 3; i++) {
-									//itemType = rareItems[rand.nextInt(rareItems.length)];
-									itemType = rareItems[(int)(Math.random() * rareItems.length)];
-									item = getRareItem(itemType);
+									do {
+										itemType = rareItems[(int)(Math.random() * rareItems.length)];
+										item = getRareItem(itemType);
+									} while(canGet(item, player));
 									player.getInventory().addItem(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 								}
 								
 								player.setLevel(player.getLevel() - 13);
+								player.updateInventory();
 								e.setCancelled(true);
 							} else
 								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 13 niveaux pour utiliser ce panneau.");
@@ -157,12 +165,13 @@ public class NewSigns implements Listener{
 								if(player.getInventory().getItemInHand().getType() == Material.AIR)
 								{
 									ItemStack item;
-									//Random rand = new Random();
 									Material itemType;
 									
-									//itemType = bestItems[rand.nextInt(bestItems.length)];
-									itemType = bestItems[(int) (Math.random() * bestItems.length)];
-									item = getBestItem(itemType);
+									do {
+										itemType = bestItems[(int) (Math.random() * bestItems.length)];
+										item = getBestItem(itemType);
+									} while(canGet(item, player));
+									
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 
@@ -183,6 +192,41 @@ public class NewSigns implements Listener{
 		}
 	}
 	
+	private boolean canGet(ItemStack item, Player player) {
+		if(plugin.getDatas().hasIsland(player.getName())) {
+			if(item.getType() == Material.MONSTER_EGG) {
+				if(item.getDurability() == 120 && !plugin.getDatas().getPlayerIsland(player.getName()).getChallenges().contains("VillagerFamily"))
+					return false;
+				else if(!plugin.getDatas().getPlayerIsland(player.getName()).getChallenges().contains("FriendlyRegion"))
+					return false;
+				else if(!plugin.getDatas().getPlayerIsland(player.getName()).getChallenges().contains("HorseAreAmazing") && item.getDurability() == 100)
+					return false;
+			} else
+			if(item.getType() == Material.DIAMOND ||
+				item.getType() == Material.DIAMOND_ORE ||
+				item.getType() == Material.DIAMOND_BLOCK) {
+					if(!plugin.getDatas().getPlayerIsland(player.getName()).getChallenges().contains("Wizard") &&
+							!plugin.getDatas().getPlayerIsland(player.getName()).getChallenges().contains("Diamond!"))
+						return false;
+			} else
+			if(item.getType() == Material.SOUL_SAND ||
+				item.getType() == Material.NETHERRACK ||
+				item.getType() == Material.NETHER_BRICK ||
+				item.getType() == Material.NETHER_BRICK_ITEM ||
+				item.getType() == Material.NETHER_BRICK_STAIRS ||
+				item.getType() == Material.NETHER_FENCE ||
+				item.getType() == Material.NETHER_STALK ||
+				item.getType() == Material.NETHER_WARTS ||
+				item.getType() == Material.GLOWSTONE ||
+				item.getType() == Material.GLOWSTONE_DUST) {
+					if(!plugin.getDatas().getPlayerIsland(player.getName()).getChallenges().contains("NetherPortal"))
+						return false;
+			}
+		}
+		
+		return true;
+	}
+
 	private ItemStack getItemStack(Material itemType, int amount) {
 		
 		//Random rand = new Random();
