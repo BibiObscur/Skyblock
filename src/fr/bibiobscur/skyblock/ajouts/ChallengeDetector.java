@@ -589,6 +589,7 @@ public class ChallengeDetector implements Listener {
 			giveExp(player, xp);
 			island.getChallenges().add(challengename);
 			player.getInventory().addItem(new ItemStack(bonus, amount));
+			player.updateInventory();
 		}
 		return island;
 	}
