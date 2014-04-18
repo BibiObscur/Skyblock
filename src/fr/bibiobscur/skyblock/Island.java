@@ -253,7 +253,7 @@ public class Island implements Serializable {
 		return true;
 	}
 	
-	public void defineLevel(World world, int spacing) {
+	public void defineLevel(World world, int spacing, double xp_bonus) {
 		Block block;
     	double xp;
     	double xpblock[] = new double[12];
@@ -272,36 +272,86 @@ public class Island implements Serializable {
         				if(block.getType() == Material.GRASS || block.getType() == Material.MYCEL)
         					xpblock[1] += 1;
         				else if(block.getType() == Material.DIRT)
-        					xpblock[2] += 1 - ((xpblock[2] > 576)?0.5:0);
+        					xpblock[2] += 1 - ((xpblock[2] > 576)?0.5:0) - ((xpblock[0] > 16384)?0.5:0);
         				else if(block.getType() == Material.SAND)
-        					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0);
+        					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0) - ((xpblock[0] > 16384)?0.5:0);
         				else if(block.getType() == Material.WOOD)
-        					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0) - ((xpblock[4] > 3584)?0.25:0);
+        					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0) - ((xpblock[4] > 3584)?0.25:0) - ((xpblock[4] > 16384)?0.25:0);
         				else if(block.getType() == Material.SMOOTH_BRICK || block.getType() == Material.STONE)
-        					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0) - ((xpblock[5] > 3584)?0.25:0);
+        					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0) - ((xpblock[5] > 3584)?0.25:0) - ((xpblock[5] > 16384)?0.25:0);
         				else if(block.getType() == Material.STEP)
-        					xpblock[6] += 1 - ((xpblock[6] > 576*2)?0.5:0) - ((xpblock[6] > 3584*2)?0.25:0);
+        					xpblock[6] += 1 - ((xpblock[6] > 576*2)?0.5:0) - ((xpblock[6] > 3584*2)?0.25:0) - ((xpblock[6] > 16384)?0.25:0);
         				else if(block.getType() == Material.SMOOTH_STAIRS)
-        					xpblock[7] += 1 - ((xpblock[7] > 576)?0.5:0) - ((xpblock[7] > 3584)?0.25:0);
+        					xpblock[7] += 1 - ((xpblock[7] > 576)?0.5:0) - ((xpblock[7] > 3584)?0.25:0) - ((xpblock[7] > 16384)?0.25:0);
         				else if(block.getType() == Material.COBBLESTONE)
         					xpblock[8] += 1 - ((xpblock[8] > 576)?1:0);
         				else if(block.getType() == Material.SANDSTONE || block.getType() == Material.SANDSTONE_STAIRS)
-        					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0);
+        					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0) - ((xpblock[9] > 16384)?0.25:0);
         				else if(block.getType() == Material.GLASS)
-        					xpblock[10] += 1 - ((xpblock[10] > 3584)?0.25:0);
+        					xpblock[10] += 1 - ((xpblock[10] > 3584)?0.25:0) - ((xpblock[10] > 16384)?0.75:0);
         				else if(block.getType() == Material.BRICK || block.getType() == Material.BRICK_STAIRS)
-        					xpblock[11] += 1 - ((xpblock[11] > 576)?0.5:0) - ((xpblock[11] > 3584)?0.25:0);
+        					xpblock[11] += 1 - ((xpblock[11] > 576)?0.5:0) - ((xpblock[11] > 3584)?0.25:0) - ((xpblock[11] > 16384)?0.25:0);
         				else
         					xpblock[0] += 1 - ((xpblock[0] > 8192)?0.5:0);
         			}
         		}
 			}
 		}
-		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 5 * xpblock[10] + 5 * xpblock[11] + 200 * challenges.size();
+		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 5 * xpblock[10] + 5 * xpblock[11] + 200 * challenges.size() + xp_bonus;
 
 		if(xp <= 16383.875)
 			this.level = (int)(xp/32.76775);
 		else
 			this.level = (int)(Math.pow((xp/(Math.pow(2, 17)-1)), 1.0/3) * 1000);
 	}
+	
+	public double defineHellLevel(World world, int spacing) {
+		Block block;
+    	double xp;
+    	double xpblock[] = new double[10];
+    	int i, j, k;
+    	
+		for(i = 0; i < xpblock.length; i++)
+			xpblock[i] = 0;
+		xpblock[1] = - 50;
+		xpblock[2] = - 27;
+		
+		for(i = this.x - spacing/2; i < this.x + spacing/2; i++) {
+			for(j = 5; j < world.getMaxHeight()-5; j++) {
+    			for(k = this.z - spacing/2; k < this.z + spacing/2; k++) {
+    				block = world.getBlockAt(new Location(world, i, j, k));
+        			if(block.getType() != Material.AIR && block.getType() != Material.WATER) {
+        				if(block.getType() == Material.NETHERRACK)
+        					xpblock[1] += 1 - ((xpblock[1] > 576)?0.5:0) - ((xpblock[1] > 3584)?0.25:0) - ((xpblock[1] > 16384)?0.25:0);
+        				else if(block.getType() == Material.SOUL_SAND)
+        					xpblock[2] += 1 - ((xpblock[2] > 576)?0.5:0) - ((xpblock[2] > 3584)?0.25:0) - ((xpblock[2] > 16384)?0.25:0);
+        				else if(block.getType() == Material.GRAVEL)
+        					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0) - ((xpblock[3] > 3584)?0.25:0) - ((xpblock[3] > 16384)?0.25:0);
+        				else if(block.getType() == Material.GLOWSTONE)
+        					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0) - ((xpblock[4] > 3584)?0.25:0) - ((xpblock[4] > 16384)?0.25:0);
+        				else if(block.getType() == Material.NETHER_BRICK || block.getType() == Material.NETHER_BRICK_STAIRS)
+        					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0) - ((xpblock[5] > 3584)?0.25:0) - ((xpblock[5] > 16384)?0.25:0);
+        				else if(block.getType() == Material.NETHER_FENCE)
+        					xpblock[6] += 1 - ((xpblock[6] > 576)?0.5:0) - ((xpblock[6] > 3584)?0.25:0) - ((xpblock[6] > 16384)?0.25:0);
+        				else if(block.getType() == Material.NETHER_WARTS)
+        					xpblock[7] += 1 - ((xpblock[7] > 576)?0.5:0) - ((xpblock[7] > 3584)?0.25:0) - ((xpblock[7] > 16384)?0.25:0);
+        				else if(block.getType().name().contains("REDSTONE"))
+        					xpblock[8] += 1 - ((xpblock[8] > 576)?0.5:0) - ((xpblock[8] > 3584)?0.25:0) - ((xpblock[8] > 16384)?0.25:0);
+        				else if(block.getType() == Material.MOB_SPAWNER)
+        					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0) - ((xpblock[9] > 16384)?0.25:0);
+        			}
+        		}
+			}
+		}
+		xp = xpblock[1]*2 + xpblock[2]*5 + xpblock[3]*4 + xpblock[4]*6 + xpblock[5]*8 + xpblock[6]*6 + xpblock[7]*4 + xpblock[8]*6 + xpblock[9]*20 + 200 * challenges.size();
+
+		if(xp <= 16383.875)
+			this.level = (int)(xp/32.76775);
+		else
+			this.level = (int)(Math.pow((xp/(Math.pow(2, 17)-1)), 1.0/3) * 1000);
+		
+		return xp;
+	}
+
+
 }
