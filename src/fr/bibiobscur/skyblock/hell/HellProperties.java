@@ -72,7 +72,7 @@ public class HellProperties implements Listener{
 				else if (!plugin.getHellDatas().hasIsland(hosthere))
 					player.teleport(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()).getSpawnLocation());
 				else {
-					if(hosthere.equals(player.getName()))
+					if(/*hosthere.equals(player.getName())*/plugin.getDatas().isOnIsland(player) && plugin.getHellDatas().hasHome(player.getName()))
 						plugin.getHellDatas().teleportHome(player);
 					else
 						plugin.getHellDatas().teleportIsland(player, hosthere);
@@ -83,7 +83,7 @@ public class HellProperties implements Listener{
 				if(hosthere == null)
 					player.teleport(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
 				else {
-					if(hosthere.equals(player.getName()))
+					if(/*hosthere.equals(player.getName())*/plugin.getHellDatas().isOnIsland(player) && plugin.getDatas().hasHome(player.getName()))
 						plugin.getDatas().teleportHome(player);
 					else
 						plugin.getDatas().teleportIsland(player, hosthere);

@@ -267,19 +267,24 @@ public class SkyDatas {
 	
 	//Dans Island.java
 	public void defineLevel() {
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-			public void run(){
+		/*plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			public void run(){*/
 				logger.info("Calcul du niveau des iles...");
-			    Island island;
+				Island island;
 			    for(Entry<String, Island> entry : playerIslands.entrySet()) {
 			    	island = (Island) entry.getValue();
-			    	if(island != null) island.defineLevel(plugin.getServer().getWorld(plugin.getworldname()), plugin.getISLAND_SPACING());
+			    	if(island != null) {
+			    		if(plugin.getHellDatas().hasIsland(entry.getKey()))
+			    			island.defineLevel(plugin.getServer().getWorld(plugin.getworldname()), plugin.getISLAND_SPACING(), plugin.getHellDatas().getPlayerIsland(entry.getKey()).defineHellLevel(plugin.getServer().getWorld(plugin.getworldname()), plugin.getISLAND_SPACING()));
+			    		else
+			    			island.defineLevel(plugin.getServer().getWorld(plugin.getworldname()), plugin.getISLAND_SPACING(), 0);
+			    	}
 			    }
 			    logger.info("Niveau des iles mis a jour.");
 				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Niveaux des îles mis à jour." + ChatColor.GOLD + " -- ");
 			    createTopList();
-			}
-		});
+			/*}
+		});*/
 	}
 	
 	public void createTopList() {
@@ -541,10 +546,6 @@ public class SkyDatas {
 		for(Entry<String, Island> entry : playerIslands.entrySet()) {
     		String name = (String) entry.getKey();
     		player.sendMessage(name);
-    		/*if(name.equalsIgnoreCase("losanls45")) {
-    			playerIslands.remove(entry);
-    			player.sendMessage("ile de losan supprimée");
-    		}*/
 		}
 	}
 	
@@ -553,14 +554,6 @@ public class SkyDatas {
 		while(it.hasNext()) {
 			Group group = it.next();
 			player.sendMessage(group.getLeader() + "  " + group.getMembers());
-			/*if(group.getLeader().equalsIgnoreCase("losanls45")) {
-				groupList.remove(group);
-				player.sendMessage("groupe de losan supprimé");
-			}*/
-			/*if(group.getLeader().equalsIgnoreCase("losanls45")) {
-				group.getMembers().add("losanls45");
-				player.sendMessage("Groupe modifié");
-			}*/
 		}
 	}
 }
