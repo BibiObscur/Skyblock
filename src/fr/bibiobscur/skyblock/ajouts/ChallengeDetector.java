@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.world.PortalCreateEvent;
 
 import fr.bibiobscur.skyblock.Island;
 import fr.bibiobscur.skyblock.Plugin;
@@ -266,25 +267,6 @@ public class ChallengeDetector implements Listener {
 			String playername = "";
 			String currentname;
 			boolean hostConnected = false;
-			/*for(int i = 0; i < plugin.getServer().getOnlinePlayers().length && !hostConnected; i++)
-			{
-				if(!plugin.getDatas().hasGroup(plugin.getDatas().getHostHere(e.getLocation()))) {
-					if(plugin.getServer().getOnlinePlayers()[i].getName().equals(plugin.getDatas().getHostHere(e.getLocation()))) {
-						hostConnected = true;
-						playername = plugin.getDatas().getHostHere(e.getLocation());
-					}
-				} else {
-					Group group = plugin.getDatas().getGroup(plugin.getDatas().getHostHere(e.getLocation()));
-					Iterator<String> it = group.getMembers().iterator();
-					while(it.hasNext()) {
-						currentname = it.next();
-						if(plugin.getServer().getOnlinePlayers()[i].getName().equalsIgnoreCase(currentname)) {
-							playername = currentname;
-						}
-					}
-					it.remove();
-				}
-			}*/
 			
 			String hostName = plugin.getDatas().getHostHere(e.getLocation());
 			if(plugin.isConnected(hostName)) {
@@ -554,6 +536,42 @@ public class ChallengeDetector implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler
+	public void portalCreate(PortalCreateEvent e) {
+		if(e.getWorld().getName().equals(plugin.getworldname()))
+		{
+			if(plugin.getDatas().getHostHere(e.getBlocks().get(0).getLocation()) != null)
+			{
+				String playername = "";
+				String currentname;
+				boolean hostConnected = false;
+				
+				String hostName = plugin.getDatas().getHostHere(e.getBlocks().get(0).getLocation());
+				if(plugin.isConnected(hostName)) {
+					playername = hostName;
+					hostConnected = true;
+				} else if(plugin.getDatas().hasGroup(hostName)) {
+					Group group = plugin.getDatas().getGroup(hostName);
+					Iterator<String> it = group.getMembers().iterator();
+					while(it.hasNext() && !hostConnected) {
+						currentname = it.next();
+						if(plugin.isConnected(currentname)) {
+							playername = currentname;
+							hostConnected = true;
+						}
+					}
+				} else
+					hostConnected = false;
+				
+				if(hostConnected)
+				{
+					challengeDone("NetherPortal", 68, plugin.getServer().getPlayer(playername), plugin.getDatas().getPlayerIsland(playername), Material.GOLD_SWORD, 1);
+				}
+			}
+		}
+	}
+	
 	
 	public Island challengeDone(String challengename, int xp, Player player, Island island) {
 		if(!island.getChallenges().contains(challengename)) {
