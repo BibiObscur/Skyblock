@@ -85,7 +85,7 @@ public class NewSigns implements Listener{
 				{
 					if(plugin.getDatas().hasIsland(player.getName()))
 					{
-						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 100)
+						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 150)
 						{
 							if(player.getLevel() > 0)
 							{
@@ -114,7 +114,7 @@ public class NewSigns implements Listener{
 							} else 
 								player.sendMessage(ChatColor.RED + "Vous avez 0 niveaux.");
 						} else
-							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 100 pour faire ceci.");
+							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 150 pour faire ceci.");
 					} else
 						player.sendMessage(ChatColor.RED + "Vous devez avoir une île pour faire ceci. Pour créer une île, faites " + ChatColor.WHITE + "/is create" + ChatColor.RED + ".");
 					
@@ -125,7 +125,7 @@ public class NewSigns implements Listener{
 				{
 					if(plugin.getDatas().hasIsland(player.getName()))
 					{
-						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 300)
+						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 450)
 						{
 							if(player.getLevel() >= 13)
 							{
@@ -147,7 +147,7 @@ public class NewSigns implements Listener{
 							} else
 								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 13 niveaux pour utiliser ce panneau.");
 						} else
-							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 300 pour faire ceci.");
+							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 450 pour faire ceci.");
 					} else
 						player.sendMessage(ChatColor.RED + "Vous devez avoir une île pour faire ceci. Pour créer une île, faites " + ChatColor.WHITE + "/is create" + ChatColor.RED + ".");
 					
