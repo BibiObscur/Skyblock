@@ -1,6 +1,5 @@
 package fr.bibiobscur.skyblock;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -22,7 +21,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
 public class IslandProtect implements Listener {
@@ -272,11 +270,6 @@ public class IslandProtect implements Listener {
 		if(isOnSkyworld(e.getPlayer())) {
 			e.setRespawnLocation(plugin.getServer().getWorld(plugin.getworldname()).getSpawnLocation());
 		}
-	}
-	
-	@EventHandler
-	public void changeGamemode(PlayerGameModeChangeEvent e) {
-		Bukkit.broadcastMessage(ChatColor.BLUE + e.getPlayer().getName() + ChatColor.RED + " est maintenant en " + ChatColor.BLUE + e.getNewGameMode());
 	}
 
 	@EventHandler
