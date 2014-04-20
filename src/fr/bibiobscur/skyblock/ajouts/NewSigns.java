@@ -1,5 +1,7 @@
 package fr.bibiobscur.skyblock.ajouts;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -56,12 +58,24 @@ public class NewSigns implements Listener{
 	};
 	
 	private final Material bestItems[] = {
-			//Material.MOB_SPAWNER, //every mob
 			Material.DIAMOND_BLOCK,
 			Material.ANVIL,
 			Material.DIAMOND_PICKAXE,
 			Material.DIAMOND_HELMET,
-			Material.ENCHANTED_BOOK //random enchant
+			Material.ENCHANTED_BOOK
+	};
+	
+	private final Material secretItems[] = {
+			Material.DIAMOND_PICKAXE,
+			Material.DIAMOND_AXE,
+			Material.DIAMOND_SPADE,
+			Material.DIAMOND_SWORD,
+			Material.DIAMOND_HELMET,
+			Material.DIAMOND_CHESTPLATE,
+			Material.DIAMOND_LEGGINGS,
+			Material.DIAMOND_BOOTS,
+			Material.BOW,
+			Material.FISHING_ROD
 	};
 	
 	public NewSigns(Plugin plugin) {
@@ -92,15 +106,14 @@ public class NewSigns implements Listener{
 								if(player.getInventory().getItemInHand().getType() == Material.AIR)
 								{
 									ItemStack item;
-									//Random rand = new Random();
-									//Material itemType = sendLevels[rand.nextInt(sendLevels.length)];
+									
 									do {
 										Material itemType = sendLevels[(int) (Math.random() * sendLevels.length)];
 										int amount = (int)(Math.random()*player.getLevel() + player.getLevel());
 										if(player.getLevel()>32) amount = 64;
 	
 										item = getItemStack(itemType, amount);
-									} while(canGet(item, player));
+									} while(!canGet(item, player));
 									
 									if(player.getLevel() <= 32)
 										player.setLevel(0);
@@ -136,7 +149,7 @@ public class NewSigns implements Listener{
 									do {
 										itemType = rareItems[(int)(Math.random() * rareItems.length)];
 										item = getRareItem(itemType);
-									} while(canGet(item, player));
+									} while(!canGet(item, player));
 									player.getInventory().addItem(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 								}
@@ -170,7 +183,7 @@ public class NewSigns implements Listener{
 									do {
 										itemType = bestItems[(int) (Math.random() * bestItems.length)];
 										item = getBestItem(itemType);
-									} while(canGet(item, player));
+									} while(!canGet(item, player));
 									
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
@@ -178,16 +191,48 @@ public class NewSigns implements Listener{
 									player.setLevel(player.getLevel() - 20);
 									e.setCancelled(true);
 								} else
-									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items." + player.getItemInHand().toString() + player.getItemInHand().getType().name());
+									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items.");
 							} else
 								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 20 niveaux pour utiliser ce panneau.");
 						} else
 							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 500 pour faire ceci.");
 					} else
 						player.sendMessage(ChatColor.RED + "Vous devez avoir une île pour faire ceci. Pour créer une île, faites " + ChatColor.WHITE + "/is create" + ChatColor.RED + ".");
-					
-					
 				}
+
+				if(sign.getLines()[0].equals("[SECRET ITEM]"))
+				{
+					if(plugin.getDatas().hasIsland(player.getName()))
+					{
+						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 800)
+						{
+							if(player.getLevel() >= 45)
+							{
+								if(player.getInventory().getItemInHand().getType() == Material.AIR)
+								{
+									ItemStack item;
+									Material itemType;
+									
+									do {
+										itemType = secretItems[(int) (Math.random() * secretItems.length)];
+										item = getSecretItem(itemType);
+									} while(!canGet(item, player));
+									
+									player.getInventory().setItemInHand(item);
+									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
+
+									player.setLevel(player.getLevel() - 45);
+									e.setCancelled(true);
+								} else
+									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items.");
+							} else
+								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 45 niveaux pour utiliser ce panneau.");
+						} else
+							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 800 pour faire ceci.");
+					} else
+						player.sendMessage(ChatColor.RED + "Vous devez avoir une île pour faire ceci. Pour créer une île, faites " + ChatColor.WHITE + "/is create" + ChatColor.RED + ".");
+				}
+				
 			}
 		}
 	}
@@ -594,7 +639,6 @@ public class NewSigns implements Listener{
 
 	private ItemStack getBestItem(Material itemType) {
 		ItemStack item;
-		//Random rand = new Random();
 		int data;
 		
 		if(itemType == Material.DIAMOND_BLOCK) {
@@ -658,7 +702,7 @@ public class NewSigns implements Listener{
 			data = (int)(Math.random() * 3);
 			EnchantmentStorageMeta enchantStorage = (EnchantmentStorageMeta) item.getItemMeta();
 			for(int i = 0; i < data + 1; i++) {
-				enchantStorage.addStoredEnchant(Enchantment.values()[/*rand.nextInt(Enchantment.values().length)*/(int)(Math.random()*Enchantment.values().length)], /*rand.nextInt(3) + 3*/(int)(Math.random()*3+3), true);
+				enchantStorage.addStoredEnchant(Enchantment.values()[(int)(Math.random()*Enchantment.values().length)], (int)(Math.random()*3+3), true);
 				item.setItemMeta(enchantStorage);
 			}
 			
@@ -671,6 +715,104 @@ public class NewSigns implements Listener{
 		return item;
 	}
 
-
+	private ItemStack getSecretItem(Material itemType) {
+		ItemStack item;
+		int data;
+		
+		item = new ItemStack(itemType, 1);
+		
+		if(itemType == Material.DIAMOND_PICKAXE ||
+				itemType == Material.DIAMOND_AXE ||
+				itemType == Material.DIAMOND_SPADE) {
+			
+			if(itemType != Material.DIAMOND_AXE || (int)(Math.random()*2) == 0) {
+				item.addEnchantment(Enchantment.DIG_SPEED, 5);
+				item.addEnchantment(Enchantment.DURABILITY, 3);
+				data = (int)(Math.random()*2);
+				if(data == 0)
+					item.addEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 3);
+				else 
+					item.addEnchantment(Enchantment.SILK_TOUCH, 1);
+			} else {
+				item.addEnchantment(Enchantment.DURABILITY, 3);
+				ArrayList<Enchantment> list = new ArrayList<Enchantment>();
+				list.add(Enchantment.DAMAGE_ALL);
+				list.add(Enchantment.DAMAGE_ARTHROPODS);
+				list.add(Enchantment.DAMAGE_UNDEAD);
+				Enchantment enchant;
+				data = (int)((Math.random()*2)+2);
+				for(int i = 0; i < data; i++) {
+					enchant = list.remove((int)(Math.random()*list.size()));
+					item.addEnchantment(enchant, enchant.getMaxLevel());
+				}
+			}
+		} else
+			if(itemType == Material.DIAMOND_SWORD) {
+			ArrayList<Enchantment> list = new ArrayList<Enchantment>();
+			list.add(Enchantment.DAMAGE_ALL);
+			list.add(Enchantment.DAMAGE_ARTHROPODS);
+			list.add(Enchantment.DAMAGE_UNDEAD);
+			list.add(Enchantment.FIRE_ASPECT);
+			list.add(Enchantment.KNOCKBACK);
+			list.add(Enchantment.LOOT_BONUS_MOBS);
+			list.add(Enchantment.DURABILITY);
+			Enchantment enchant;
+			
+			data = (int)(Math.random()*4)+4;
+			for(int i = 0; i < data; i++) {
+				enchant = list.remove((int)(Math.random()*list.size()));
+				item.addEnchantment(enchant, enchant.getMaxLevel());
+			}
+		} else
+			if(itemType == Material.BOW) {
+			ArrayList<Enchantment> list = new ArrayList<Enchantment>();
+			list.add(Enchantment.DURABILITY);
+			list.add(Enchantment.ARROW_DAMAGE);
+			list.add(Enchantment.ARROW_INFINITE);
+			list.add(Enchantment.ARROW_FIRE);
+			list.add(Enchantment.ARROW_KNOCKBACK);
+			Enchantment enchant;
+			
+			data = (int)(Math.random()*3)+3;
+			for(int i = 0; i < data; i++) {
+				enchant = list.remove((int)(Math.random()*list.size()));
+				item.addEnchantment(enchant, enchant.getMaxLevel());
+			}
+		} else
+			if(itemType == Material.FISHING_ROD) {
+			item.addEnchantment(Enchantment.LURE, 3);
+			item.addEnchantment(Enchantment.LUCK, 3);
+			item.addEnchantment(Enchantment.DURABILITY, 3);
+		} else
+			if(itemType == Material.DIAMOND_HELMET ||
+				itemType == Material.DIAMOND_CHESTPLATE ||
+				itemType == Material.DIAMOND_LEGGINGS ||
+				itemType == Material.DIAMOND_BOOTS) {
+			ArrayList<Enchantment> list = new ArrayList<Enchantment>();
+			list.add(Enchantment.PROTECTION_PROJECTILE);
+			list.add(Enchantment.PROTECTION_EXPLOSIONS);
+			list.add(Enchantment.PROTECTION_ENVIRONMENTAL);
+			list.add(Enchantment.PROTECTION_FIRE);
+			list.add(Enchantment.THORNS);
+			list.add(Enchantment.DURABILITY);
+			
+			Enchantment enchant;
+			data = (int)(Math.random()*4)+3;
+			for(int i = 0; i < data; i++) {
+				enchant = list.remove((int)(Math.random()*list.size()));
+				item.addEnchantment(enchant, enchant.getMaxLevel());
+			}
+			
+			if(itemType == Material.DIAMOND_BOOTS && (int)(Math.random()*2) ==0 )
+				item.addEnchantment(Enchantment.PROTECTION_FALL, 4);
+			if(itemType == Material.DIAMOND_HELMET && (int)(Math.random()*2) ==0 )
+				item.addEnchantment(Enchantment.WATER_WORKER, 1);
+			if(itemType == Material.DIAMOND_HELMET && (int)(Math.random()*2) ==0 )
+				item.addEnchantment(Enchantment.OXYGEN, 3);
+			
+		}
+		
+		return item;
+	}
 
 }
