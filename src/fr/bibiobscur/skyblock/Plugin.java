@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.bibiobscur.skyblock.ajouts.ChallengeDetector;
 import fr.bibiobscur.skyblock.ajouts.MobsProperties;
 import fr.bibiobscur.skyblock.ajouts.NewSigns;
+import fr.bibiobscur.skyblock.ajouts.PegaseProperties;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
 import fr.bibiobscur.skyblock.hell.HellCommands;
 import fr.bibiobscur.skyblock.hell.HellDatas;
@@ -58,6 +59,7 @@ public class Plugin extends JavaPlugin{
 		new NewSigns(this);
 		new HellProperties(this);
 		new MobsProperties(this);
+		new PegaseProperties(this);
 		
 		//Create new Skyblock datas
 		datas = new SkyDatas(this);
