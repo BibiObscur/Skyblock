@@ -107,7 +107,8 @@ public class IslandProtect implements Listener {
 	    	if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 		    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getClickedBlock().getLocation()) &&
 		    			(e.getClickedBlock().getType() == Material.CHEST ||
-		    			e.getClickedBlock().getType() == Material.FENCE_GATE ||
+		    			e.getClickedBlock().getType() == Material.TRAPPED_CHEST ||
+				    	e.getClickedBlock().getType() == Material.FENCE_GATE ||
 		    			e.getClickedBlock().getType() == Material.WOODEN_DOOR ||
 		    			e.getClickedBlock().getType() == Material.NOTE_BLOCK ||
 		    			e.getClickedBlock().getType() == Material.FURNACE ||
