@@ -116,7 +116,8 @@ public class IslandProtect implements Listener {
 		    			e.getClickedBlock().getType() == Material.BREWING_STAND ||
 		    			e.getClickedBlock().getType() == Material.ANVIL ||
 		    			e.getClickedBlock().getType() == Material.TRAP_DOOR ||
-		    			e.getClickedBlock().getType() == Material.HOPPER ||
+				    	e.getClickedBlock().getType() == Material.HOPPER ||
+						e.getClickedBlock().getType() == Material.DIODE ||
 				    	e.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR ||
 						e.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_ON ||
 						e.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_OFF ||
