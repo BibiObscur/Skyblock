@@ -206,7 +206,7 @@ public class NewSigns implements Listener{
 					{
 						if(plugin.getDatas().getPlayerIsland(player.getName()).getLevel() >= 800)
 						{
-							if(player.getLevel() >= 45)
+							if(player.getLevel() >= 60)
 							{
 								if(player.getInventory().getItemInHand().getType() == Material.AIR)
 								{
@@ -221,12 +221,12 @@ public class NewSigns implements Listener{
 									player.getInventory().setItemInHand(item);
 									player.sendMessage(ChatColor.GOLD + "Vous avez obtenu : " + ChatColor.BLUE + item.getType().name() + ChatColor.GOLD + " !");
 
-									player.setLevel(player.getLevel() - 45);
+									player.setLevel(player.getLevel() - 60);
 									e.setCancelled(true);
 								} else
 									player.sendMessage(ChatColor.RED + "N'ayez rien dans la main pour recevoir les items.");
 							} else
-								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 45 niveaux pour utiliser ce panneau.");
+								player.sendMessage(ChatColor.RED + "Vous avez " + player.getLevel() + " niveaux, vous devez avoir 60 niveaux pour utiliser ce panneau.");
 						} else
 							player.sendMessage(ChatColor.RED + "Votre île est niveau " + ChatColor.WHITE + plugin.getDatas().getPlayerIsland(player.getName()).getLevel() + ChatColor.RED + ". Vous devez avoir une île niveau 800 pour faire ceci.");
 					} else
