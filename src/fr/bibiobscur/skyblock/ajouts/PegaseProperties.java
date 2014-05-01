@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.HorseJumpEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.potion.PotionEffect;
@@ -80,6 +81,14 @@ public class PegaseProperties implements Listener{
 			Entity entity = (Entity) e.getVehicle();
 			if(isPegase(entity)) {
 				LivingEntity livingentity = (LivingEntity) entity;
+				if(livingentity.getHealth() == livingentity.getMaxHealth()) {
+					livingentity.setMaxHealth(60);
+					livingentity.setHealth(60);
+				} else {
+					double quotient = livingentity.getHealth()/livingentity.getMaxHealth();
+					livingentity.setMaxHealth(60);
+					livingentity.setHealth(livingentity.getMaxHealth()*quotient);
+				}
 				livingentity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60*5, 2));
 				Horse horse = (Horse) entity;
 				horse.setJumpStrength(1.5);
@@ -87,7 +96,6 @@ public class PegaseProperties implements Listener{
 				if(fallingList.containsKey(player.getName()))
 					fallingList.remove(player.getName());
 				fallingList.put(player.getName(), 10);
-				
 			}
 		}
 	}
@@ -173,7 +181,7 @@ public class PegaseProperties implements Listener{
 		}
 	}
 	
-	private boolean isPegase(Entity entity) {
+	public static boolean isPegase(Entity entity) {
 		if(entity instanceof Horse) {
 			Horse horse = (Horse) entity;
 			if(horse.getCustomName() != null) {

@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
@@ -15,6 +16,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -450,6 +452,16 @@ public class ChallengeDetector implements Listener {
 	}
 	
 	@EventHandler
+	public void pegaseDetector(PlayerInteractEntityEvent e) {
+		if(plugin.getDatas().isOnIsland(e.getPlayer())) {
+			if(PegaseProperties.isPegase(e.getRightClicked())) {
+				Island island = plugin.getDatas().getPlayerIsland(e.getPlayer().getName());
+				island = challengeDone("Pegase", 300, e.getPlayer(), island, Material.DIAMOND_SWORD, 1);
+			}
+		}
+	}
+	
+	@EventHandler
 	public void inventoryOpen(InventoryOpenEvent e) {
 		if(plugin.getDatas().isOnIsland(plugin.getServer().getPlayer(e.getPlayer().getName())))
 		{
@@ -480,6 +492,10 @@ public class ChallengeDetector implements Listener {
 					e.getInventory().contains(new ItemStack(Material.ROTTEN_FLESH, 64)) &&
 					e.getInventory().contains(new ItemStack(Material.SULPHUR, 64)))
 				island = challengeDone("MobHunter", 100, player, island, Material.OBSIDIAN, 10);
+			
+			if(e.getInventory() instanceof HorseInventory) {
+				island = challengeDone("Riding", 150, player, island, Material.SADDLE, 1);
+			}
 		}
 	}
 	
