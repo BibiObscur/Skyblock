@@ -21,7 +21,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.inventory.HorseInventory;
+
+import fr.bibiobscur.skyblock.ajouts.PegaseProperties;
 
 public class IslandProtect implements Listener {
 
@@ -151,6 +155,19 @@ public class IslandProtect implements Listener {
     }
     
     @EventHandler
+    public void horseInventoryProtect(InventoryOpenEvent e) {
+    	if(e.getPlayer().getWorld().getName().equals(plugin.getworldname()) ||
+    		e.getPlayer().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+    		Player player = (Player) e.getPlayer();
+    		if(!plugin.getDatas().isOnIsland(player)) {
+    			if(e.getInventory() instanceof HorseInventory) {
+    				e.setCancelled(true);
+    			}
+    		}
+    	}
+    }
+
+    @EventHandler
     public void interactEntityProtect(PlayerInteractEntityEvent e) {
     	if(isOnSkyworld(e.getPlayer())) {
     		if(!e.getPlayer().getName().equals("BibiObscur") && !plugin.getDatas().isOnIsland(e.getPlayer(), e.getRightClicked().getLocation())) {
@@ -158,10 +175,20 @@ public class IslandProtect implements Listener {
     					e.getRightClicked().getType() == EntityType.MINECART_FURNACE ||
     					e.getRightClicked().getType() == EntityType.MINECART_HOPPER ||
     					e.getRightClicked().getType() == EntityType.ITEM_FRAME ||
-    					e.getRightClicked().getType() == EntityType.LEASH_HITCH ||
-    					e.getRightClicked().getType() == EntityType.HORSE) {
+    					e.getRightClicked().getType() == EntityType.LEASH_HITCH) {
     				e.setCancelled(true);
     				e.getPlayer().sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île.");
+    			} else
+    			if(e.getRightClicked().getType() == EntityType.HORSE) {
+    				if(plugin.getDatas().hasIsland(e.getPlayer().getName())) {
+    					if(!plugin.getDatas().getPlayerIsland(e.getPlayer().getName()).getChallenges().contains("Riding")) {
+    						e.setCancelled(true);
+    	    				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas monter sur un cheval.");
+    					} else if(PegaseProperties.isPegase(e.getRightClicked()) && !plugin.getDatas().getPlayerIsland(e.getPlayer().getName()).getChallenges().contains("Pegase")) {
+    						e.setCancelled(true);
+    	    				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas monter sur un pegase.");
+    					}
+    				}
     			}
     		}
     	}
@@ -316,4 +343,6 @@ public class IslandProtect implements Listener {
 			}
 		}
 	}
+
+
 }
