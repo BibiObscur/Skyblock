@@ -256,7 +256,7 @@ public class Island implements Serializable {
 	public void defineLevel(World world, int spacing, double xp_bonus) {
 		Block block;
     	double xp;
-    	double xpblock[] = new double[12];
+    	double xpblock[] = new double[14];
     	int i, j, k;
     	
 		for(i = 0; i < xpblock.length; i++)
@@ -277,6 +277,8 @@ public class Island implements Serializable {
         					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0) - ((xpblock[0] > 16384)?0.5:0);
         				else if(block.getType() == Material.WOOD)
         					xpblock[4] += 1 - ((xpblock[4] > 576)?0.5:0) - ((xpblock[4] > 3584)?0.25:0) - ((xpblock[4] > 16384)?0.25:0);
+        				else if(block.getType() == Material.LOG || block.getType() == Material.LOG_2)
+        					xpblock[4] += 2 - ((xpblock[4] > 576)?1:0) - ((xpblock[4] > 3584)?0.5:0) - ((xpblock[4] > 16384)?0.5:0);
         				else if(block.getType() == Material.SMOOTH_BRICK || block.getType() == Material.STONE)
         					xpblock[5] += 1 - ((xpblock[5] > 576)?0.5:0) - ((xpblock[5] > 3584)?0.25:0) - ((xpblock[5] > 16384)?0.25:0);
         				else if(block.getType() == Material.STEP)
@@ -291,13 +293,17 @@ public class Island implements Serializable {
         					xpblock[10] += 1 - ((xpblock[10] > 3584)?0.25:0) - ((xpblock[10] > 16384)?0.75:0);
         				else if(block.getType() == Material.BRICK || block.getType() == Material.BRICK_STAIRS)
         					xpblock[11] += 1 - ((xpblock[11] > 576)?0.5:0) - ((xpblock[11] > 3584)?0.25:0) - ((xpblock[11] > 16384)?0.25:0);
+        				else if(block.getType() == Material.QUARTZ_BLOCK || block.getType() == Material.QUARTZ_STAIRS)
+        					xpblock[12] += 1 - ((xpblock[12] > 576)?0.5:0) - ((xpblock[12] > 3584)?0.25:0) - ((xpblock[12] > 16384)?0.25:0);
+        				else if(block.getType().name().contains("REDSTONE"))
+        					xpblock[13] += 1 - ((xpblock[13] > 576)?0.5:0) - ((xpblock[13] > 3584)?0.25:0) - ((xpblock[13] > 16384)?0.25:0);
         				else
         					xpblock[0] += 1 - ((xpblock[0] > 8192)?0.5:0);
         			}
         		}
 			}
 		}
-		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 5 * xpblock[10] + 5 * xpblock[11] + 200 * challenges.size() + xp_bonus;
+		xp = 1 * xpblock[0] + 8 * xpblock[1] + 6 * xpblock[2] + 3 * xpblock[3] + 2 * xpblock[4] + 4 * xpblock[5] + 2 * xpblock[6] + 4 * xpblock[7] + 0.5 * xpblock[8] + 6 * xpblock[9] + 5 * xpblock[10] + 5 * xpblock[11] + 6 * xpblock[12] + 4 * xpblock[13] + 200 * challenges.size() + xp_bonus;
 
 		if(xp <= 16383.875)
 			this.level = (int)(xp/32.76775);
@@ -308,7 +314,7 @@ public class Island implements Serializable {
 	public double defineHellLevel(World world, int spacing) {
 		Block block;
     	double xp;
-    	double xpblock[] = new double[10];
+    	double xpblock[] = new double[11];
     	int i, j, k;
     	
 		for(i = 0; i < xpblock.length; i++)
@@ -339,11 +345,14 @@ public class Island implements Serializable {
         					xpblock[8] += 1 - ((xpblock[8] > 576)?0.5:0) - ((xpblock[8] > 3584)?0.25:0) - ((xpblock[8] > 16384)?0.25:0);
         				else if(block.getType() == Material.MOB_SPAWNER)
         					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0) - ((xpblock[9] > 16384)?0.25:0);
+        				else if(block.getType() == Material.QUARTZ_BLOCK || block.getType() == Material.QUARTZ_STAIRS)
+        					xpblock[10] += 1 - ((xpblock[10] > 576)?0.5:0) - ((xpblock[10] > 3584)?0.25:0) - ((xpblock[10] > 16384)?0.25:0);
+        				
         			}
         		}
 			}
 		}
-		xp = xpblock[1]*2 + xpblock[2]*5 + xpblock[3]*4 + xpblock[4]*6 + xpblock[5]*8 + xpblock[6]*6 + xpblock[7]*4 + xpblock[8]*6 + xpblock[9]*20 + 200 * challenges.size();
+		xp = xpblock[1]*2 + xpblock[2]*5 + xpblock[3]*4 + xpblock[4]*6 + xpblock[5]*8 + xpblock[6]*6 + xpblock[7]*4 + xpblock[8]*6 + xpblock[9]*20 + xpblock[10]*8 + 200 * challenges.size();
 
 		if(xp <= 16383.875)
 			this.level = (int)(xp/32.76775);
