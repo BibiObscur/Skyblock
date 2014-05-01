@@ -228,7 +228,15 @@ public class HellCommands implements CommandExecutor {
 		}
 		
 		island.buildHell(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()));
-		plugin.getHellDatas().addPlayerIsland(player.getName(), island);
+		
+		if(plugin.getDatas().hasGroup(player.getName())) {
+			if(plugin.getDatas().isLeader(player.getName())) {
+				plugin.getHellDatas().addPlayerIsland(player.getName(), island);
+			} else
+				plugin.getHellDatas().addPlayerIsland(plugin.getDatas().getGroup(player.getName()).getLeader(), island);
+		} else
+			plugin.getHellDatas().addPlayerIsland(player.getName(), island);
+		
 		plugin.getHellDatas().teleportIsland(player);
 		plugin.getHellDatas().createHome(player, new Location(plugin.getServer().getWorld(plugin.getHellDatas().getworldname()), island.getX(), plugin.getISLANDS_Y(), island.getZ()));
 		

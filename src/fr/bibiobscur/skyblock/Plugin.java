@@ -23,6 +23,7 @@ import fr.bibiobscur.skyblock.ajouts.PegaseProperties;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
 import fr.bibiobscur.skyblock.hell.HellCommands;
 import fr.bibiobscur.skyblock.hell.HellDatas;
+import fr.bibiobscur.skyblock.hell.HellOpCommands;
 import fr.bibiobscur.skyblock.hell.HellProperties;
 
 
@@ -52,6 +53,7 @@ public class Plugin extends JavaPlugin{
 		getCommand("createskyworld").setExecutor(new CreateWorldCommand(this));
 		getCommand("createhellworld").setExecutor(new CreateWorldCommand(this));
 		getCommand("ishell").setExecutor(new HellCommands(this));
+		getCommand("skyhell").setExecutor(new HellOpCommands(this));
 		
 		//Enable Skyblock listeners
 		new IslandProtect(this);
