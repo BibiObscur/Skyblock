@@ -276,22 +276,43 @@ public class IslandProtect implements Listener {
 
 	@EventHandler
 	public void leaveEnterIsland(PlayerMoveEvent e) {
-		//Si le joueur quitte une île
-		if(((e.getFrom().getBlockX()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockX()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
-				((e.getFrom().getBlockZ()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockZ()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
-				((e.getFrom().getBlockX()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockX()-plugin.getISLAND_SPACING()/2)%200) == 0) ||
-				((e.getFrom().getBlockZ()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockZ()-plugin.getISLAND_SPACING()/2)%200) == 0)){
-			if(plugin.getDatas().getHostHere(e.getFrom()) != null) {
-				e.getPlayer().sendMessage(ChatColor.GOLD + "Vous quittez l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(e.getFrom()) + ChatColor.GOLD + ".");
+		if(e.getFrom().getWorld().getName().equals(plugin.getworldname())) {
+			//Si le joueur quitte une île
+			if(((e.getFrom().getBlockX()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockX()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getFrom().getBlockZ()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockZ()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getFrom().getBlockX()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockX()-plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getFrom().getBlockZ()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockZ()-plugin.getISLAND_SPACING()/2)%200) == 0)){
+				if(plugin.getDatas().getHostHere(e.getFrom()) != null) {
+					e.getPlayer().sendMessage(ChatColor.GOLD + "Vous quittez l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(e.getFrom()) + ChatColor.GOLD + ".");
+				}
+			} else
+			//Si le joueur rejoint une île
+			if(((e.getTo().getBlockX()+1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockX()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getTo().getBlockZ()+1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockZ()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getTo().getBlockX()-1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockX()-plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getTo().getBlockZ()-1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockZ()-plugin.getISLAND_SPACING()/2)%200) == 0)){
+				if(plugin.getDatas().getHostHere(e.getTo()) != null) {
+					e.getPlayer().sendMessage(ChatColor.GOLD + "Vous entrez sur l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(e.getTo()) + ChatColor.GOLD + ".");
+				}
 			}
-		} else
-		//Si le joueur rejoint une île
-		if(((e.getTo().getBlockX()+1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockX()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
-				((e.getTo().getBlockZ()+1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockZ()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
-				((e.getTo().getBlockX()-1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockX()-plugin.getISLAND_SPACING()/2)%200) == 0) ||
-				((e.getTo().getBlockZ()-1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockZ()-plugin.getISLAND_SPACING()/2)%200) == 0)){
-			if(plugin.getDatas().getHostHere(e.getTo()) != null) {
-				e.getPlayer().sendMessage(ChatColor.GOLD + "Vous entrez sur l'île de " + ChatColor.BLUE + plugin.getDatas().getHostHere(e.getTo()) + ChatColor.GOLD + ".");
+		} else if(e.getFrom().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			//Si le joueur quitte une île
+			if(((e.getFrom().getBlockX()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockX()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getFrom().getBlockZ()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockZ()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getFrom().getBlockX()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockX()-plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getFrom().getBlockZ()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getTo().getBlockZ()-plugin.getISLAND_SPACING()/2)%200) == 0)){
+				if(plugin.getHellDatas().getHostHere(e.getFrom()) != null) {
+					e.getPlayer().sendMessage(ChatColor.GOLD + "Vous quittez l'île de " + ChatColor.RED + plugin.getHellDatas().getHostHere(e.getFrom()) + ChatColor.GOLD + ".");
+				}
+			} else
+			//Si le joueur rejoint une île
+			if(((e.getTo().getBlockX()+1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockX()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getTo().getBlockZ()+1-plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockZ()+plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getTo().getBlockX()-1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockX()-plugin.getISLAND_SPACING()/2)%200) == 0) ||
+					((e.getTo().getBlockZ()-1+plugin.getISLAND_SPACING()/2)%200 == 0 && ((e.getFrom().getBlockZ()-plugin.getISLAND_SPACING()/2)%200) == 0)){
+				if(plugin.getHellDatas().getHostHere(e.getTo()) != null) {
+					e.getPlayer().sendMessage(ChatColor.GOLD + "Vous entrez sur l'île de " + ChatColor.RED + plugin.getHellDatas().getHostHere(e.getTo()) + ChatColor.GOLD + ".");
+				}
 			}
 		}
 	}
