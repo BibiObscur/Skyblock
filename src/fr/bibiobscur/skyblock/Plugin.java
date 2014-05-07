@@ -21,6 +21,7 @@ import fr.bibiobscur.skyblock.ajouts.MobsProperties;
 import fr.bibiobscur.skyblock.ajouts.NewSigns;
 import fr.bibiobscur.skyblock.ajouts.PegaseProperties;
 import fr.bibiobscur.skyblock.group.IslandGroupCommands;
+import fr.bibiobscur.skyblock.hell.ChallengeDetectorHell;
 import fr.bibiobscur.skyblock.hell.HellCommands;
 import fr.bibiobscur.skyblock.hell.HellDatas;
 import fr.bibiobscur.skyblock.hell.HellOpCommands;
@@ -62,6 +63,7 @@ public class Plugin extends JavaPlugin{
 		new HellProperties(this);
 		new MobsProperties(this);
 		new PegaseProperties(this);
+		new ChallengeDetectorHell(this);
 		
 		//Create new Skyblock datas
 		datas = new SkyDatas(this);
@@ -114,11 +116,17 @@ public class Plugin extends JavaPlugin{
 	}
 	
 	public void autodefinelevels() {
+		final Plugin plug = this;
+		
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-    	    public void run(){
-    	    	datas.defineLevel();
-    	    }
-        }, 0L, 20 * 60 * 30L);
+			public void run(){
+		    	/*getServer().getScheduler().runTask(plug, new Runnable() {
+		    		public void run(){*/
+		    	    	datas.defineLevel();
+		    	    /*}
+		        });*/
+			}
+		}, 0L, 1 * 60 * 30L);
 	}
 
 //---------------------------------------------------------------------------------------------------------
