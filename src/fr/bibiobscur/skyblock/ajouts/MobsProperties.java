@@ -22,7 +22,7 @@ public class MobsProperties implements Listener {
 		if(e.getEntity().getLocation().getWorld().getName().equals(plugin.getworldname())) {
 			if(e.getEntityType() == EntityType.ENDERMAN) {
 				Enderman enderman = (Enderman) e.getEntity();
-				if(enderman.getCarriedMaterial() != null)
+				if(enderman.getCarriedMaterial() != null && enderman.getLocation().getBlockY() > 0)
 				{
 					enderman.getWorld().dropItem(enderman.getLocation(), enderman.getCarriedMaterial().toItemStack(1));
 				}
