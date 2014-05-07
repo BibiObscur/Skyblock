@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
@@ -271,7 +272,7 @@ public class Island implements Serializable {
         			if(block.getType() != Material.AIR && block.getType() != Material.WATER) {
         				if(block.getType() == Material.GRASS || block.getType() == Material.MYCEL)
         					xpblock[1] += 1;
-        				else if(block.getType() == Material.DIRT)
+        				else if(block.getType() == Material.DIRT || block.getType() == Material.SOIL)
         					xpblock[2] += 1 - ((xpblock[2] > 576)?0.5:0) - ((xpblock[0] > 16384)?0.5:0);
         				else if(block.getType() == Material.SAND)
         					xpblock[3] += 1 - ((xpblock[3] > 576)?0.5:0) - ((xpblock[0] > 16384)?0.5:0);
@@ -289,7 +290,7 @@ public class Island implements Serializable {
         					xpblock[8] += 1 - ((xpblock[8] > 576)?1:0);
         				else if(block.getType() == Material.SANDSTONE || block.getType() == Material.SANDSTONE_STAIRS)
         					xpblock[9] += 1 - ((xpblock[9] > 576)?0.5:0) - ((xpblock[9] > 3584)?0.25:0) - ((xpblock[9] > 16384)?0.25:0);
-        				else if(block.getType() == Material.GLASS)
+        				else if(block.getType() == Material.GLASS || block.getType() == Material.STAINED_GLASS)
         					xpblock[10] += 1 - ((xpblock[10] > 3584)?0.25:0) - ((xpblock[10] > 16384)?0.75:0);
         				else if(block.getType() == Material.BRICK || block.getType() == Material.BRICK_STAIRS)
         					xpblock[11] += 1 - ((xpblock[11] > 576)?0.5:0) - ((xpblock[11] > 3584)?0.25:0) - ((xpblock[11] > 16384)?0.25:0);
