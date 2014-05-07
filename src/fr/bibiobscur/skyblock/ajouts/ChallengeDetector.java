@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -109,7 +111,7 @@ public class ChallengeDetector implements Listener {
 				if(e.getItem().getItemStack().getType() == Material.PUMPKIN && e.getPlayer().getInventory().contains(new ItemStack(Material.PUMPKIN, 64)))
 					island = challengeDone("PumpkinCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.MELON && e.getPlayer().getInventory().contains(new ItemStack(Material.MELON, 64)))
-					island = challengeDone("MelonCollector", 80, e.getPlayer(), island, Material.INK_SACK, 1);
+					island = challengeDone("MelonCollector", 80, e.getPlayer(), island, Material.INK_SACK, 1, (short) 3);
 				if(e.getItem().getItemStack().getType() == Material.POTATO_ITEM && e.getPlayer().getInventory().contains(new ItemStack(Material.POTATO_ITEM, 64)))
 					island = challengeDone("PotatoCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.CARROT_ITEM && e.getPlayer().getInventory().contains(new ItemStack(Material.CARROT_ITEM, 64)))
@@ -121,7 +123,7 @@ public class ChallengeDetector implements Listener {
 				if(e.getItem().getItemStack().getType() == Material.SUGAR_CANE && e.getPlayer().getInventory().contains(new ItemStack(Material.SUGAR_CANE, 64)))
 					island = challengeDone("SugarCaneCollector", 80, e.getPlayer(), island, Material.DIRT, 32);
 				if(e.getItem().getItemStack().getType() == Material.SLIME_BALL && e.getPlayer().getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
-					island = challengeDone("SlimeBallCollector", 80, e.getPlayer(), island, Material.DIAMOND_PICKAXE, 1);
+					island = challengeDone("SlimeBallCollector", 80, e.getPlayer(), island, Material.GRASS, 32);
 				
 				if(e.getItem().getItemStack().getType() == Material.RAW_CHICKEN || e.getItem().getItemStack().getType() == Material.FEATHER)
 					island = challengeDone("Chicken", 30, e.getPlayer(), island);
@@ -137,7 +139,7 @@ public class ChallengeDetector implements Listener {
 					island = challengeDone("Bowman", 30, e.getPlayer(), island, Material.ARROW, 10);
 				
 				if(e.getItem().getItemStack().getType() == Material.REDSTONE)
-					island = challengeDone("ApprenticeRedstoneMan", 30, e.getPlayer(), island);
+					island = challengeDone("ApprenticeRedstoneMan", 30, e.getPlayer(), island, Material.REDSTONE_TORCH_OFF, 1);
 				
 				if(e.getItem().getItemStack().getType() == Material.SNOW_BALL)
 					island = challengeDone("DoYouWantToBuildASnowMan", 50, e.getPlayer(), island, Material.ICE, 5);
@@ -362,66 +364,67 @@ public class ChallengeDetector implements Listener {
 	public void playerItemConsume(PlayerItemConsumeEvent e) {
 		
 		if(e.getPlayer().getWorld().getName().equals(plugin.getworldname()) || e.getPlayer().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
+			if(plugin.getDatas().hasIsland(e.getPlayer().getName())) {
+				Material item = e.getItem().getType();
 			
-			Material item = e.getItem().getType();
-			
-			if(item == Material.CAKE ||
-					item == Material.COOKED_BEEF ||
-					item == Material.COOKED_CHICKEN ||
-					item == Material.RAW_CHICKEN ||
-					item == Material.COOKED_FISH ||
-					item == Material.COOKIE ||
-					item == Material.GRILLED_PORK ||
-					item == Material.PUMPKIN_PIE ||
-					item == Material.GOLDEN_CARROT ||
-					item == Material.GOLDEN_APPLE ||
-					item == Material.APPLE ||
-					item == Material.BAKED_POTATO ||
-					item == Material.BREAD ||
-					item == Material.CARROT_ITEM ||
-					item == Material.MELON ||
-					item == Material.MUSHROOM_SOUP ||
-					item == Material.RAW_FISH ||
-					item == Material.ROTTEN_FLESH) {
-				Player player = e.getPlayer();
-				Island island = plugin.getDatas().getPlayerIsland(player.getName());
-				island = challengeDone("EatToSurvive", 40, player, island, Material.IRON_ORE, 5);
-				
-				for(int i = 0; i < 2; i++)
-					player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
-				
-				int foodGet = 0;
-				
-				if(item == Material.COOKIE ||
-						item == Material.RAW_FISH ||
-						item == Material.RAW_CHICKEN ||
-						item == Material.MELON ||
-						item == Material.ROTTEN_FLESH)
-					foodGet = 2;
-				if(item == Material.RAW_BEEF ||
-						item == Material.PORK)
-					foodGet = 3;
-				if(item == Material.APPLE ||
-						item == Material.CARROT_ITEM ||
-						item == Material.GOLDEN_APPLE)
-					foodGet = 4;
-				if(item == Material.COOKED_FISH ||
-						item == Material.BREAD)
-					foodGet = 5;
-				if(item == Material.COOKED_CHICKEN ||
-						item == Material.BAKED_POTATO ||
-						item == Material.MUSHROOM_SOUP ||
-						item == Material.GOLDEN_CARROT)
-					foodGet = 6;
-				if(item == Material.PUMPKIN_PIE ||
-						item == Material.GRILLED_PORK ||
+				if(item == Material.CAKE ||
 						item == Material.COOKED_BEEF ||
-						item == Material.CAKE)
-					foodGet = 8;
-				
-				if(player.getFoodLevel() + foodGet > 20) foodGet = 20 - player.getFoodLevel();
-				
-				giveExp(player, foodGet*2);
+						item == Material.COOKED_CHICKEN ||
+						item == Material.RAW_CHICKEN ||
+						item == Material.COOKED_FISH ||
+						item == Material.COOKIE ||
+						item == Material.GRILLED_PORK ||
+						item == Material.PUMPKIN_PIE ||
+						item == Material.GOLDEN_CARROT ||
+						item == Material.GOLDEN_APPLE ||
+						item == Material.APPLE ||
+						item == Material.BAKED_POTATO ||
+						item == Material.BREAD ||
+						item == Material.CARROT_ITEM ||
+						item == Material.MELON ||
+						item == Material.MUSHROOM_SOUP ||
+						item == Material.RAW_FISH ||
+						item == Material.ROTTEN_FLESH) {
+					Player player = e.getPlayer();
+					Island island = plugin.getDatas().getPlayerIsland(player.getName());
+					island = challengeDone("EatToSurvive", 40, player, island, Material.IRON_ORE, 5);
+					
+					for(int i = 0; i < 2; i++)
+						player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
+					
+					int foodGet = 0;
+					
+					if(item == Material.COOKIE ||
+							item == Material.RAW_FISH ||
+							item == Material.RAW_CHICKEN ||
+							item == Material.MELON ||
+							item == Material.ROTTEN_FLESH)
+						foodGet = 2;
+					if(item == Material.RAW_BEEF ||
+							item == Material.PORK)
+						foodGet = 3;
+					if(item == Material.APPLE ||
+							item == Material.CARROT_ITEM ||
+							item == Material.GOLDEN_APPLE)
+						foodGet = 4;
+					if(item == Material.COOKED_FISH ||
+							item == Material.BREAD)
+						foodGet = 5;
+					if(item == Material.COOKED_CHICKEN ||
+							item == Material.BAKED_POTATO ||
+							item == Material.MUSHROOM_SOUP ||
+							item == Material.GOLDEN_CARROT)
+						foodGet = 6;
+					if(item == Material.PUMPKIN_PIE ||
+							item == Material.GRILLED_PORK ||
+							item == Material.COOKED_BEEF ||
+							item == Material.CAKE)
+						foodGet = 8;
+					
+					if(player.getFoodLevel() + foodGet > 20) foodGet = 20 - player.getFoodLevel();
+					
+					giveExp(player, foodGet*2);
+				}
 			}
 		}
 	}
@@ -454,10 +457,21 @@ public class ChallengeDetector implements Listener {
 	@EventHandler
 	public void pegaseDetector(PlayerInteractEntityEvent e) {
 		if(plugin.getDatas().isOnIsland(e.getPlayer())) {
-			if(PegaseProperties.isPegase(e.getRightClicked())) {
+			if(e.getRightClicked() instanceof Horse) {
+				Horse horse = (Horse) e.getRightClicked();
+				if(horse.getColor() == Color.WHITE && horse.getCustomName() == null) {
+					if(e.getPlayer().getItemInHand().getType() == Material.NAME_TAG && e.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) {
+						if(e.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Pegase")) {
+							Island island = plugin.getDatas().getPlayerIsland(e.getPlayer().getName());
+							island = challengeDone("Pegase", 300, e.getPlayer(), island, Material.DIAMOND_SWORD, 1);
+						}
+					}
+				}
+			}
+			/*if(PegaseProperties.isPegase(e.getRightClicked())) {
 				Island island = plugin.getDatas().getPlayerIsland(e.getPlayer().getName());
 				island = challengeDone("Pegase", 300, e.getPlayer(), island, Material.DIAMOND_SWORD, 1);
-			}
+			}*/
 		}
 	}
 	
@@ -473,7 +487,7 @@ public class ChallengeDetector implements Listener {
 			if(e.getInventory().contains(new ItemStack(Material.PUMPKIN, 64)))
 				island = challengeDone("PumpkinCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.MELON, 64)))
-				island = challengeDone("MelonCollector", 80, player, island, Material.INK_SACK, 1);
+				island = challengeDone("MelonCollector", 80, player, island, Material.INK_SACK, 1, (short) 3);
 			if(e.getInventory().contains(new ItemStack(Material.POTATO_ITEM, 64)))
 				island = challengeDone("PotatoCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.CARROT_ITEM, 64)))
@@ -485,7 +499,7 @@ public class ChallengeDetector implements Listener {
 			if(e.getInventory().contains(new ItemStack(Material.SUGAR_CANE, 64)))
 				island = challengeDone("SugarCaneCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
-				island = challengeDone("SlimeBallCollector", 80, player, island, Material.DIAMOND_PICKAXE, 1);
+				island = challengeDone("SlimeBallCollector", 80, player, island, Material.GRASS, 32);
 			
 			if(e.getInventory().contains(new ItemStack(Material.BONE, 64)) &&
 					e.getInventory().contains(new ItemStack(Material.STRING, 64)) &&
@@ -511,7 +525,7 @@ public class ChallengeDetector implements Listener {
 			if(e.getInventory().contains(new ItemStack(Material.PUMPKIN, 64)))
 				island = challengeDone("PumpkinCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.MELON, 64)))
-				island = challengeDone("MelonCollector", 80, player, island, Material.INK_SACK, 1);
+				island = challengeDone("MelonCollector", 80, player, island, Material.INK_SACK, 1, (short)3);
 			if(e.getInventory().contains(new ItemStack(Material.POTATO_ITEM, 64)))
 				island = challengeDone("PotatoCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.CARROT_ITEM, 64)))
@@ -523,7 +537,7 @@ public class ChallengeDetector implements Listener {
 			if(e.getInventory().contains(new ItemStack(Material.SUGAR_CANE, 64)))
 				island = challengeDone("SugarCaneCollector", 80, player, island, Material.DIRT, 32);
 			if(e.getInventory().contains(new ItemStack(Material.SLIME_BALL, 64)))
-				island = challengeDone("SlimeBallCollector", 80, player, island, Material.DIAMOND_PICKAXE, 1);
+				island = challengeDone("SlimeBallCollector", 80, player, island, Material.GRASS, 32);
 			
 			if(e.getInventory().contains(new ItemStack(Material.BONE, 64)) &&
 					e.getInventory().contains(new ItemStack(Material.STRING, 64)) &&
@@ -590,22 +604,40 @@ public class ChallengeDetector implements Listener {
 	
 	
 	public Island challengeDone(String challengename, int xp, Player player, Island island) {
-		if(!island.getChallenges().contains(challengename)) {
-			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
-			giveExp(player, xp);
-			island.getChallenges().add(challengename);
+		if(plugin.getDatas().hasIsland(player.getName())) {
+			if(!island.getChallenges().contains(challengename)) {
+				player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
+				giveExp(player, xp);
+				island.getChallenges().add(challengename);
+			}
 		}
 		return island;
 	}
 	
 	public Island challengeDone(String challengename, int xp, Player player, Island island, Material bonus, int amount) {
-		if(!island.getChallenges().contains(challengename)) {
-			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
-			player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez gagné un bonus de " + ChatColor.GREEN + amount + " " + ChatColor.BLUE + bonus.toString() + ChatColor.GOLD + " !");
-			giveExp(player, xp);
-			island.getChallenges().add(challengename);
-			player.getInventory().addItem(new ItemStack(bonus, amount));
-			player.updateInventory();
+		if(plugin.getDatas().hasIsland(player.getName())) {
+			if(!island.getChallenges().contains(challengename)) {
+				player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
+				player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez gagné un bonus de " + ChatColor.GREEN + amount + " " + ChatColor.BLUE + bonus.toString() + ChatColor.GOLD + " !");
+				giveExp(player, xp);
+				island.getChallenges().add(challengename);
+				player.getInventory().addItem(new ItemStack(bonus, amount));
+				player.updateInventory();
+			}
+		}
+		return island;
+	}
+	
+	public Island challengeDone(String challengename, int xp, Player player, Island island, Material bonus, int amount, short data) {
+		if(plugin.getDatas().hasIsland(player.getName())) {
+			if(!island.getChallenges().contains(challengename)) {
+				player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez accompli le challenge " + ChatColor.BLUE + challengename + ChatColor.GOLD + " !");
+				player.sendMessage("[SkyChallenge] " + ChatColor.GOLD + "Vous avez gagné un bonus de " + ChatColor.GREEN + amount + " " + ChatColor.BLUE + bonus.toString() + ChatColor.GOLD + " !");
+				giveExp(player, xp);
+				island.getChallenges().add(challengename);
+				player.getInventory().addItem(new ItemStack(bonus, amount, data));
+				player.updateInventory();
+			}
 		}
 		return island;
 	}
