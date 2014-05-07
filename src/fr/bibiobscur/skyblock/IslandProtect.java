@@ -1,20 +1,28 @@
 package fr.bibiobscur.skyblock;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -43,6 +51,51 @@ public class IslandProtect implements Listener {
 			return true;
 		else
 			return false;
+	}
+	
+	private boolean isOnSkyworld(Location location) {
+		if(location.getWorld().getName().equals(plugin.getworldname()))
+			return true;
+		else if(location.getWorld().getName().equals(plugin.getHellDatas().getworldname()))
+			return true;
+		else 
+			return false;
+	}
+	
+	@EventHandler
+	public void tntProtect(EntityExplodeEvent e) {
+		if(e.getEntity().getWorld().getName().equals(plugin.getworldname())) {
+			if(e.getEntity() instanceof TNTPrimed) {
+				//e.blockList().clear();
+				TNTPrimed tnt = (TNTPrimed) e.getEntity();
+				if(tnt.isIncendiary()) {
+					tnt.setIsIncendiary(false);
+					e.blockList().clear();
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void antiTntCannon(EntityDamageEvent e) {
+		if(e.getEntity().getWorld().getName().equals(plugin.getworldname())) {
+			if(e.getEntityType() == EntityType.PRIMED_TNT) {
+				TNTPrimed tnt = (TNTPrimed) e.getEntity();
+				tnt.setIsIncendiary(true);
+				//e.getEntity().remove();
+			}
+		}
+	}
+	
+	@EventHandler
+	public void mobExplosionsProtect(ExplosionPrimeEvent e) {
+		if(e.getEntity().getLocation().getWorld().getName().equals(plugin.getworldname())) {
+			if(e.getEntityType() == EntityType.FIREBALL || e.getEntityType() == EntityType.WITHER_SKULL)
+				e.setCancelled(true);
+		}
+		
+		if(plugin.isOnSpawn(e.getEntity().getLocation()))
+			e.setCancelled(true);
 	}
 	
 	@EventHandler
@@ -86,7 +139,7 @@ public class IslandProtect implements Listener {
 	@EventHandler
     public void blockPlaceProtect(BlockPlaceEvent e){
 		if(isOnSkyworld(e.getPlayer())) {
-			if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().getName().equals("BibiObscur")){
+			if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation())/* && !e.getPlayer().getName().equals("BibiObscur")*/ && (!e.getPlayer().isOp() || e.getPlayer().getGameMode() == GameMode.CREATIVE)){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
 			} else if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
@@ -97,11 +150,26 @@ public class IslandProtect implements Listener {
     @EventHandler
     public void blockBreakProtect(BlockBreakEvent e) {
     	if(isOnSkyworld(e.getPlayer())) {
-	    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && !e.getPlayer().getName().equals("BibiObscur")){
+	    	if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation())/* && !e.getPlayer().getName().equals("BibiObscur")*/ && (!e.getPlayer().isOp() || e.getPlayer().getGameMode() == GameMode.CREATIVE)){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous devez être sur votre île pour faire ceci !");
 			} else if(!plugin.getDatas().isOnIsland(e.getPlayer(), e.getBlock().getLocation()) && e.getPlayer().isOp())
 				e.getPlayer().sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île.");
+    	}
+    }
+    
+    @EventHandler
+    public void blockPushedEvent(BlockPistonExtendEvent e) {
+    	if(isOnSkyworld(e.getBlock().getLocation())) {
+    		for(int i = 0; i < e.getBlocks().size(); i++) {
+	    		if(((e.getBlocks().get(i).getX()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && e.getDirection() == BlockFace.WEST) ||
+						((e.getBlocks().get(i).getZ()+1+plugin.getISLAND_SPACING()/2)%200 == 0 && e.getDirection() == BlockFace.NORTH) ||
+						((e.getBlocks().get(i).getX()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && e.getDirection() == BlockFace.EAST) ||
+						((e.getBlocks().get(i).getZ()-1-plugin.getISLAND_SPACING()/2)%200 == 0 && e.getDirection() == BlockFace.SOUTH)){
+					e.setCancelled(true);
+	    		}
+    		}
+    		
     	}
     }
     
@@ -156,11 +224,11 @@ public class IslandProtect implements Listener {
     
     @EventHandler
     public void horseInventoryProtect(InventoryOpenEvent e) {
-    	if(e.getPlayer().getWorld().getName().equals(plugin.getworldname()) ||
-    		e.getPlayer().getWorld().getName().equals(plugin.getHellDatas().getworldname())) {
-    		Player player = (Player) e.getPlayer();
+		Player player = (Player) e.getPlayer();
+    	if(isOnSkyworld(player)) {
     		if(!plugin.getDatas().isOnIsland(player)) {
     			if(e.getInventory() instanceof HorseInventory) {
+    				player.sendMessage("Vous ne pouvez pas ouvrir l'inventaire d'un cheval ici.");
     				e.setCancelled(true);
     			}
     		}
@@ -178,19 +246,22 @@ public class IslandProtect implements Listener {
     					e.getRightClicked().getType() == EntityType.LEASH_HITCH) {
     				e.setCancelled(true);
     				e.getPlayer().sendMessage(ChatColor.RED + "Vous n'êtes pas sur votre île.");
-    			} else
-    			if(e.getRightClicked().getType() == EntityType.HORSE) {
-    				if(plugin.getDatas().hasIsland(e.getPlayer().getName())) {
-    					if(!plugin.getDatas().getPlayerIsland(e.getPlayer().getName()).getChallenges().contains("Riding")) {
-    						e.setCancelled(true);
-    	    				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas monter sur un cheval.");
-    					} else if(PegaseProperties.isPegase(e.getRightClicked()) && !plugin.getDatas().getPlayerIsland(e.getPlayer().getName()).getChallenges().contains("Pegase")) {
-    						e.setCancelled(true);
-    	    				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas monter sur un pegase.");
-    					}
-    				}
     			}
     		}
+    		
+			if(e.getRightClicked().getType() == EntityType.HORSE) {
+				if(plugin.getDatas().hasIsland(e.getPlayer().getName())) {
+					if(!plugin.getDatas().getPlayerIsland(e.getPlayer().getName()).getChallenges().contains("Riding") && !plugin.getDatas().isOnIsland(e.getPlayer(), e.getRightClicked().getLocation())) {
+						e.setCancelled(true);
+	    				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas monter sur un cheval.");
+					} else if(PegaseProperties.isPegase(e.getRightClicked()) && !plugin.getDatas().getPlayerIsland(e.getPlayer().getName()).getChallenges().contains("Pegase")) {
+						e.setCancelled(true);
+	    				e.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas monter sur un pegase.");
+					}
+				} else
+					e.setCancelled(true);
+			}
+    		
     	}
     }
     
