@@ -114,6 +114,15 @@ public class IslandOpCommands implements CommandExecutor {
 					plugin.getDatas().afficherGroupList(player);
 				}
 				
+				if(args[0].equalsIgnoreCase("orphlist")) {
+					Player player = (Player) sender;
+					plugin.getDatas().afficherOrphanedList(player);
+				}
+				
+				if(args[0].equalsIgnoreCase("orphclear")) {
+					plugin.getDatas().clearOrphanedIsland();
+				}
+				
 			} else if(args.length == 2) {
 				
 				String playername = args[0];

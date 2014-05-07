@@ -259,6 +259,10 @@ public class SkyDatas {
     	
     	return spawn;
     }
+
+	public void clearOrphanedIsland() {
+		orphaned.clear();
+	}
 	
 	public void addOrphanedIsland(int x, int z) {
 		Island island = new Island(x, z);
@@ -267,8 +271,8 @@ public class SkyDatas {
 	
 	//Dans Island.java
 	public void defineLevel() {
-		/*plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-			public void run(){*/
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			public void run(){
 				logger.info("Calcul du niveau des iles...");
 				Island island;
 			    for(Entry<String, Island> entry : playerIslands.entrySet()) {
@@ -283,8 +287,8 @@ public class SkyDatas {
 			    logger.info("Niveau des iles mis a jour.");
 				Bukkit.broadcastMessage(ChatColor.GOLD + " -- " + ChatColor.RED + "Niveaux des îles mis à jour." + ChatColor.GOLD + " -- ");
 			    createTopList();
-			/*}
-		});*/
+			}
+		});
 	}
 	
 	public void createTopList() {
@@ -554,6 +558,18 @@ public class SkyDatas {
 		while(it.hasNext()) {
 			Group group = it.next();
 			player.sendMessage(group.getLeader() + "  " + group.getMembers());
+			if(group.getMembers().isEmpty()) {
+				groupList.remove(group);
+				player.sendMessage(ChatColor.RED + "Groupe de " + group.getLeader() + "  supprimé.");
+			}
+		}
+	}
+	
+	public void afficherOrphanedList(Player player) {
+		Iterator<Island> it = orphaned.iterator();
+		while(it.hasNext()) {
+			Island island = it.next();
+			player.sendMessage(island.getX() + "  " + island.getZ());
 		}
 	}
 }
